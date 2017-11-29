@@ -36,11 +36,11 @@ import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
 import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS_SEQ;
 
-public class MainActivity extends AppCompatActivity implements CommunicationListener {
+public class TrustChainActivity extends AppCompatActivity implements CommunicationListener {
 
 
     public final static String TRANSACTION = "Hello world!";
-    private final static String TAG = MainActivity.class.toString();
+    private final static String TAG = TrustChainActivity.class.toString();
 
     TrustChainDBHelper dbHelper;
 
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements CommunicationList
     EditText editTextDestinationIP;
     EditText editTextDestinationPort;
 
-    MainActivity thisActivity;
+    TrustChainActivity thisActivity;
 
     private Communication communication;
 
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements CommunicationList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.main_menu:
-                Intent intent = new Intent(this, OverviewActivity.class);
+                Intent intent = new Intent(this, OverviewConnectionsActivity.class);
                 startActivity(intent);
                 return true;
             default:
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements CommunicationList
                 try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
                     final String ip = s.next();
                     // new thread to handle UI updates
-                    MainActivity.this.runOnUiThread(new Runnable() {
+                    TrustChainActivity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             updateExternalIPField(ip);

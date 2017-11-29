@@ -1,5 +1,4 @@
 package nl.tudelft.cs4160.trustchain_android.main;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,7 +19,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -49,7 +47,7 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Punctur
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.PunctureRequest;
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReadException;
 
-public class OverviewActivity extends AppCompatActivity {
+public class OverviewConnectionsActivity extends AppCompatActivity {
 
     public final static String CONNECTABLE_ADDRESS = "130.161.211.254";
     final static int UNKNOWN_PEER_LIMIT = 20;
@@ -138,7 +136,7 @@ public class OverviewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.main_menu:
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, TrustChainActivity.class);
                 startActivity(intent);
                 return true;
             default:
@@ -345,7 +343,7 @@ public class OverviewActivity extends AppCompatActivity {
     }
 
     /**
-     * Start the listen thread. The thread opens a new {@link DatagramChannel} and calls {@link OverviewActivity#dataReceived(ByteBuffer,
+     * Start the listen thread. The thread opens a new {@link DatagramChannel} and calls {@link OverviewConnectionsActivity#dataReceived(ByteBuffer,
      * InetSocketAddress)} for each incoming datagram.
      */
     private void startListenThread() {
