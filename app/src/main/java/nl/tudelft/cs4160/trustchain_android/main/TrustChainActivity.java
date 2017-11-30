@@ -31,6 +31,7 @@ import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
 import nl.tudelft.cs4160.trustchain_android.connection.network.NetworkCommunication;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
+import nl.tudelft.cs4160.trustchain_android.qr.ScanQRActivity;
 
 
 public class TrustChainActivity extends AppCompatActivity implements CommunicationListener {
@@ -45,6 +46,7 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
     TextView localIPText;
     TextView statusText;
     Button connectionButton;
+    Button scanQRButton;
     EditText editTextDestinationIP;
     EditText editTextDestinationPort;
 
@@ -89,6 +91,13 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
             Toast.makeText(getApplicationContext(), "Requires at least API 19 (KitKat)", Toast.LENGTH_LONG).show();
         }
     }
+
+    View.OnClickListener scanQRListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            startActivity(new Intent(TrustChainActivity.this, ScanQRActivity.class));
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +155,8 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
 
         updateIP();
         updateLocalIPField(getLocalIPAddress());
+
+        scanQRButton.setOnClickListener(scanQRListener);
 
         //start listening for messages
         communication.start();
@@ -221,11 +232,11 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
         //just to be sure run it on the ui thread
         //this is not necessary when this function is called from a AsyncTask
         runOnUiThread(new Runnable() {
-                  @Override
-                  public void run() {
-                      TextView statusText = findViewById(R.id.status);
-                      statusText.append(msg);
-                  }
-              });
+            @Override
+            public void run() {
+                TextView statusText = findViewById(R.id.status);
+                statusText.append(msg);
+            }
+        });
     }
 }
