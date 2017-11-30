@@ -30,6 +30,7 @@ import nl.tudelft.cs4160.trustchain_android.connection.network.NetworkCommunicat
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.main.bluetooth.BluetoothActivity;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
+import nl.tudelft.cs4160.trustchain_android.qr.ScanQRActivity;
 
 import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS_SEQ;
 
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements CommunicationList
     Button chainExplorerButton;
     Button resetDatabaseButton;
     Button bluetoothButton;
+    Button scanQRButton;
     EditText editTextDestinationIP;
     EditText editTextDestinationPort;
 
@@ -113,6 +115,13 @@ public class MainActivity extends AppCompatActivity implements CommunicationList
         }
     };
 
+    View.OnClickListener scanQRListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            startActivity(new Intent(MainActivity.this, ScanQRActivity.class));
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements CommunicationList
         chainExplorerButton.setOnClickListener(chainExplorerButtonListener);
         bluetoothButton.setOnClickListener(keyOptionsListener);
         resetDatabaseButton.setOnClickListener(resetDatabaseListener);
+        scanQRButton.setOnClickListener(scanQRListener);
 
         //start listening for messages
         communication.start();
@@ -252,11 +262,11 @@ public class MainActivity extends AppCompatActivity implements CommunicationList
         //just to be sure run it on the ui thread
         //this is not necessary when this function is called from a AsyncTask
         runOnUiThread(new Runnable() {
-                  @Override
-                  public void run() {
-                      TextView statusText = findViewById(R.id.status);
-                      statusText.append(msg);
-                  }
-              });
+            @Override
+            public void run() {
+                TextView statusText = findViewById(R.id.status);
+                statusText.append(msg);
+            }
+        });
     }
 }
