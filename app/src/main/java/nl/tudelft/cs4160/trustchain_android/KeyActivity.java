@@ -32,18 +32,13 @@ public class KeyActivity extends AppCompatActivity {
     }
 
     private void init() {
-        buttonNewKey = (Button) findViewById(R.id.new_key);
-        textPrivateKey = (TextView) findViewById(R.id.private_key);
-        signData = (Button) findViewById(R.id.sign_data);
-        signedData = (TextView ) findViewById(R.id.signed_data);
-        verifySignature = (Button) findViewById(R.id.verify_sig);
+        buttonNewKey = findViewById(R.id.new_key);
+        textPrivateKey = findViewById(R.id.private_key);
+        signData = findViewById(R.id.sign_data);
+        signedData = findViewById(R.id.signed_data);
+        verifySignature = findViewById(R.id.verify_sig);
 
-        KeyPair kp = Key.loadKeys(getApplicationContext());
-        if(kp == null) {
-            kp = Key.createNewKeyPair();
-            Key.saveKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE, kp.getPublic());
-            Key.saveKey(getApplicationContext(), Key.DEFAULT_PRIV_KEY_FILE, kp.getPrivate());
-        }
+        KeyPair kp = Key.ensureKeysExist(getApplicationContext());
         textPrivateKey.setText(Base64.encodeToString(kp.getPrivate().getEncoded(), Base64.DEFAULT));
 
         verifySignature.setOnClickListener(new View.OnClickListener() {
@@ -63,9 +58,7 @@ public class KeyActivity extends AppCompatActivity {
         buttonNewKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                KeyPair kp = Key.createNewKeyPair();
-                Key.saveKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE, kp.getPublic());
-                Key.saveKey(getApplicationContext(), Key.DEFAULT_PRIV_KEY_FILE, kp.getPrivate());
+                KeyPair kp = Key.createAndSaveKeys(getApplicationContext());
                 textPrivateKey.setText(Base64.encodeToString(kp.getPrivate().getEncoded(), Base64.DEFAULT));
 
             }
