@@ -3,6 +3,7 @@ sudo: true
 env:
   global:
     - ANDROID_ABI=armeabi-v7a
+    - ANDROID_EMU_API_LEVEL=22
 
 android:
   components:
@@ -17,7 +18,7 @@ android:
     - sys-img-armeabi-v7a-android-25
 
 before_script:
-  - echo no | android create avd --force -n test -t android-25 --abi google_apis/$ANDROID_ABI
+  - echo no | android create avd --force -n test -t android-$ANDROID_EMU_API_LEVEL --abi google_apis/$ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
