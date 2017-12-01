@@ -2,7 +2,7 @@ language: android
 sudo: true
 env:
   global:
-    - ANDROID_ABI=google_apis/armeabi-v7a
+    - ANDROID_ABI=armeabi-v7a
 
 android:
   components:
