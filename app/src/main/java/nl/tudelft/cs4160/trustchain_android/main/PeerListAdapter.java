@@ -130,6 +130,7 @@ public class PeerListAdapter extends ArrayAdapter<PeerAppToApp> {
                 PeerAppToApp peer = getItem(pos);
                 Intent intent = new Intent(context, TrustChainActivity.class);
                 intent.putExtra("PeerAppToApp", peer);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         };
