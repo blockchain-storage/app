@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -25,6 +26,7 @@ import java.util.List;
 import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
@@ -55,6 +57,7 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
     EditText editTextDestinationPort;
 
     TrustChainActivity thisActivity;
+    PeerAppToApp peer;
 
     private Communication communication;
 
@@ -120,6 +123,9 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        peer = (PeerAppToApp) getIntent().getSerializableExtra("PeerAppToApp");
+        TextView destination_IP = (TextView) findViewById(R.id.destination_IP);
+        destination_IP.setText(peer.getExternalAddress().toString().substring(1));
 
         initVariables();
         init();
@@ -232,6 +238,7 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
      */
     public void updateIP() {
         Thread thread = new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void run() {
                 try (java.util.Scanner s = new java.util.Scanner(new java.net.URL("https://api.ipify.org").openStream(), "UTF-8").useDelimiter("\\A")) {
