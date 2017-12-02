@@ -49,7 +49,6 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
     TextView localIPText;
     TextView statusText;
     Button connectionButton;
-    Button resetDatabaseButton;
     EditText editTextDestinationIP;
     EditText editTextDestinationPort;
 
@@ -86,17 +85,14 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
         communication.connectToPeer(peer);
     }
 
-    View.OnClickListener resetDatabaseListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
-                ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE))
-                        .clearApplicationUserData();
-            } else {
-                Toast.makeText(getApplicationContext(), "Requires at least API 19 (KitKat)", Toast.LENGTH_LONG).show();
-            }
+    public void onClickReset(View view) {
+        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
+            ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE))
+                    .clearApplicationUserData();
+        } else {
+            Toast.makeText(getApplicationContext(), "Requires at least API 19 (KitKat)", Toast.LENGTH_LONG).show();
         }
-    };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +144,6 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
         editTextDestinationIP = (EditText) findViewById(R.id.destination_IP);
         editTextDestinationPort = (EditText) findViewById(R.id.destination_port);
         connectionButton = (Button) findViewById(R.id.connection_button);
-        resetDatabaseButton = (Button) findViewById(R.id.reset_database_button);
     }
 
     private void init() {
@@ -167,8 +162,6 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
 
         updateIP();
         updateLocalIPField(getLocalIPAddress());
-
-        resetDatabaseButton.setOnClickListener(resetDatabaseListener);
 
         //start listening for messages
         communication.start();

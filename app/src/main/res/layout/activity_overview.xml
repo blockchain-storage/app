@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="0dp"
+    android:orientation="vertical"
     android:paddingTop="8dp"
     tools:context=".main.OverviewConnectionsActivity">
 
@@ -12,8 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:visibility="gone">
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <TableRow>
 
@@ -66,7 +66,7 @@
                 android:layout_weight="1"
                 android:text="" />
         </TableRow>
-
+<!--
         <TableRow>
 
             <TextView
@@ -121,7 +121,7 @@
                 android:text="@string/outgoing"
                 android:textStyle="bold" />
 
-        </TableRow>
+        </TableRow>-->
     </TableLayout>
 
     <Button
@@ -129,6 +129,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:visibility="gone"
         android:text="@string/exit_prompt" />
 
 
@@ -191,4 +192,4 @@
     </TableLayout>-->
 
 
-</RelativeLayout>
+</LinearLayout>
