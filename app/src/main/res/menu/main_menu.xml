@@ -9,4 +9,8 @@
         android:id="@+id/details"
         android:title="@string/menu_item_2"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/user_configuration"
+        android:title="@string/menu_item_3"
+        app:showAsAction="never" />
 </menu>

@@ -70,6 +70,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     private List<PeerAppToApp> incomingList = new ArrayList<>();
     private List<PeerAppToApp> outgoingList = new ArrayList<>();
     private String hashId;
+    private String currentUsername;
+    private int currentUserIcon;
     private String networkOperator;
     private WanVote wanVote;
     private int connectionType;
@@ -121,6 +123,10 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 Intent detailActivity = new Intent(this, DetailActivity.class);
                 startActivity(detailActivity);
                 return true;
+            case R.id.user_configuration:
+                Intent userActivity = new Intent(this, UserConfigurationActivity.class);
+                startActivity(userActivity);
+                return true;
             default:
                 return true;
         }
@@ -148,6 +154,14 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         wanVote = new WanVote();
         outBuffer = ByteBuffer.allocate(BUFFER_SIZE);
         mWanVote = (TextView) findViewById(R.id.wanvote);
+
+//        if(getIntent().getSerializableExtra("userName") != null) {
+//
+//            currentUsername = (String) getIntent().getSerializableExtra("userName");
+//
+//            System.out.println("Name gotten: " + currentUsername + " with icon: " + currentUserIcon);
+//        }
+        //currentUserIcon = (Integer) getIntent().getSerializableExtra("icon");
     }
 
 
