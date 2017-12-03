@@ -157,7 +157,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
         currentUsername = (String) getIntent().getSerializableExtra("userName");
         currentUserIcon = (Integer) getIntent().getSerializableExtra("icon");
-        System.out.println("Name gotten: " + currentUsername + " with icon: " + currentUserIcon);
     }
 
 
@@ -189,7 +188,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      */
     private void addInitialPeer() {
         try {
-            addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), PeerAppToApp.OUTGOING);
+            addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -411,7 +410,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 return peer;
             }
         }
-        return addPeer(id, address, incoming);
+        return addPeer(id, address, "", incoming);
     }
 
 
@@ -588,7 +587,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @param incoming whether the peerAppToApp is an incoming peerAppToApp.
      * @return the added peerAppToApp.
      */
-    private synchronized PeerAppToApp addPeer(String peerId, InetSocketAddress address, boolean incoming) {
+    private synchronized PeerAppToApp addPeer(String peerId, InetSocketAddress address, String username, boolean incoming) {
         if (hashId.equals(peerId)) {
             System.out.println("Not adding self");
             PeerAppToApp self = null;
@@ -610,7 +609,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             if (peer.getPeerId() != null && peer.getPeerId().equals(peerId)) return peer;
             if (peer.getAddress().equals(address)) return peer;
         }
-        final PeerAppToApp peer = new PeerAppToApp(peerId, address);
+        final PeerAppToApp peer = new PeerAppToApp(peerId, address, username);
         if (incoming) {
             showToast("New incoming peerAppToApp from " + peer.getAddress());
         }

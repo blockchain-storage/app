@@ -6,6 +6,8 @@ import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.List;
 
+import nl.tudelft.cs4160.trustchain_android.userIdentification;
+
 /**
  * The peer object. The peer is identified by its unique peer id and keeps track of the last send and receive time.
  * <p/>
@@ -18,6 +20,7 @@ public class PeerAppToApp implements Serializable {
     final private static int TIMEOUT = 20000;
     private InetSocketAddress address;
     private String peerId;
+    private userIdentification userId;
     private boolean hasReceivedData = false;
     private boolean hasSentData = false;
     private int connectionType;
@@ -33,11 +36,12 @@ public class PeerAppToApp implements Serializable {
      * @param peerId  its unique id.
      * @param address its address.
      */
-    public PeerAppToApp(String peerId, InetSocketAddress address) {
+    public PeerAppToApp(String peerId, InetSocketAddress address, String username) {
         this.peerId = peerId;
         this.address = address;
         this.lastSendTime = System.currentTimeMillis();
         this.creationTime = System.currentTimeMillis();
+        this.userId = new userIdentification(username, 0);
     }
 
     public long getCreationTime() {
@@ -59,7 +63,6 @@ public class PeerAppToApp implements Serializable {
     public void setConnectionType(int connectionType) {
         this.connectionType = connectionType;
     }
-
 
     public String getPeerId() {
         return peerId;
@@ -89,6 +92,9 @@ public class PeerAppToApp implements Serializable {
         this.address = address;
     }
 
+    public userIdentification getUserId() { return userId; }
+
+    public void setUserId(userIdentification userId) {  this.userId = userId;  }
 
     /**
      * Method called when data is sent to this peer.

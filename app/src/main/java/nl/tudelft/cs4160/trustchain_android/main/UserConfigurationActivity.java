@@ -1,5 +1,6 @@
 package nl.tudelft.cs4160.trustchain_android.main;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,6 +40,7 @@ public class UserConfigurationActivity extends AppCompatActivity{
 
         Button confirmBtn = (Button) findViewById(R.id.confirm_button);
         confirmBtn.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint({"ResourceAsColor", "NewApi"})
             public void onClick(View v) {
                 EditText userNameInput = (EditText) findViewById(R.id.username);
                 if(!userNameInput.getText().toString().matches("")) {
@@ -51,6 +53,7 @@ public class UserConfigurationActivity extends AppCompatActivity{
                     UserConfigurationActivity.this.startActivity(myIntent);
                 } else {
                     TextView userNot = (TextView) findViewById(R.id.user_notification);
+                    userNot.setTextColor(getResources().getColor(R.color.colorStatusCantConnect, null));
                     userNot.setText("Please fill in a username!");
                 }
             }

@@ -138,7 +138,8 @@ public abstract class Message extends HashMap {
         String address = (String) map.get(ADDRESS);
         String peerId = null;
         if (map.containsKey(PEER_ID)) peerId = (String) map.get(PEER_ID);
-        return new PeerAppToApp(peerId, new InetSocketAddress(address, port));
+        // TODO: change hardcoded username
+        return new PeerAppToApp(peerId, new InetSocketAddress(address, port), "");
     }
 
     public InetSocketAddress getDestination() throws MessageException {
