@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import nl.tudelft.cs4160.trustchain_android.R;
 
@@ -39,13 +40,19 @@ public class UserConfigurationActivity extends AppCompatActivity{
         Button confirmBtn = (Button) findViewById(R.id.confirm_button);
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent myIntent = new Intent(UserConfigurationActivity.this, OverviewConnectionsActivity.class);
-                EditText mEdit = (EditText)findViewById(R.id.username);
-                myIntent.putExtra("userName", mEdit.getText().toString());
-                // TODO: Change hard coded icon index passing
-                myIntent.putExtra("icon", 0);
-                myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                UserConfigurationActivity.this.startActivity(myIntent);
+                EditText userNameInput = (EditText) findViewById(R.id.username);
+                if(!userNameInput.getText().toString().matches("")) {
+                    Intent myIntent = new Intent(UserConfigurationActivity.this, OverviewConnectionsActivity.class);
+                    EditText mEdit = (EditText)findViewById(R.id.username);
+                    myIntent.putExtra("userName", mEdit.getText().toString());
+                    // TODO: Change hard coded icon index passing
+                    myIntent.putExtra("icon", 0);
+                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    UserConfigurationActivity.this.startActivity(myIntent);
+                } else {
+                    TextView userNot = (TextView) findViewById(R.id.user_notification);
+                    userNot.setText("Please fill in a username!");
+                }
             }
         });
     }

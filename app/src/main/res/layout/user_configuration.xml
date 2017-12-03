@@ -75,6 +75,14 @@
 
             </TableRow>
 
+            <TableRow>
+
+                <TextView
+                android:id="@+id/user_notification"
+                android:layout_weight="1" />
+
+            </TableRow>
+
         </TableLayout>
 
     </RelativeLayout>

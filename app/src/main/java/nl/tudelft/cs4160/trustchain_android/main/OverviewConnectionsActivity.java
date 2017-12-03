@@ -155,13 +155,9 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         outBuffer = ByteBuffer.allocate(BUFFER_SIZE);
         mWanVote = (TextView) findViewById(R.id.wanvote);
 
-//        if(getIntent().getSerializableExtra("userName") != null) {
-//
-//            currentUsername = (String) getIntent().getSerializableExtra("userName");
-//
-//            System.out.println("Name gotten: " + currentUsername + " with icon: " + currentUserIcon);
-//        }
-        //currentUserIcon = (Integer) getIntent().getSerializableExtra("icon");
+        currentUsername = (String) getIntent().getSerializableExtra("userName");
+        currentUserIcon = (Integer) getIntent().getSerializableExtra("icon");
+        System.out.println("Name gotten: " + currentUsername + " with icon: " + currentUserIcon);
     }
 
 
