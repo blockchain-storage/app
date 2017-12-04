@@ -1,11 +1,14 @@
 package nl.tudelft.cs4160.trustchain_android.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.nfc.Tag;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -40,6 +43,7 @@ public class PeerListAdapter extends ArrayAdapter<PeerAppToApp> {
             holder.mDestinationAddress = (TextView) convertView.findViewById(R.id.destination_address);
             holder.mReceivedIndicator = (TextView) convertView.findViewById(R.id.received_indicator);
             holder.mSentIndicator = (TextView) convertView.findViewById(R.id.sent_indicator);
+            holder.mTableLayoutConnection = (TableLayout) convertView.findViewById(R.id.tableLayoutConnection);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -78,6 +82,7 @@ public class PeerListAdapter extends ArrayAdapter<PeerAppToApp> {
         if (System.currentTimeMillis() - peer.getLastReceiveTime() < 200) {
             animate(holder.mReceivedIndicator);
         }
+        setOnClickListener(holder.mTableLayoutConnection, position);
 
         return convertView;
     }
@@ -113,6 +118,23 @@ public class PeerListAdapter extends ArrayAdapter<PeerAppToApp> {
         TextView mStatusIndicator;
         TextView mReceivedIndicator;
         TextView mSentIndicator;
+        TableLayout mTableLayoutConnection;
+    }
+
+    private void setOnClickListener(TableLayout mTableLayoutConnection, int position) {
+        mTableLayoutConnection.setTag(position);
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = (int) v.getTag();
+                PeerAppToApp peer = getItem(pos);
+                Intent intent = new Intent(context, TrustChainActivity.class);
+                intent.putExtra("PeerAppToApp", peer);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        };
+        mTableLayoutConnection.setOnClickListener(onClickListener);
     }
 
 }
