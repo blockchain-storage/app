@@ -4,14 +4,18 @@ import android.content.Context;
 import android.location.Address;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import junit.framework.TestCase;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.util.concurrent.TimeUnit;
 
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 
@@ -47,5 +51,42 @@ public class PeerAppToAppTest extends TestCase {
         PeerAppToApp peer1 = new PeerAppToApp("RANDOM", address);
         PeerAppToApp peer2 = new PeerAppToApp("MORERANDOM", address);
         assertFalse(peer1.equals(peer2));
+    }
+
+    @Test
+    public void testCreationTime(){
+        PeerAppToApp peer1 = new PeerAppToApp(id1, address);
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        PeerAppToApp peer2 = new PeerAppToApp(id2, address);
+        assertFalse(peer1.getCreationTime() == peer2.getCreationTime());
+        assertTrue(peer1.getCreationTime() < System.currentTimeMillis());
+    }
+
+    @Test
+    public void testNetworkOperator(){
+        PeerAppToApp peer1 = new PeerAppToApp(id1, address);
+        peer1.setNetworkOperator("NoVODAFONE");
+        assertTrue(peer1.getNetworkOperator().equals("NoVODAFONE"));
+    }
+
+    @Test
+    public void testHasReceivedData(){
+        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        assertFalse(peer1.hasReceivedData());
+        peer1.received(mock(ByteBuffer.class));
+        assertTrue(peer1.hasReceivedData());
+    }
+
+    @Test
+    public void testToString(){
+        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        peer1.setConnectionType(1);
+        assertEquals("Peer{" + "address=" + address + ", peerId='" + "firstPEER" + '\'' +
+                ", hasReceivedData=" + false + ", connectionType=" + 1 + '}'
+                ,peer1.toString());
     }
 }
