@@ -113,13 +113,17 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.chain:
-                Intent trustChainActivity = new Intent(this, ChainExplorerActivity.class);
-                startActivity(trustChainActivity);
+            case R.id.chain_menu:
+                Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
+                startActivity(chainExplorerActivity);
                 return true;
-            case R.id.details:
+            case R.id.details_menu:
                 Intent detailActivity = new Intent(this, DetailActivity.class);
                 startActivity(detailActivity);
+                return true;
+            case R.id.switch_menu:
+                Intent trustChainActivity = new Intent(this, TrustChainActivity.class);
+                startActivity(trustChainActivity);
                 return true;
             default:
                 return true;
