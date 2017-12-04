@@ -695,29 +695,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 splitPeerList();
                 incomingPeerAdapter.notifyDataSetChanged();
                 outgoingPeerAdapter.notifyDataSetChanged();
-                updatePeerStats();
             }
         });
-    }
-
-    /**
-     * Update the connection stats of thee peers.
-     */
-    private void updatePeerStats() {/*
-        int activePeers = 0;
-        int connectablePeers = 0;
-        for (PeerAppToApp peer : peerList.getList()) {
-            if (peer.isHasSentData() || peer.hasReceivedData()) {
-                activePeers++;
-            }
-            if (peer.hasReceivedData()) {
-                connectablePeers++;
-            }
-        }
-        float ratio = (float) connectablePeers / (float) activePeers;
-        mConnectablePeers.setText(String.valueOf(connectablePeers));
-        mActivePeers.setText(String.valueOf(activePeers));
-        mConnectableRatio.setText(String.valueOf(ratio));*/
     }
 
     /**
@@ -733,18 +712,14 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 newOutgoing.add(peer);
             }
         }
-        boolean changed = false;
         if (!newIncoming.equals(incomingList)) {
-            changed = true;
             incomingList.clear();
             incomingList.addAll(newIncoming);
         }
         if (!newOutgoing.equals(outgoingList)) {
-            changed = true;
             outgoingList.clear();
             outgoingList.addAll(newOutgoing);
         }
-        if (changed) updatePeerStats();
     }
 
     /**
