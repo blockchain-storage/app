@@ -26,47 +26,49 @@ public class UserConfigurationActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.user_configuration);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if(preferences.getString(HASH_ID, null) == null) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.user_configuration);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        EditText userNameInput = (EditText) findViewById(R.id.username);
-        userNameInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                    setNewUserName();
+            EditText userNameInput = (EditText) findViewById(R.id.username);
+            userNameInput.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus) {
+                        hideKeyboard(v);
+                    }
                 }
-            }
-        });
-        Button confirmBtn = (Button) findViewById(R.id.confirm_button);
-        confirmBtn.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint({"ResourceAsColor", "NewApi"})
-            public void onClick(View v) {
-                EditText userNameInput = (EditText) findViewById(R.id.username);
-                if(!userNameInput.getText().toString().matches("")) {
-                    Intent myIntent = new Intent(UserConfigurationActivity.this, OverviewConnectionsActivity.class);
-                    EditText mEdit = (EditText)findViewById(R.id.username);
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(v.getContext());
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString(HASH_ID, mEdit.getText().toString());
-                    editor.apply();
+            });
+            Button confirmBtn = (Button) findViewById(R.id.confirm_button);
+            confirmBtn.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint({"ResourceAsColor", "NewApi"})
+                public void onClick(View v) {
+                    EditText userNameInput = (EditText) findViewById(R.id.username);
+                    if(!userNameInput.getText().toString().matches("")) {
+                        Intent myIntent = new Intent(UserConfigurationActivity.this, OverviewConnectionsActivity.class);
+                        EditText mEdit = (EditText)findViewById(R.id.username);
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(v.getContext());
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString(HASH_ID, mEdit.getText().toString());
+                        editor.apply();
 
-                    myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    UserConfigurationActivity.this.startActivity(myIntent);
-                } else {
-                    TextView userNot = (TextView) findViewById(R.id.user_notification);
-                    userNot.setTextColor(getResources().getColor(R.color.colorStatusCantConnect, null));
-                    userNot.setText("Please fill in a username first!");
+                        myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        UserConfigurationActivity.this.startActivity(myIntent);
+                    } else {
+                        TextView userNot = (TextView) findViewById(R.id.user_notification);
+                        userNot.setTextColor(getResources().getColor(R.color.colorStatusCantConnect, null));
+                        userNot.setText("Please fill in a username first!");
+                    }
                 }
-            }
-        });
-    }
-
-    private void setNewUserName() {
-
+            });
+        } else {
+            Intent myIntent = new Intent(UserConfigurationActivity.this, OverviewConnectionsActivity.class);
+            myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            UserConfigurationActivity.this.startActivity(myIntent);
+        }
     }
 
     public void hideKeyboard(View view) {
