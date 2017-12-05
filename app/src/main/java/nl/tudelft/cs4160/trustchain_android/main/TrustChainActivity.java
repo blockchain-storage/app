@@ -145,6 +145,7 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
         editTextDestinationIP = findViewById(R.id.destination_IP);
         editTextDestinationPort = findViewById(R.id.destination_port);
         connectionButton = findViewById(R.id.connection_button);
+        scanQRButton = findViewById(R.id.qr_scan_button);
     }
 
     private void init() {
