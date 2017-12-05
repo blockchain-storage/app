@@ -128,14 +128,6 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
                 Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
                 startActivity(chainExplorerActivity);
                 return true;
-            case R.id.details_menu:
-                Intent detailActivity = new Intent(this, DetailActivity.class);
-                startActivity(detailActivity);
-                return true;
-            case R.id.switch_menu:
-                Intent trustChainActivity = new Intent(this, TrustChainActivity.class);
-                startActivity(trustChainActivity);
-                return true;
             default:
                 return true;
         }
