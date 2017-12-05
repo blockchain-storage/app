@@ -14,8 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.zxing.Result;
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.Util.Key;
 
 public class ScanQRActivity extends AppCompatActivity {
     private Vibrator vibrator;
@@ -86,6 +90,10 @@ public class ScanQRActivity extends AppCompatActivity {
                         .setNeutralButton(android.R.string.ok, null)
                         .show();
                 vibrator.vibrate(100);
+                PrivateKey privKey = Key.getPrivateKeyFromBytes(result.getRawBytes());
+                PublicKey pubKey = Key.getPublicKeyFromBytes(result.getRawBytes());
+                Key.saveKey(ScanQRActivity.this, Key.DEFAULT_PRIV_KEY_FILE, privKey);
+                Key.saveKey(ScanQRActivity.this, Key.DEFAULT_PUB_KEY_FILE, pubKey);
                 scannerView.resumeCameraPreview(this);
             }
         });

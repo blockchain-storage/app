@@ -1,6 +1,7 @@
 package nl.tudelft.cs4160.trustchain_android.Util;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
 
@@ -168,12 +169,18 @@ public class Key {
      * @return Public key
      */
     public static PublicKey loadPublicKey(String key) {
+        byte[] rawKey = Base64.decode(key, Base64.DEFAULT);
+        PublicKey pubKeySpec1 = getPublicKeyFromBytes(rawKey);
+        if (pubKeySpec1 != null) return pubKeySpec1;
+        return null;
+    }
+
+    @Nullable
+    public static PublicKey getPublicKeyFromBytes(byte[] rawKey) {
         KeyFactory kf = getKeyFactory();
         if(kf == null) {
             return null;
         }
-
-        byte[] rawKey = Base64.decode(key, Base64.DEFAULT);
         X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(rawKey);
 
         try {
@@ -205,12 +212,16 @@ public class Key {
      * @return The private key
      */
     public static PrivateKey loadPrivateKey(String key) {
+        byte[] rawKey = Base64.decode(key, Base64.DEFAULT);
+        return getPrivateKeyFromBytes(rawKey);
+    }
+
+    @Nullable
+    public static PrivateKey getPrivateKeyFromBytes(byte[] rawKey) {
         KeyFactory kf = getKeyFactory();
-        if(kf == null) {
+        if (kf == null) {
             return null;
         }
-
-        byte[] rawKey = Base64.decode(key, Base64.DEFAULT);
         PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(rawKey);
         try {
             return kf.generatePrivate(ks);
