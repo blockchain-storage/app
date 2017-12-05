@@ -139,7 +139,7 @@ public abstract class Message extends HashMap {
         String peerId = null;
         if (map.containsKey(PEER_ID)) peerId = (String) map.get(PEER_ID);
         // TODO: change hardcoded username
-        return new PeerAppToApp(peerId, new InetSocketAddress(address, port), "");
+        return new PeerAppToApp(peerId, new InetSocketAddress(address, port));
     }
 
     public InetSocketAddress getDestination() throws MessageException {

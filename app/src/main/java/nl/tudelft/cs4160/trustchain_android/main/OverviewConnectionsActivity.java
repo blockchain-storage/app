@@ -70,8 +70,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     private List<PeerAppToApp> incomingList = new ArrayList<>();
     private List<PeerAppToApp> outgoingList = new ArrayList<>();
     private String hashId;
-    private String currentUsername;
-    private int currentUserIcon;
     private String networkOperator;
     private WanVote wanVote;
     private int connectionType;
@@ -145,14 +143,13 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         } else {
             peerList = new PeerList();
         }
-        hashId = getId();
-        ((TextView) findViewById(R.id.peer_id)).setText(hashId.toString().substring(0, 4));
         wanVote = new WanVote();
         outBuffer = ByteBuffer.allocate(BUFFER_SIZE);
         mWanVote = (TextView) findViewById(R.id.wanvote);
 
-        currentUsername = (String) getIntent().getSerializableExtra("userName");
-        currentUserIcon = (Integer) getIntent().getSerializableExtra("icon");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        hashId = preferences.getString(HASH_ID, null);
+        ((TextView) findViewById(R.id.peer_id)).setText(hashId);
     }
 
 
@@ -605,7 +602,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             if (peer.getPeerId() != null && peer.getPeerId().equals(peerId)) return peer;
             if (peer.getAddress().equals(address)) return peer;
         }
-        final PeerAppToApp peer = new PeerAppToApp(peerId, address, username);
+        final PeerAppToApp peer = new PeerAppToApp(peerId, address);
         if (incoming) {
             showToast("New incoming peerAppToApp from " + peer.getAddress());
         }

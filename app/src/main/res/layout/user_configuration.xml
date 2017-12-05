@@ -55,19 +55,6 @@
 
             <TableRow>
 
-                <TextView
-                    android:layout_weight="1"
-                    android:text="Choose an icon: " />
-
-                <ImageView
-                    android:id="@+id/user_icon"
-                    android:layout_weight="1"
-                    android:adjustViewBounds="true" />
-
-            </TableRow>
-
-            <TableRow>
-
                 <Button
                     android:id="@+id/confirm_button"
                     android:layout_weight="1"
