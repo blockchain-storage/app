@@ -5,8 +5,4 @@
         android:id="@+id/chain_menu"
         android:title="@string/menu_item_1"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/user_configuration"
-        android:title="@string/menu_item_3"
-        app:showAsAction="never" />
 </menu>

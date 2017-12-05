@@ -117,10 +117,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
                 startActivity(chainExplorerActivity);
                 return true;
-            case R.id.user_configuration:
-                Intent userActivity = new Intent(this, UserConfigurationActivity.class);
-                startActivity(userActivity);
-                return true;
             default:
                 return true;
         }
