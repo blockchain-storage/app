@@ -115,13 +115,9 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.chain:
-                Intent trustChainActivity = new Intent(this, ChainExplorerActivity.class);
-                startActivity(trustChainActivity);
-                return true;
-            case R.id.details:
-                Intent detailActivity = new Intent(this, DetailActivity.class);
-                startActivity(detailActivity);
+            case R.id.chain_menu:
+                Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
+                startActivity(chainExplorerActivity);
                 return true;
             case R.id.user_configuration:
                 Intent userActivity = new Intent(this, UserConfigurationActivity.class);
@@ -700,29 +696,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 splitPeerList();
                 incomingPeerAdapter.notifyDataSetChanged();
                 outgoingPeerAdapter.notifyDataSetChanged();
-                updatePeerStats();
             }
         });
-    }
-
-    /**
-     * Update the connection stats of thee peers.
-     */
-    private void updatePeerStats() {/*
-        int activePeers = 0;
-        int connectablePeers = 0;
-        for (PeerAppToApp peer : peerList.getList()) {
-            if (peer.isHasSentData() || peer.hasReceivedData()) {
-                activePeers++;
-            }
-            if (peer.hasReceivedData()) {
-                connectablePeers++;
-            }
-        }
-        float ratio = (float) connectablePeers / (float) activePeers;
-        mConnectablePeers.setText(String.valueOf(connectablePeers));
-        mActivePeers.setText(String.valueOf(activePeers));
-        mConnectableRatio.setText(String.valueOf(ratio));*/
     }
 
     /**
@@ -738,18 +713,14 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 newOutgoing.add(peer);
             }
         }
-        boolean changed = false;
         if (!newIncoming.equals(incomingList)) {
-            changed = true;
             incomingList.clear();
             incomingList.addAll(newIncoming);
         }
         if (!newOutgoing.equals(outgoingList)) {
-            changed = true;
             outgoingList.clear();
             outgoingList.addAll(newOutgoing);
         }
-        if (changed) updatePeerStats();
     }
 
     /**

@@ -34,6 +34,7 @@ public class PeerListAdapter extends ArrayAdapter<PeerAppToApp> {
         ViewHolder holder;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
             convertView = inflater.inflate(R.layout.peer_connection_list_item, parent, false);
 
             holder = new ViewHolder();

@@ -35,7 +35,7 @@
     <!-- Menu -->
     <string name="menu_item_1">My Chain</string>
     <string name="menu_item_2">Details</string>
-    <string name="menu_item_3">User Configuration</string>
+    <string name="menu_item_3">User</string>
 
     <!--- app to app strings -->
     <string name="start_connection">Attempt connection</string>

@@ -105,12 +105,14 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
 
     private void connectToPeer() {
         peerAppToApp = (PeerAppToApp) getIntent().getSerializableExtra("PeerAppToApp");
-        String address = peerAppToApp.getExternalAddress().toString().substring(1);
-        int port = peerAppToApp.getPort();
-        editTextDestinationIP.setText(address);
-        editTextDestinationPort.setText(port + "");
-        peer = new Peer(null, address, port);
-        communication.connectToPeer(peer);
+        if(peerAppToApp != null) {
+            String address = peerAppToApp.getExternalAddress().toString().substring(1);
+            int port = peerAppToApp.getPort();
+            editTextDestinationIP.setText(address);
+            editTextDestinationPort.setText(port + "");
+            peer = new Peer(null, address, port);
+            communication.connectToPeer(peer);
+        }
     }
 
     @Override
@@ -122,18 +124,14 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.chain:
-                Intent intent = new Intent(this, ChainExplorerActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.details:
-                startActivity(new Intent(this, DetailActivity.class));
+            case R.id.chain_menu:
+                Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
+                startActivity(chainExplorerActivity);
                 return true;
             default:
                 return true;
         }
     }
-
 
     private void initVariables() {
         thisActivity = this;
