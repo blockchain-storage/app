@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements CommunicationList
         chainExplorerButton = findViewById(R.id.chain_explorer_button);
         resetDatabaseButton = findViewById(R.id.reset_database_button);
         bluetoothButton = findViewById(R.id.bluetooth_connection_button);
+        scanQRButton = findViewById(R.id.qr_scan_button);
     }
 
     private void init() {
