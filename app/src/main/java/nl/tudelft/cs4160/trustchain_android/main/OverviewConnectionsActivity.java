@@ -1,4 +1,5 @@
 package nl.tudelft.cs4160.trustchain_android.main;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,12 +11,14 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +41,7 @@ import java.util.UUID;
 
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
+import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.WanVote;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.IntroductionRequest;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.IntroductionResponse;
@@ -46,6 +50,7 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Message
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Puncture;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.PunctureRequest;
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReadException;
+import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
 
 public class OverviewConnectionsActivity extends AppCompatActivity {
 
@@ -56,17 +61,14 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     final static int KNOWN_PEER_LIMIT = 10;
     private static final int BUFFER_SIZE = 2048;
     private TextView mWanVote;
-    private TextView mActivePeers;
-    private TextView mConnectablePeers;
-    private TextView mConnectableRatio;
     private Button mExitButton;
     private PeerListAdapter incomingPeerAdapter;
     private PeerListAdapter outgoingPeerAdapter;
     private DatagramChannel channel;
 
-    private ArrayList<PeerAppToApp> peerList;
-    private List<PeerAppToApp> incomingList;
-    private List<PeerAppToApp> outgoingList;
+    private PeerList peerList;
+    private List<PeerAppToApp> incomingList = new ArrayList<>();
+    private List<PeerAppToApp> outgoingList = new ArrayList<>();
     private String hashId;
     private String networkOperator;
     private WanVote wanVote;
@@ -88,33 +90,9 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
-
-        TelephonyManager telephonyManager = ((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE));
-        networkOperator = telephonyManager.getNetworkOperatorName();
-        if (savedInstanceState != null) {
-            peerList = (ArrayList<PeerAppToApp>) savedInstanceState.getSerializable("peers");
-            System.out.println("New peerlist: " + peerList);
-        } else {
-            peerList = new ArrayList<>();
-        }
-        incomingList = new ArrayList<>();
-        outgoingList = new ArrayList<>();
-        hashId = getId();
-        ((TextView) findViewById(R.id.peer_id)).setText(hashId.toString().substring(0, 4));
-        wanVote = new WanVote();
-        outBuffer = ByteBuffer.allocate(BUFFER_SIZE);
-        mWanVote = (TextView) findViewById(R.id.wanvote);
-        mActivePeers = (TextView) findViewById(R.id.active_peers);
-        mConnectablePeers = (TextView) findViewById(R.id.connectable_peers);
-        mConnectableRatio = (TextView) findViewById(R.id.connectable_ratio);
+        initVariables(savedInstanceState);
         initExitButton();
-
-        try {
-            channel = DatagramChannel.open();
-            channel.socket().bind(new InetSocketAddress(DEFAULT_PORT));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        openChannel();
         updateConnectionType();
         addInitialPeer();
         startListenThread();
@@ -135,14 +113,39 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.main_menu:
-                Intent intent = new Intent(this, TrustChainActivity.class);
-                startActivity(intent);
+            case R.id.chain_menu:
+                Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
+                startActivity(chainExplorerActivity);
                 return true;
             default:
                 return true;
         }
     }
+
+    private void openChannel() {
+        try {
+            channel = DatagramChannel.open();
+            channel.socket().bind(new InetSocketAddress(DEFAULT_PORT));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initVariables(Bundle savedInstanceState) {
+        TelephonyManager telephonyManager = ((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE));
+        networkOperator = telephonyManager.getNetworkOperatorName();
+        if (savedInstanceState != null) {
+            peerList = new PeerList((ArrayList<PeerAppToApp>) savedInstanceState.getSerializable("peers"));
+        } else {
+            peerList = new PeerList();
+        }
+        hashId = getId();
+        ((TextView) findViewById(R.id.peer_id)).setText(hashId.toString().substring(0, 4));
+        wanVote = new WanVote();
+        outBuffer = ByteBuffer.allocate(BUFFER_SIZE);
+        mWanVote = (TextView) findViewById(R.id.wanvote);
+    }
+
 
     private void initExitButton() {
         mExitButton = (Button) findViewById(R.id.exit_button);
@@ -156,7 +159,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     /**
-     * Initialize the peer lists.
+     * Initialize the peerAppToApp lists.
      */
     private void initPeerLists() {
         ListView incomingPeerConnectionListView = (ListView) findViewById(R.id.incoming_peer_connection_list_view);
@@ -168,7 +171,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     /**
-     * Add the intial hard-coded connectable peer to the peer list.
+     * Add the intial hard-coded connectable peerAppToApp to the peerAppToApp list.
      */
     private void addInitialPeer() {
         try {
@@ -195,9 +198,9 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     /**
-     * Retrieve the local peer id from storage.
+     * Retrieve the local peerAppToApp id from storage.
      *
-     * @return the peer id.
+     * @return the peerAppToApp id.
      */
     private String getId() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -213,7 +216,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     /**
-     * Generate a new hash to be used as peer id.
+     * Generate a new hash to be used as peerAppToApp id.
      *
      * @return the generated hash.
      */
@@ -222,7 +225,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     /**
-     * Start the thread send thread responsible for sending a {@link IntroductionRequest} to a random peer every 5 seconds.
+     * Start the thread send thread responsible for sending a {@link IntroductionRequest} to a random peerAppToApp every 5 seconds.
      */
     private void startSendThread() {
         sendThread = new Thread(new Runnable() {
@@ -267,7 +270,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * Send a puncture request.
      *
      * @param peer         the destination.
-     * @param puncturePeer the peer to puncture.
+     * @param puncturePeer the peerAppToApp to puncture.
      * @throws IOException
      */
     private void sendPunctureRequest(PeerAppToApp peer, PeerAppToApp puncturePeer) throws IOException {
@@ -290,12 +293,12 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * Send an introduction response.
      *
      * @param peer    the destination.
-     * @param invitee the invitee to which the destination peer will send a puncture request.
+     * @param invitee the invitee to which the destination peerAppToApp will send a puncture request.
      * @throws IOException
      */
     private void sendIntroductionResponse(PeerAppToApp peer, PeerAppToApp invitee) throws IOException {
         List<PeerAppToApp> pexPeers = new ArrayList<>();
-        for (PeerAppToApp p : peerList) {
+        for (PeerAppToApp p : peerList.getList()) {
             if (p.hasReceivedData() && p.getPeerId() != null && p.isAlive())
                 pexPeers.add(p);
         }
@@ -305,10 +308,10 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     /**
-     * Send a message to given peer.
+     * Send a message to given peerAppToApp.
      *
      * @param message the message to send.
-     * @param peer    the destination peer.
+     * @param peer    the destination peerAppToApp.
      * @throws IOException
      */
     private synchronized void sendMesssage(Message message, PeerAppToApp peer) throws IOException {
@@ -322,14 +325,14 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     /**
-     * Pick a random eligible peer/invitee for sending an introduction request to.
+     * Pick a random eligible peerAppToApp/invitee for sending an introduction request to.
      *
-     * @param excludePeer peer to which the invitee is sent.
-     * @return the eligible peer if any, else null.
+     * @param excludePeer peerAppToApp to which the invitee is sent.
+     * @return the eligible peerAppToApp if any, else null.
      */
     private PeerAppToApp getEligiblePeer(PeerAppToApp excludePeer) {
         List<PeerAppToApp> eligiblePeers = new ArrayList<>();
-        for (PeerAppToApp p : peerList) {
+        for (PeerAppToApp p : peerList.getList()) {
             if (p.isAlive() && !p.equals(excludePeer)) {
                 eligiblePeers.add(p);
             }
@@ -368,64 +371,33 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     /**
-     * Resolve a peer id or address to a peer, else create a new one.
+     * Resolve a peerAppToApp id or address to a peerAppToApp, else create a new one.
      *
-     * @param id       the peer's unique id.
-     * @param address  the peer's address.
-     * @param incoming boolean indicator whether the peer is incoming.
-     * @return the resolved or create peer.
+     * @param id       the peerAppToApp's unique id.
+     * @param address  the peerAppToApp's address.
+     * @param incoming boolean indicator whether the peerAppToApp is incoming.
+     * @return the resolved or create peerAppToApp.
      */
     private PeerAppToApp getOrMakePeer(String id, InetSocketAddress address, boolean incoming) {
         if (id != null) {
-            for (PeerAppToApp peer : peerList) {
+            for (PeerAppToApp peer : peerList.getList()) {
                 if (id.equals(peer.getPeerId())) {
                     if (!address.equals(peer.getAddress())) {
                         System.out.println("Peer address differs from known address");
                         peer.setAddress(address);
-                        removeDuplicates();
+                        peerList.removeDuplicates();
                     }
                     return peer;
                 }
             }
         }
-        for (PeerAppToApp peer : peerList) {
+        for (PeerAppToApp peer : peerList.getList()) {
             if (peer.getAddress().equals(address)) {
                 if (id != null) peer.setPeerId(id);
                 return peer;
             }
         }
         return addPeer(id, address, incoming);
-    }
-
-    /**
-     * Remove duplicate peers from the peerlist.
-     */
-    private void removeDuplicates() {
-        for (int i = 0; i < peerList.size(); i++) {
-            PeerAppToApp p1 = peerList.get(i);
-            for (int j = 0; j < peerList.size(); j++) {
-                PeerAppToApp p2 = peerList.get(j);
-                if (j != i && p1.getPeerId() != null && p1.getPeerId().equals(p2.getPeerId())) {
-                    peerList.remove(p2);
-                }
-            }
-        }
-    }
-
-    /**
-     * Check whether a peer exists.
-     *
-     * @param id the peer's id.
-     * @return the result.
-     */
-    private boolean peerExists(String id) {
-        if (id == null) return false;
-        for (PeerAppToApp peer : peerList) {
-            if (id.equals(peer.getPeerId())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 
@@ -471,7 +443,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     /**
      * Handle an introduction request. Send a puncture request to the included invitee.
      *
-     * @param peer    the origin peer.
+     * @param peer    the origin peerAppToApp.
      * @param message the message.
      * @throws IOException
      */
@@ -494,7 +466,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     /**
      * Handle an introduction response. Parse incoming PEX peers.
      *
-     * @param peer    the origin peer.
+     * @param peer    the origin peerAppToApp.
      * @param message the message.
      */
     private void handleIntroductionResponse(PeerAppToApp peer, IntroductionResponse message) {
@@ -510,7 +482,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     /**
      * Handle a puncture. Does nothing because the only purpose of a puncture is to punch a hole in the NAT.
      *
-     * @param peer    the origin peer.
+     * @param peer    the origin peerAppToApp.
      * @param message the message.
      * @throws IOException
      */
@@ -518,16 +490,17 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     /**
-     * Handle a puncture request. Sends a puncture to the puncture peer included in the message.
+     * Handle a puncture request. Sends a puncture to the puncture peerAppToApp included in the message.
      *
-     * @param peer    the origin peer.
+     * @param peer    the origin peerAppToApp.
      * @param message the message.
      * @throws IOException
      * @throws MessageException
      */
     private void handlePunctureRequest(PeerAppToApp peer, PunctureRequest message) throws IOException, MessageException {
-        if (!peerExists(message.getPuncturePeer().getPeerId()))
+        if (!peerList.peerExistsInList(message.getPuncturePeer())) {
             sendPuncture(message.getPuncturePeer());
+        }
     }
 
     /**
@@ -594,38 +567,38 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     /**
-     * Add a peer to the peer list.
+     * Add a peerAppToApp to the peerAppToApp list.
      *
-     * @param peerId   the peer's id.
-     * @param address  the peer's address.
-     * @param incoming whether the peer is an incoming peer.
-     * @return the added peer.
+     * @param peerId   the peerAppToApp's id.
+     * @param address  the peerAppToApp's address.
+     * @param incoming whether the peerAppToApp is an incoming peerAppToApp.
+     * @return the added peerAppToApp.
      */
     private synchronized PeerAppToApp addPeer(String peerId, InetSocketAddress address, boolean incoming) {
         if (hashId.equals(peerId)) {
             System.out.println("Not adding self");
             PeerAppToApp self = null;
-            for (PeerAppToApp p : peerList) {
+            for (PeerAppToApp p : peerList.getList()) {
                 if (p.getAddress().equals(wanVote.getAddress()))
                     self = p;
             }
             if (self != null) {
-                peerList.remove(self);
+                peerList.getList().remove(self);
                 System.out.println("Removed self");
             }
             return null;
         }
         if (wanVote.getAddress() != null && wanVote.getAddress().equals(address)) {
-            System.out.println("Not adding peer with same address as wanVote");
+            System.out.println("Not adding peerAppToApp with same address as wanVote");
             return null;
         }
-        for (PeerAppToApp peer : peerList) {
+        for (PeerAppToApp peer : peerList.getList()) {
             if (peer.getPeerId() != null && peer.getPeerId().equals(peerId)) return peer;
             if (peer.getAddress().equals(address)) return peer;
         }
         final PeerAppToApp peer = new PeerAppToApp(peerId, address);
         if (incoming) {
-            showToast("New incoming peer from " + peer.getAddress());
+            showToast("New incoming peerAppToApp from " + peer.getAddress());
         }
         new Handler(Looper.getMainLooper()).post(new Runnable() {
 
@@ -660,7 +633,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         int knownPeers = 0;
         PeerAppToApp oldestPeer = null;
         long oldestDate = System.currentTimeMillis();
-        for (PeerAppToApp peer : peerList) {
+        for (PeerAppToApp peer : peerList.getList()) {
             if (peer.hasReceivedData()) {
                 knownPeers++;
                 if (peer.getCreationTime() < oldestDate) {
@@ -687,7 +660,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         int unknownPeers = 0;
         PeerAppToApp oldestPeer = null;
         long oldestDate = System.currentTimeMillis();
-        for (PeerAppToApp peer : peerList) {
+        for (PeerAppToApp peer : peerList.getList()) {
             if (!peer.hasReceivedData()) {
                 unknownPeers++;
                 if (peer.getCreationTime() < oldestDate) {
@@ -705,7 +678,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     /**
-     * Update the showed peer lists.
+     * Update the showed peerAppToApp lists.
      */
     private void updatePeerLists() {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
@@ -714,56 +687,31 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 splitPeerList();
                 incomingPeerAdapter.notifyDataSetChanged();
                 outgoingPeerAdapter.notifyDataSetChanged();
-                updatePeerStats();
             }
         });
     }
 
     /**
-     * Update the connection stats of thee peers.
-     */
-    private void updatePeerStats() {
-        int activePeers = 0;
-        int connectablePeers = 0;
-        for (PeerAppToApp peer : peerList) {
-            if (peer.isHasSentData() || peer.hasReceivedData()) {
-                activePeers++;
-            }
-            if (peer.hasReceivedData()) {
-                connectablePeers++;
-            }
-        }
-        float ratio = (float) connectablePeers / (float) activePeers;
-        mConnectablePeers.setText(String.valueOf(connectablePeers));
-        mActivePeers.setText(String.valueOf(activePeers));
-        mConnectableRatio.setText(String.valueOf(ratio));
-    }
-
-    /**
-     * Split the peer list between incoming and outgoing peers.
+     * Split the peerAppToApp list between incoming and outgoing peers.
      */
     private void splitPeerList() {
         List<PeerAppToApp> newIncoming = new ArrayList<>();
         List<PeerAppToApp> newOutgoing = new ArrayList<>();
-        for (PeerAppToApp peer : peerList) {
+        for (PeerAppToApp peer : peerList.getList()) {
             if (peer.hasReceivedData()) {
                 newIncoming.add(peer);
             } else {
                 newOutgoing.add(peer);
             }
         }
-        boolean changed = false;
         if (!newIncoming.equals(incomingList)) {
-            changed = true;
             incomingList.clear();
             incomingList.addAll(newIncoming);
         }
         if (!newOutgoing.equals(outgoingList)) {
-            changed = true;
             outgoingList.clear();
             outgoingList.addAll(newOutgoing);
         }
-        if (changed) updatePeerStats();
     }
 
     /**
@@ -804,7 +752,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("peers", peerList);
+        outState.putSerializable("peers", peerList.getList());
 
         super.onSaveInstanceState(outState);
     }

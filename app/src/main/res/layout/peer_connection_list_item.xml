@@ -49,6 +49,7 @@
     </TableLayout>
 
     <TableLayout
+        android:id="@+id/tableLayoutConnection"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.85">
@@ -60,11 +61,13 @@
                 android:id="@+id/carrier"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
+                android:hint="carrier"
                 android:textColor="@android:color/secondary_text_light"/>
 
             <TextView
                 android:id="@+id/peer_id"
                 android:layout_width="0dp"
+                android:hint="peer id"
                 android:layout_weight="0.5"
                 android:textColor="@android:color/secondary_text_light"/>
         </TableRow>
@@ -77,6 +80,7 @@
                 android:id="@+id/destination_address"
                 android:layout_width="fill_parent"
                 android:layout_span="2"
+                android:hint="destination_address"
                 android:layout_weight="1"
                 android:textColor="@android:color/secondary_text_light"/>
         </TableRow>
