@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -13,7 +14,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +41,7 @@ import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
 import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS_SEQ;
 
-public class TrustChainActivity extends AppCompatActivity implements CommunicationListener {
+public class TrustChainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, CommunicationListener {
 
 
     public final static String TRANSACTION = "Hello world!";
@@ -48,9 +52,13 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
     TextView externalIPText;
     TextView localIPText;
     TextView statusText;
-    Button connectionButton;
+    TextView developerModeText;
+    Button sendButton;
     EditText editTextDestinationIP;
     EditText editTextDestinationPort;
+    EditText messageEditText;
+    SwitchCompat switchDeveloperMode;
+    LinearLayout extraInformationPanel;
 
     TrustChainActivity thisActivity;
     PeerAppToApp peerAppToApp;
@@ -79,19 +87,11 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
      * the network is not compromised due to not using dispersy.
      */
 
+
     public void onClickConnect(View view) {
         peer = new Peer(null, editTextDestinationIP.getText().toString(),
                 Integer.parseInt(editTextDestinationPort.getText().toString()));
         communication.connectToPeer(peer);
-    }
-
-    public void onClickReset(View view) {
-        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
-            ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE))
-                    .clearApplicationUserData();
-        } else {
-            Toast.makeText(getApplicationContext(), "Requires at least API 19 (KitKat)", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override
@@ -118,7 +118,7 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.trustchain_menu, menu);
         return true;
     }
 
@@ -128,6 +128,13 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
                 Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
                 startActivity(chainExplorerActivity);
                 return true;
+            case R.id.close:
+                if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
+                    ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE))
+                            .clearApplicationUserData();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Requires at least API 19 (KitKat)", Toast.LENGTH_LONG).show();
+                }
             default:
                 return true;
         }
@@ -141,7 +148,13 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
         statusText.setMovementMethod(new ScrollingMovementMethod());
         editTextDestinationIP = (EditText) findViewById(R.id.destination_IP);
         editTextDestinationPort = (EditText) findViewById(R.id.destination_port);
-        connectionButton = (Button) findViewById(R.id.connection_button);
+        sendButton = (Button) findViewById(R.id.send_button);
+        messageEditText = (EditText) findViewById(R.id.message_edit_text);
+        extraInformationPanel = (LinearLayout) findViewById(R.id.extra_information_panel);
+        developerModeText = (TextView) findViewById(R.id.developer_mode_text);
+        switchDeveloperMode = (SwitchCompat) findViewById(R.id.switch_developer_mode);
+        switchDeveloperMode.setOnCheckedChangeListener(this);
+
     }
 
     private void init() {
@@ -174,6 +187,11 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
             Key.saveKey(getApplicationContext(), Key.DEFAULT_PRIV_KEY_FILE, kp.getPrivate());
             Log.i(TAG, "New keys created");
         }
+    }
+
+    private void enableMessage(){
+        messageEditText.setVisibility(View.VISIBLE);
+        sendButton.setText(getResources().getString(R.string.send));
     }
 
     /**
@@ -271,4 +289,16 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
             }
         });
     }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(isChecked) {
+            extraInformationPanel.setVisibility(View.VISIBLE);
+            developerModeText.setTextColor(getResources().getColor(R.color.colorAccent));
+        } else {
+            extraInformationPanel.setVisibility(View.GONE);
+            developerModeText.setTextColor(getResources().getColor(R.color.colorGray));
+        }
+    }
+
 }

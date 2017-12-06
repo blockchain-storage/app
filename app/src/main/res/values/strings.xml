@@ -32,6 +32,9 @@
     <string name="bluetooth_explanation">First pair with a device via the Android bluetooth manager. After the two devices are paired press on the desired device to initiate a connection.</string>
     <string name="bluetooth_button">Bluetooth</string>
 
+    <string name="send">Send</string>
+    <string name="developer_mode">Developer Mode</string>
+
     <!-- Menu -->
     <string name="menu_item_1">My Chain</string>
     <string name="menu_item_2">Details</string>
