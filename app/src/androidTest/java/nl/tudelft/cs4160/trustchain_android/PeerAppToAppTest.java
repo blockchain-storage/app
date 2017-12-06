@@ -1,10 +1,6 @@
 package nl.tudelft.cs4160.trustchain_android;
 
-import android.content.Context;
-import android.location.Address;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
 import junit.framework.TestCase;
 
@@ -12,15 +8,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -36,7 +29,7 @@ public class PeerAppToAppTest extends TestCase {
 
     @Before
     public void setUp() {
-        address = mock(InetSocketAddress.class);
+        address = new InetSocketAddress(11);
         id1 = "123";
         id2 = "24";
     }
@@ -81,5 +74,14 @@ public class PeerAppToAppTest extends TestCase {
         assertFalse(peer1.hasReceivedData());
         peer1.received(mock(ByteBuffer.class));
         assertTrue(peer1.hasReceivedData());
+    }
+
+    @Test
+    public void testToString(){
+        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        peer1.setConnectionType(1);
+        assertEquals("Peer{" + "address=" + address + ", peerId='" + "firstPEER" + '\'' +
+                       ", hasReceivedData=" + false + ", connectionType=" + 1 + '}'
+                        ,peer1.toString());
     }
 }
