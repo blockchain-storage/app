@@ -92,9 +92,6 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
     public void onClickSend(View view) {
         EditText editText = (EditText) view;
-        if(editText.getText().toString() == ){
-
-        }
         peer = new Peer(null, editTextDestinationIP.getText().toString(),
                 Integer.parseInt(editTextDestinationPort.getText().toString()));
         communication.connectToPeer(peer);
@@ -309,12 +306,12 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
                 builder.setMessage("accept?")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                               communication.setPermission(true);
+                               communication.acceptTransaction();
                             }
                         })
                         .setNegativeButton("X", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                communication.setPermission(false);
+                                // do nothing?
                             }
                         });
                 builder.create();
