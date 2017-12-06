@@ -373,7 +373,8 @@ public abstract class Communication {
             // send a crawl request, requesting the last 5 blocks before the received halfblock (if available) of the peer
             sendCrawlRequest(peer, block.getPublicKey().toByteArray(), Math.max(GENESIS_SEQ, block.getSequenceNumber() - 5));
         } else {
-            signBlock(peer, block);
+           // signBlock(peer, block);
+            listener.requestPermission(block, peer);
         }
     }
 
@@ -404,16 +405,17 @@ public abstract class Communication {
         }
     }
 
+    public void acceptTransaction(MessageProto.TrustChainBlock block, Peer peer) {
+             signBlock(peer, block);
+    }
+
     public byte[] getMyPublicKey() {
         return keyPair.getPublic().getEncoded();
     }
 
-
     protected Map<String, byte[]> getPeers() {
         return peers;
     }
-
-
 
     public boolean hasPublicKey(String identifier) {
         return peers.containsKey(identifier);

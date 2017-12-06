@@ -91,7 +91,6 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
 
     public void onClickSend(View view) {
-        EditText editText = (EditText) view;
         peer = new Peer(null, editTextDestinationIP.getText().toString(),
                 Integer.parseInt(editTextDestinationPort.getText().toString()));
         communication.connectToPeer(peer);
@@ -296,14 +295,14 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
 
     @Override
-    public void requestPermission(final TrustChainBlock block, final Peer peer) {
+    public void requestPermission(final MessageProto.TrustChainBlock block, final Peer peer) {
         //just to be sure run it on the ui thread
         //this is not necessary when this function is called from a AsyncTask
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
-                builder.setMessage("accept?")
+                builder.setMessage("accept? " + block.getTransaction().toString())
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                communication.acceptTransaction(block, peer);
