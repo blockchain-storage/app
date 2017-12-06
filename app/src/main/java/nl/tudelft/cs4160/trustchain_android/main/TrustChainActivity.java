@@ -296,7 +296,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
 
     @Override
-    public void requestPermission(final String msg) {
+    public void requestPermission(final TrustChainBlock block, final Peer peer) {
         //just to be sure run it on the ui thread
         //this is not necessary when this function is called from a AsyncTask
         runOnUiThread(new Runnable() {
@@ -306,7 +306,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
                 builder.setMessage("accept?")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                               communication.acceptTransaction();
+                               communication.acceptTransaction(block, peer);
                             }
                         })
                         .setNegativeButton("X", new DialogInterface.OnClickListener() {
