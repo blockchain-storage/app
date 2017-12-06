@@ -8,6 +8,7 @@ import android.util.Log;
 
 import junit.framework.TestCase;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -33,10 +34,11 @@ public class PeerAppToAppTest extends TestCase {
     String id2;
     InetSocketAddress address;
 
-    @Override
-    protected void setUp() {
-        // not sure if the setUp works correctly
+    @Before
+    public void setUp() {
         address = mock(InetSocketAddress.class);
+        id1 = "123";
+        id2 = "24";
     }
 
     @Test
@@ -79,14 +81,5 @@ public class PeerAppToAppTest extends TestCase {
         assertFalse(peer1.hasReceivedData());
         peer1.received(mock(ByteBuffer.class));
         assertTrue(peer1.hasReceivedData());
-    }
-
-    @Test
-    public void testToString(){
-        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
-        peer1.setConnectionType(1);
-        assertEquals("Peer{" + "address=" + address + ", peerId='" + "firstPEER" + '\'' +
-                ", hasReceivedData=" + false + ", connectionType=" + 1 + '}'
-                ,peer1.toString());
     }
 }
