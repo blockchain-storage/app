@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.security.KeyPair;
@@ -80,8 +82,28 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
      */
 
     public void onClickConnect(View view) {
-        peer = new Peer(null, editTextDestinationIP.getText().toString(),
-                Integer.parseInt(editTextDestinationPort.getText().toString()));
+        String destinationIp = "";
+        int destinationPort = 0;
+        // input validation when the use adjusts the IP and/or port of the destination address.
+        try{
+            destinationIp = editTextDestinationIP.getText().toString();
+            if(destinationIp.length() < 6 || destinationIp.length() > 15){
+                throw new Exception("IP is not of a valid length");
+            }
+            Object res = InetAddress.getByName(destinationIp);
+            if(!(res instanceof Inet4Address) || !(res instanceof Inet6Address)){
+                throw new Exception("IP is not a valid IP4 or IP6 address.");
+            }
+            String potentialPort = editTextDestinationPort.getText().toString();
+            destinationPort = Integer.parseInt(potentialPort);
+            if (destinationPort < 1024 || destinationPort > 5000) {
+                throw new Exception("Only use a range of valid ports.");
+            }
+        } catch (Exception e){
+            Toast.makeText(thisActivity, "The destination port or the IP adress is not a valid. Port: " + destinationPort + " IP: " + destinationIp, Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+        peer = new Peer(null,destinationIp , destinationPort);
         communication.connectToPeer(peer);
     }
 
