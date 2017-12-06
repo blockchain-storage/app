@@ -50,8 +50,8 @@ public class PeerAppToAppTest extends TestCase {
 
     @Test
     public void testNotEqual() {
-        PeerAppToApp peer1 = new PeerAppToApp("RANDOM", address);
-        PeerAppToApp peer2 = new PeerAppToApp("MORERANDOM", address);
+        PeerAppToApp peer1 = new PeerAppToApp(id1, address);
+        PeerAppToApp peer2 = new PeerAppToApp(id2, address);
         assertFalse(peer1.equals(peer2));
     }
 
