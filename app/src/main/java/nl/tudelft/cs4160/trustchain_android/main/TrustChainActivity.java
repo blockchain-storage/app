@@ -1,10 +1,12 @@
 package nl.tudelft.cs4160.trustchain_android.main;
 
 import android.app.ActivityManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.text.method.ScrollingMovementMethod;
@@ -44,7 +46,7 @@ import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS
 public class TrustChainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, CommunicationListener {
 
 
-    public final static String TRANSACTION = "Hello world!";
+    public static String TRANSACTION_DATA = "Hello world!";
     private final static String TAG = TrustChainActivity.class.toString();
 
     TrustChainDBHelper dbHelper;
@@ -88,10 +90,15 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
      */
 
 
-    public void onClickConnect(View view) {
+    public void onClickSend(View view) {
+        EditText editText = (EditText) view;
+        if(editText.getText().toString() == ){
+
+        }
         peer = new Peer(null, editTextDestinationIP.getText().toString(),
                 Integer.parseInt(editTextDestinationPort.getText().toString()));
         communication.connectToPeer(peer);
+        TRANSACTION_DATA = messageEditText.getText().toString();
     }
 
     @Override
@@ -286,6 +293,31 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
             @Override
             public void run() {
                 ((TextView) findViewById(R.id.status)).append(msg);
+            }
+        });
+    }
+
+
+    @Override
+    public void requestPermission(final String msg) {
+        //just to be sure run it on the ui thread
+        //this is not necessary when this function is called from a AsyncTask
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                builder.setMessage("accept?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                               communication.setPermission(true);
+                            }
+                        })
+                        .setNegativeButton("X", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                communication.setPermission(false);
+                            }
+                        });
+                builder.create();
             }
         });
     }
