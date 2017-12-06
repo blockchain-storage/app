@@ -26,9 +26,9 @@ public class UserConfigurationActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if(preferences.getString(HASH_ID, null) == null) {
-            super.onCreate(savedInstanceState);
             setContentView(R.layout.user_configuration);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
