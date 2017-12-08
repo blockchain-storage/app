@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.security.KeyPair;
@@ -80,8 +82,34 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
      */
 
     public void onClickConnect(View view) {
-        peer = new Peer(null, editTextDestinationIP.getText().toString(),
-                Integer.parseInt(editTextDestinationPort.getText().toString()));
+        String destinationIp = "";
+        String potentialPort = "";
+        int destinationPort = 0;
+        // input validation when the use adjusts the IP and/or port of the destination address.
+        try{
+            destinationIp = editTextDestinationIP.getText().toString();
+            String len = destinationIp.replace(".", "");
+            if(len.length() < 6 || len.length() > 15){
+                throw new Exception("IP is not of a valid length");
+            }
+            Object res = InetAddress.getByName(destinationIp);
+            if(!(res instanceof Inet4Address) && !(res instanceof Inet6Address)){
+                Log.i("Destination IP Adress: ", res.toString());
+                throw new Exception("IP is not a valid IP4 or IP6 address.");
+            }
+            potentialPort = editTextDestinationPort.getText().toString();
+            Toast.makeText(thisActivity, potentialPort, Toast.LENGTH_LONG);
+            Log.i("Potential Port: ", potentialPort);
+            destinationPort = Integer.parseInt(potentialPort);
+            if (destinationPort < 1024 || destinationPort > 5000) {
+                Log.i("Destination port: ", Integer.toString(destinationPort));
+                throw new Exception("Only use a range of valid ports.");
+            }
+        } catch (Exception e){
+            Toast.makeText(thisActivity, "The destination port or the IP adress is not a valid. Port: " + potentialPort + " IP: " + destinationIp, Toast.LENGTH_SHORT).show();
+//            e.printStackTrace();
+        }
+        peer = new Peer(null,destinationIp , destinationPort);
         communication.connectToPeer(peer);
     }
 
