@@ -11,14 +11,12 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -422,7 +420,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             peer.received(data);
             switch (message.getType()) {
                 case Message.INTRODUCTION_REQUEST:
-                    handlIntroductionRequest(peer, (IntroductionRequest) message);
+                    handleIntroductionRequest(peer, (IntroductionRequest) message);
                     break;
                 case Message.INTRODUCTION_RESPONSE:
                     handleIntroductionResponse(peer, (IntroductionResponse) message);
@@ -447,7 +445,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @param message the message.
      * @throws IOException
      */
-    private void handlIntroductionRequest(PeerAppToApp peer, IntroductionRequest message) throws IOException {
+    private void handleIntroductionRequest(PeerAppToApp peer, IntroductionRequest message) throws IOException {
         peer.setNetworkOperator(message.getNetworkOperator());
         peer.setConnectionType((int) message.getConnectionType());
         if (peerList.size() > 1) {
