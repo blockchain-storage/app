@@ -95,6 +95,8 @@ public abstract class Communication {
 
         // send the crawl request
         MessageProto.Message message = newBuilder().setCrawlRequest(crawlRequest).build();
+
+        listener.updateLog("Sent crawl request to " + peer.getName() + "\n");
         sendMessage(peer, message);
     }
 
@@ -106,6 +108,8 @@ public abstract class Communication {
      */
     public void sendHalfBlock(Peer peer, MessageProto.TrustChainBlock block) {
         MessageProto.Message message = newBuilder().setHalfBlock(block).build();
+
+        listener.updateLog("Sent half block to  " + peer.getName() + "\n");
         sendMessage(peer, message);
     }
 
@@ -296,9 +300,9 @@ public abstract class Communication {
         String messageLog = "";
         // In case we received a halfblock
         if (block.getPublicKey().size() > 0 && crawlRequest.getPublicKey().size() == 0) {
-            messageLog += "block received from: " + peer.getName() + "\n" + TrustChainBlock.transferDataToString(block);
+            messageLog += "block received from: " + peer.getName() + "\n" + TrustChainBlock.transferDataToString(block) + "\n";
 
-            listener.updateLog("\n  Server: " + messageLog);
+            listener.updateLog("\nServer: " + messageLog);
             peer.setPublicKey(block.getPublicKey().toByteArray());
 
             //make sure the correct port is set
@@ -308,8 +312,8 @@ public abstract class Communication {
 
         // In case we received a crawlrequest
         if (block.getPublicKey().size() == 0 && crawlRequest.getPublicKey().size() > 0) {
-            messageLog += "crawlrequest received from: " + peer.getName();
-            listener.updateLog("\n  Server: " + messageLog);
+            messageLog += "crawlrequest received from: " + peer.getName() + "\n";
+            listener.updateLog("\nServer: " + messageLog);
 
             peer.setPublicKey(crawlRequest.getPublicKey().toByteArray());
             this.receivedCrawlRequest(peer, crawlRequest);

@@ -52,6 +52,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
     TrustChainDBHelper dbHelper;
 
+    boolean developerMode = false;
     TextView externalIPText;
     TextView localIPText;
     TextView statusText;
@@ -93,19 +94,19 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
     public void onClickSend(View view) throws UnsupportedEncodingException {
         Log.d("testLogs", "onClickSend");
-
         if(isConnected()){
             TRANSACTION_DATA = messageEditText.getText().toString();
             byte[] transactionData = TRANSACTION_DATA.getBytes("UTF-8");
             communication.signBlock(transactionData, peer);
         }else {
-            peer = new Peer(null, editTextDestinationIP.getText().toString(),
-                    Integer.parseInt(editTextDestinationPort.getText().toString()));
-            if (communication.connectToPeer(peer)) {
-                Log.d("testLogs", "connected to peer!");
-                enableMessage();
-            } else {
-                Log.d("testLogs", "FAILED to connect to peer");
+            if(developerMode) {
+                peer = new Peer(null, editTextDestinationIP.getText().toString(),
+                        Integer.parseInt(editTextDestinationPort.getText().toString()));
+                if(communication.connectToPeer(peer)) {
+                    enableMessage();
+                }
+            }else{
+                connectToPeer();
             }
         }
     }
@@ -129,10 +130,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
             editTextDestinationPort.setText(port + "");
             peer = new Peer(null, address, port, name);
             if (communication.connectToPeer(peer)) {
-                Log.d("testLogs", "connected to peer!");
                 enableMessage();
-            } else {
-                Log.d("testLogs", "FAILED to connect to peer");
             }
         }
     }
@@ -354,6 +352,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        developerMode = isChecked;
         if (isChecked) {
             extraInformationPanel.setVisibility(View.VISIBLE);
             developerModeText.setTextColor(getResources().getColor(R.color.colorAccent));
