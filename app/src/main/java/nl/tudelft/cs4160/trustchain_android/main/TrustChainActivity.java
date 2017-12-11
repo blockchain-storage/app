@@ -23,6 +23,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.security.KeyPair;
@@ -90,11 +91,23 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
      */
 
 
-    public void onClickSend(View view) {
-        peer = new Peer(null, editTextDestinationIP.getText().toString(),
-                Integer.parseInt(editTextDestinationPort.getText().toString()));
-        communication.connectToPeer(peer);
-        TRANSACTION_DATA = messageEditText.getText().toString();
+    public void onClickSend(View view) throws UnsupportedEncodingException {
+        Log.d("testLogs", "onClickSend");
+
+        if(isConnected()){
+            TRANSACTION_DATA = messageEditText.getText().toString();
+            byte[] transactionData = TRANSACTION_DATA.getBytes("UTF-8");
+            communication.signBlock(transactionData, peer);
+        }else {
+            peer = new Peer(null, editTextDestinationIP.getText().toString(),
+                    Integer.parseInt(editTextDestinationPort.getText().toString()));
+            if (communication.connectToPeer(peer)) {
+                Log.d("testLogs", "connected to peer!");
+                enableMessage();
+            } else {
+                Log.d("testLogs", "FAILED to connect to peer");
+            }
+        }
     }
 
     @Override
@@ -108,14 +121,18 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
     private void connectToPeer() {
         peerAppToApp = (PeerAppToApp) getIntent().getSerializableExtra("PeerAppToApp");
-        if(peerAppToApp != null) {
+        if (peerAppToApp != null) {
             String address = peerAppToApp.getExternalAddress().toString().substring(1);
             int port = peerAppToApp.getPort();
+            String name = peerAppToApp.getPeerId();
             editTextDestinationIP.setText(address);
             editTextDestinationPort.setText(port + "");
-            peer = new Peer(null, address, port);
-            if (communication.connectToPeer(peer)){
+            peer = new Peer(null, address, port, name);
+            if (communication.connectToPeer(peer)) {
+                Log.d("testLogs", "connected to peer!");
                 enableMessage();
+            } else {
+                Log.d("testLogs", "FAILED to connect to peer");
             }
         }
     }
@@ -164,21 +181,15 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
     private void init() {
         dbHelper = new TrustChainDBHelper(thisActivity);
-
-
         //create or load keys
         initKeys();
-
         if (isStartedFirstTime()) {
             MessageProto.TrustChainBlock block = TrustChainBlock.createGenesisBlock(kp);
             dbHelper.insertInDB(block);
         }
-
         communication = new NetworkCommunication(dbHelper, kp, this);
-
         updateIP();
         updateLocalIPField(getLocalIPAddress());
-
         //start listening for messages
         communication.start();
 
@@ -194,9 +205,30 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
         }
     }
 
-    private void enableMessage(){
-        messageEditText.setVisibility(View.VISIBLE);
-        sendButton.setText(getResources().getString(R.string.send));
+    private boolean isConnected() {
+        if (peer != null) {
+            if (communication.getPublicKey(peer.getIpAddress()) != null) {
+                return true;
+            }else{
+                Log.d("testLogs", "getPublicKey == null");
+            }
+        }else{
+
+            Log.d("testLogs", "peer == null");
+        }
+        return false;
+    }
+
+    private void enableMessage() {
+        if (isConnected()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    messageEditText.setVisibility(View.VISIBLE);
+                    sendButton.setText(getResources().getString(R.string.send));
+                }
+            });
+        }
     }
 
     /**
@@ -293,8 +325,8 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
                 ((TextView) findViewById(R.id.status)).append(msg);
             }
         });
+        enableMessage();
     }
-
 
     @Override
     public void requestPermission(final MessageProto.TrustChainBlock block, final Peer peer) {
@@ -307,7 +339,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
                 builder.setMessage("accept? " + block.getTransaction().toString())
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                               communication.acceptTransaction(block, peer);
+                                communication.acceptTransaction(block, peer);
                             }
                         })
                         .setNegativeButton("X", new DialogInterface.OnClickListener() {
@@ -322,7 +354,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(isChecked) {
+        if (isChecked) {
             extraInformationPanel.setVisibility(View.VISIBLE);
             developerModeText.setTextColor(getResources().getColor(R.color.colorAccent));
         } else {

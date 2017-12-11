@@ -190,6 +190,10 @@ public abstract class Communication {
         if (transaction == null) {
             Log.e(TAG, "signBlock: Null transaction given.");
         }
+
+        Log.d("testLogs", "trans " + transaction);
+        Log.d("testLogs", "trans " + transaction.length);
+
         MessageProto.TrustChainBlock block =
                 createBlock(transaction,dbHelper,
                         getMyPublicKey(),null,peer.getPublicKey());
@@ -259,6 +263,10 @@ public abstract class Communication {
             sendHalfBlock(peer, block);
         }
 
+        Log.d("testLogs", "received crawl request");
+        Log.d("testLogs", "connected to peer!");
+
+
         Log.i(TAG, "Sent " + blockList.size() + " blocks");
     }
 
@@ -288,9 +296,7 @@ public abstract class Communication {
         String messageLog = "";
         // In case we received a halfblock
         if (block.getPublicKey().size() > 0 && crawlRequest.getPublicKey().size() == 0) {
-            messageLog += "block received from: " + peer.getIpAddress() + ":"
-                    + peer.getPort() + "\n"
-                    + TrustChainBlock.toShortString(block);
+            messageLog += "block received from: " + peer.getName() + "\n" + TrustChainBlock.transferDataToString(block);
 
             listener.updateLog("\n  Server: " + messageLog);
             peer.setPublicKey(block.getPublicKey().toByteArray());
@@ -302,8 +308,7 @@ public abstract class Communication {
 
         // In case we received a crawlrequest
         if (block.getPublicKey().size() == 0 && crawlRequest.getPublicKey().size() > 0) {
-            messageLog += "crawlrequest received from: " + peer.getIpAddress() + ":"
-                    + peer.getPort();
+            messageLog += "crawlrequest received from: " + peer.getName();
             listener.updateLog("\n  Server: " + messageLog);
 
             peer.setPublicKey(crawlRequest.getPublicKey().toByteArray());
@@ -391,7 +396,7 @@ public abstract class Communication {
         }
         Log.e(TAG, "Identifier: " + identifier);
         if (hasPublicKey(identifier)) {
-            listener.updateLog("Sending half block to known peer");
+            listener.updateLog("Sending half block to known peer \n");
             peer.setPublicKey(getPublicKey(identifier));
             sendLatestBlocksToPeer(peer);
             return true;
@@ -401,7 +406,7 @@ public abstract class Communication {
           //      e.printStackTrace();
          //   }
         } else {
-            listener.updateLog("Unknown peer, sending crawl request, when received press connect again");
+            listener.updateLog("Unknown peer, sending crawl request \n");
             sendCrawlRequest(peer, getMyPublicKey(),-5);
             return false;
         }
