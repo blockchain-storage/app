@@ -151,4 +151,10 @@ public class BluetoothActivity extends AppCompatActivity implements Communicatio
     public void requestPermission(MessageProto.TrustChainBlock block, Peer peer) {
         // TODO: This needs to be implemented, but Bluetooth currently does not work.
     }
+
+    @Override
+    public void connectionSuccessful() {
+
+        // TODO: This needs to be implemented, but Bluetooth currently does not work.
+    }
 }

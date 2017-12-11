@@ -294,6 +294,7 @@ public abstract class Communication {
      * @param peer From the peer.
      */
     public void receivedMessage(MessageProto.Message message, Peer peer) {
+        Log.d("testlogs", "received message " + message.toString());
         MessageProto.TrustChainBlock block = message.getHalfBlock();
         MessageProto.CrawlRequest crawlRequest = message.getCrawlRequest();
 
@@ -304,6 +305,7 @@ public abstract class Communication {
 
             listener.updateLog("\nServer: " + messageLog);
             peer.setPublicKey(block.getPublicKey().toByteArray());
+            listener.connectionSuccessful();
 
             //make sure the correct port is set
             peer.setPort(NetworkCommunication.DEFAULT_PORT);
@@ -393,7 +395,7 @@ public abstract class Communication {
      * If the peer is not known, this will send a crawl request, otherwise a half block.
      * @param peer
      */
-    public boolean connectToPeer(Peer peer) {
+    public void connectToPeer(Peer peer) {
         String identifier = peer.getIpAddress();
         if(peer.getDevice() != null) {
             identifier = peer.getDevice().getAddress();
@@ -402,8 +404,8 @@ public abstract class Communication {
         if (hasPublicKey(identifier)) {
             listener.updateLog("Sending half block to known peer \n");
             peer.setPublicKey(getPublicKey(identifier));
+            listener.connectionSuccessful();
             sendLatestBlocksToPeer(peer);
-            return true;
           //  try {
            //     signBlock(TrustChainActivity.TRANSACTION_DATA.getBytes("UTF-8"), peer);
           //  } catch (UnsupportedEncodingException e) {
@@ -412,7 +414,6 @@ public abstract class Communication {
         } else {
             listener.updateLog("Unknown peer, sending crawl request \n");
             sendCrawlRequest(peer, getMyPublicKey(),-5);
-            return false;
         }
     }
 

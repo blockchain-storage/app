@@ -94,18 +94,17 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
     public void onClickSend(View view) throws UnsupportedEncodingException {
         Log.d("testLogs", "onClickSend");
-        if(isConnected()){
+        if (isConnected()) {
             TRANSACTION_DATA = messageEditText.getText().toString();
             byte[] transactionData = TRANSACTION_DATA.getBytes("UTF-8");
             communication.signBlock(transactionData, peer);
-        }else {
-            if(developerMode) {
+        } else {
+            if (developerMode) {
                 peer = new Peer(null, editTextDestinationIP.getText().toString(),
                         Integer.parseInt(editTextDestinationPort.getText().toString()));
-                if(communication.connectToPeer(peer)) {
-                    enableMessage();
-                }
-            }else{
+                communication.connectToPeer(peer);
+
+            } else {
                 connectToPeer();
             }
         }
@@ -129,9 +128,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
             editTextDestinationIP.setText(address);
             editTextDestinationPort.setText(port + "");
             peer = new Peer(null, address, port, name);
-            if (communication.connectToPeer(peer)) {
-                enableMessage();
-            }
+            communication.connectToPeer(peer);
         }
     }
 
@@ -207,10 +204,10 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
         if (peer != null) {
             if (communication.getPublicKey(peer.getIpAddress()) != null) {
                 return true;
-            }else{
+            } else {
                 Log.d("testLogs", "getPublicKey == null");
             }
-        }else{
+        } else {
 
             Log.d("testLogs", "peer == null");
         }
@@ -218,15 +215,13 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
     }
 
     private void enableMessage() {
-        if (isConnected()) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    messageEditText.setVisibility(View.VISIBLE);
-                    sendButton.setText(getResources().getString(R.string.send));
-                }
-            });
-        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messageEditText.setVisibility(View.VISIBLE);
+                sendButton.setText(getResources().getString(R.string.send));
+            }
+        });
     }
 
     /**
@@ -323,7 +318,6 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
                 ((TextView) findViewById(R.id.status)).append(msg);
             }
         });
-        enableMessage();
     }
 
     @Override
@@ -348,6 +342,11 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
                 builder.create();
             }
         });
+    }
+
+    @Override
+    public void connectionSuccessful() {
+        enableMessage();
     }
 
     @Override
