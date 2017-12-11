@@ -11,5 +11,5 @@ public interface CommunicationListener {
 
     void updateLog(String msg);
     void requestPermission(MessageProto.TrustChainBlock block, Peer peer);
-    void connectionSuccessful();
+    void connectionSuccessful(byte[] publicKey);
 }
