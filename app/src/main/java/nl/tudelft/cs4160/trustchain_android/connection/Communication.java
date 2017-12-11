@@ -384,7 +384,7 @@ public abstract class Communication {
      * If the peer is not known, this will send a crawl request, otherwise a half block.
      * @param peer
      */
-    public void connectToPeer(Peer peer) {
+    public boolean connectToPeer(Peer peer) {
         String identifier = peer.getIpAddress();
         if(peer.getDevice() != null) {
             identifier = peer.getDevice().getAddress();
@@ -394,14 +394,16 @@ public abstract class Communication {
             listener.updateLog("Sending half block to known peer");
             peer.setPublicKey(getPublicKey(identifier));
             sendLatestBlocksToPeer(peer);
-            try {
-                signBlock(TrustChainActivity.TRANSACTION_DATA.getBytes("UTF-8"), peer);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            return true;
+          //  try {
+           //     signBlock(TrustChainActivity.TRANSACTION_DATA.getBytes("UTF-8"), peer);
+          //  } catch (UnsupportedEncodingException e) {
+          //      e.printStackTrace();
+         //   }
         } else {
             listener.updateLog("Unknown peer, sending crawl request, when received press connect again");
             sendCrawlRequest(peer, getMyPublicKey(),-5);
+            return false;
         }
     }
 

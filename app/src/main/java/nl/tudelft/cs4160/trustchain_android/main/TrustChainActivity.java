@@ -114,7 +114,9 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
             editTextDestinationIP.setText(address);
             editTextDestinationPort.setText(port + "");
             peer = new Peer(null, address, port);
-            communication.connectToPeer(peer);
+            if (communication.connectToPeer(peer)){
+                enableMessage();
+            }
         }
     }
 
