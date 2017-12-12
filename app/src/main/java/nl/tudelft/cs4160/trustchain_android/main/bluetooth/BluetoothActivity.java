@@ -59,12 +59,12 @@ public class BluetoothActivity extends AppCompatActivity implements Communicatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
 
-        listPairedDevices = findViewById(R.id.bluetooth_list);
+        listPairedDevices = (ListView) findViewById(R.id.bluetooth_list);
         init();
     }
 
     public void init() {
-        textViewLog = findViewById(R.id.bluetooth_log);
+        textViewLog = (TextView) findViewById(R.id.bluetooth_log);
         textViewLog.setMovementMethod(new ScrollingMovementMethod());
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
