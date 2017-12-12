@@ -7,6 +7,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +25,7 @@ import java.util.List;
 import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
@@ -32,6 +36,7 @@ import nl.tudelft.cs4160.trustchain_android.main.bluetooth.BluetoothActivity;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
 import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS_SEQ;
+
 
 public class TrustChainActivity extends AppCompatActivity implements CommunicationListener {
 
@@ -45,13 +50,12 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
     TextView localIPText;
     TextView statusText;
     Button connectionButton;
-    Button chainExplorerButton;
-    Button resetDatabaseButton;
-    Button bluetoothButton;
     EditText editTextDestinationIP;
     EditText editTextDestinationPort;
 
     TrustChainActivity thisActivity;
+    PeerAppToApp peerAppToApp;
+    Peer peer;
 
     private Communication communication;
 
@@ -62,64 +66,70 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
 
     /**
      * Listener for the connection button.
-     * On click a block is created and send to a peer.
-     * When we encounter an unknown peer, send a crawl request to that peer in order to get its
+     * On click a block is created and send to a peerAppToApp.
+     * When we encounter an unknown peerAppToApp, send a crawl request to that peerAppToApp in order to get its
      * public key.
-     * Also, when we want to send a block always send our last 5 blocks to the peer so the block
+     * Also, when we want to send a block always send our last 5 blocks to the peerAppToApp so the block
      * request won't be rejected due to NO_INFO error.
-     *
+     * <p>
      * This is code to simulate dispersy, note that this does not work properly with a busy network,
-     * because the time delay between sending information to the peer and sending the actual
+     * because the time delay between sending information to the peerAppToApp and sending the actual
      * to-be-signed block could cause gaps.
-     *
+     * <p>
      * Also note that whatever goes wrong we will never get a valid full block, so the integrity of
      * the network is not compromised due to not using dispersy.
      */
-    View.OnClickListener connectionButtonListener = new View.OnClickListener(){
-        @Override
-        public void onClick(View view) {
-            Peer peer = new Peer(null, editTextDestinationIP.getText().toString(),
-                    Integer.parseInt(editTextDestinationPort.getText().toString()));
-            //send either a crawl request or a half block
-            communication.connectToPeer(peer);
-        }
-    };
 
-    View.OnClickListener chainExplorerButtonListener = new View.OnClickListener(){
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(thisActivity, ChainExplorerActivity.class);
-            startActivity(intent);
-        }
-    };
+    public void onClickConnect(View view) {
+        peer = new Peer(null, editTextDestinationIP.getText().toString(),
+                Integer.parseInt(editTextDestinationPort.getText().toString()));
+        communication.connectToPeer(peer);
+    }
 
-    View.OnClickListener keyOptionsListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(thisActivity, BluetoothActivity.class);
-            startActivity(intent);
+    public void onClickReset(View view) {
+        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
+            ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE))
+                    .clearApplicationUserData();
+        } else {
+            Toast.makeText(getApplicationContext(), "Requires at least API 19 (KitKat)", Toast.LENGTH_LONG).show();
         }
-    };
-
-    View.OnClickListener resetDatabaseListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
-                ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE))
-                        .clearApplicationUserData();
-            } else {
-                Toast.makeText(getApplicationContext(), "Requires at least API 19 (KitKat)", Toast.LENGTH_LONG).show();
-            }
-        }
-    };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initVariables();
         init();
+        setPeerDetails();
+    }
+
+    private void setPeerDetails() {
+        peerAppToApp = (PeerAppToApp) getIntent().getSerializableExtra("PeerAppToApp");
+        if(peerAppToApp != null) {
+            String address = peerAppToApp.getExternalAddress().toString().substring(1);
+            int port = peerAppToApp.getPort();
+            editTextDestinationIP.setText(address);
+            editTextDestinationPort.setText(port + "");
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.chain_menu:
+                Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
+                startActivity(chainExplorerActivity);
+                return true;
+            default:
+                return true;
+        }
     }
 
     private void initVariables() {
@@ -135,49 +145,16 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
 
     private void init() {
         dbHelper = new TrustChainDBHelper(thisActivity);
-
-
-        //create or load keys
-        initKeys();
-
-        if(isStartedFirstTime()) {
-            MessageProto.TrustChainBlock block = TrustChainBlock.createGenesisBlock(kp);
-            dbHelper.insertInDB(block);
-        }
-
+        //load keys
+        KeyPair kp = Key.loadKeys(getApplicationContext());
         communication = new NetworkCommunication(dbHelper, kp, this);
 
         updateIP();
         updateLocalIPField(getLocalIPAddress());
 
-        connectionButton.setOnClickListener(connectionButtonListener);
-        chainExplorerButton.setOnClickListener(chainExplorerButtonListener);
-        bluetoothButton.setOnClickListener(keyOptionsListener);
-        resetDatabaseButton.setOnClickListener(resetDatabaseListener);
-
         //start listening for messages
         communication.start();
 
-    }
-
-    private void initKeys() {
-        kp = Key.loadKeys(getApplicationContext());
-        if(kp == null) {
-            kp = Key.createAndSaveKeys(getApplicationContext());
-            Log.i(TAG, "New keys created" );
-        }
-    }
-
-    /**
-     * Checks if this is the first time the app is started and returns a boolean value indicating
-     * this state.
-     * @return state - false if the app has been initialized before, true if first time app started
-     */
-    public boolean isStartedFirstTime() {
-        // check if a genesis block is present in database
-        MessageProto.TrustChainBlock genesisBlock = dbHelper.getBlock(kp.getPublic().getEncoded(),GENESIS_SEQ);
-
-        return genesisBlock == null;
     }
 
     /**
