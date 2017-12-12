@@ -135,9 +135,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         KeyPair kp = Key.loadKeys(getApplicationContext());
         TrustChainDBHelper dbHelper = new TrustChainDBHelper(this);
         if (kp == null) {
-            kp = Key.createNewKeyPair();
-            Key.saveKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE, kp.getPublic());
-            Key.saveKey(getApplicationContext(), Key.DEFAULT_PRIV_KEY_FILE, kp.getPrivate());
+            kp = Key.createAndSaveKeys(getApplicationContext());
         }
         if (isStartedFirstTime(dbHelper, kp)) {
             MessageProto.TrustChainBlock block = TrustChainBlock.createGenesisBlock(kp);
