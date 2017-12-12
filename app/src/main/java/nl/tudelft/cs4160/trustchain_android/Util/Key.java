@@ -5,33 +5,16 @@ import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
 
-import org.spongycastle.asn1.x9.X9ECParameters;
-import org.spongycastle.crypto.ec.CustomNamedCurves;
-import org.spongycastle.jce.ECNamedCurveTable;
-import org.spongycastle.jce.provider.BouncyCastleProvider;
-import org.spongycastle.jce.spec.ECParameterSpec;
-
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.Security;
-import java.security.Signature;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
+import org.libsodium.jni.Sodium;
+import org.libsodium.jni.encoders.Raw;
+import org.libsodium.jni.keys.KeyPair;
+import org.libsodium.jni.keys.PrivateKey;
+import org.libsodium.jni.keys.PublicKey;
 
 /**
  * Manages key operations.
  */
 public class Key {
-    static {
-        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);}
-
-    public final static String PROVIDER = BouncyCastleProvider.PROVIDER_NAME;
     private final static String TAG = "KEY";
 
     public final static String DEFAULT_PUB_KEY_FILE = "pub.key";
@@ -49,113 +32,63 @@ public class Key {
 
     public static KeyPair createAndSaveKeys(Context context) {
         KeyPair kp = Key.createNewKeyPair();
-        Key.saveKey(context, Key.DEFAULT_PUB_KEY_FILE, kp.getPublic());
-        Key.saveKey(context, Key.DEFAULT_PRIV_KEY_FILE, kp.getPrivate());
-
+        saveKeyPair(context, kp);
         return kp;
+    }
+
+    public static void saveKeyPair(Context context, KeyPair kp) {
+        Key.saveKey(context, Key.DEFAULT_PUB_KEY_FILE, kp.getPublicKey().toBytes());
+        Key.saveKey(context, Key.DEFAULT_PRIV_KEY_FILE, kp.getPublicKey().toBytes());
     }
 
     /**
      * Creates a new curve25519 KeyPair.
+     *
      * @return KeyPair.
      */
     public static KeyPair createNewKeyPair() {
-        return createNewKeyPair("curve25519", "ECDSA", PROVIDER, true);
-    }
-
-    /**
-     * Creates a new (elliptic curve) KeyPair according to the given arguments.
-     * @param curveName The given curnename
-     * @param algorithm The used algorithm
-     * @param provider The security provider
-     * @param custom If this is a custom curve (see BouncyCastle for what custom curves are).
-     * @return The generated keypair.
-     */
-    public static KeyPair createNewKeyPair(String curveName, String algorithm, String provider, boolean custom) {
-        ECParameterSpec ecSpec = getParameterSpec(curveName, custom);
-        KeyPair keyPair = null;
-        try {
-            KeyPairGenerator g = KeyPairGenerator.getInstance(algorithm, provider);
-            g.initialize(ecSpec, new SecureRandom());
-            keyPair = g.generateKeyPair();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return keyPair;
-    }
-
-    /**
-     * Retrieves the parameters of the given elliptic curve.
-     * @param curveName The curve name
-     * @param custom Custom or not?
-     * @return The elliptic curve parameters.
-     */
-    private static ECParameterSpec getParameterSpec(String curveName, boolean custom) {
-        if(custom) {
-            X9ECParameters ecP = CustomNamedCurves.getByName(curveName);
-            return new ECParameterSpec(ecP.getCurve(), ecP.getG(),
-                    ecP.getN(), ecP.getH(), ecP.getSeed());
-
-        }
-        return ECNamedCurveTable.getParameterSpec(curveName);
+        byte[] vk = new byte[Sodium.crypto_box_secretkeybytes()];
+        Raw encoder = new Raw();
+        return new KeyPair(encoder.encode(vk), encoder);
     }
 
 
     /**
      * Sign a message using the given private key.
+     *
      * @param privateKey The private key
-     * @param data The message
+     * @param data       The message
      * @return The signature
      */
     public static byte[] sign(PrivateKey privateKey, byte[] data) {
-        try {
-            Signature sig = Signature.getInstance("SHA256withECDSA", PROVIDER);
-            sig.initSign(privateKey);
-            sig.update(data);
-            return sig.sign();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        byte[] out = new byte[Sodium.crypto_sign_ed25519_bytes()];
+        Sodium.crypto_sign_detached(out, null, data, data.length, privateKey.toBytes());
+        return out;
     }
 
     /**
      * Verify a signature
-     * @param publicKey  The public key of the signer.
-     * @param msg The message that was signed.
-     * @param rawSig The signature.
+     *
+     * @param publicKey The public key of the signer.
+     * @param msg       The message that was signed.
+     * @param rawSig    The signature.
      * @return True if this a correct signature, false if not.
      */
     public static boolean verify(PublicKey publicKey, byte[] msg, byte[] rawSig) {
-        try {
-            Signature sig = Signature.getInstance("SHA256withECDSA", PROVIDER);
-            sig.initVerify(publicKey);
-            sig.update(msg);
-            return sig.verify(rawSig);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    private static KeyFactory getKeyFactory() {
-        try {
-            return KeyFactory.getInstance("ECDSA");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return null;
-        }
+        int result = Sodium.crypto_sign_ed25519_verify_detached(rawSig, msg, msg.length, publicKey.toBytes());
+        return result == 0;
     }
 
     /**
      * Load a public key from the given file.
+     *
      * @param context The context (needed so we can read the file)
-     * @param file The file to read.
+     * @param file    The file to read.
      * @return The public key.
      */
     public static PublicKey loadPublicKey(Context context, String file) {
         String key = Util.readFile(context, file);
-        if(key == null) {
+        if (key == null) {
             return null;
         }
         Log.i(TAG, "PUBLIC FROM FILE: " + key);
@@ -165,6 +98,7 @@ public class Key {
 
     /**
      * Load a raw base64 encoded key.
+     *
      * @param key The base64 encoded key.
      * @return Public key
      */
@@ -177,29 +111,19 @@ public class Key {
 
     @Nullable
     public static PublicKey getPublicKeyFromBytes(byte[] rawKey) {
-        KeyFactory kf = getKeyFactory();
-        if(kf == null) {
-            return null;
-        }
-        X509EncodedKeySpec pubKeySpec = new X509EncodedKeySpec(rawKey);
-
-        try {
-            return kf.generatePublic(pubKeySpec);
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return new PublicKey(rawKey);
     }
 
     /**
      * Load a private key from the given file
+     *
      * @param context The context (needed to read the file)
-     * @param file The file
+     * @param file    The file
      * @return The private key
      */
     public static PrivateKey loadPrivateKey(Context context, String file) {
         String key = Util.readFile(context, file);
-        if(key == null) {
+        if (key == null) {
             return null;
         }
         Log.i(TAG, "PRIVATE FROM FILE: " + key);
@@ -208,6 +132,7 @@ public class Key {
 
     /**
      * Load a private key from a base64 encoded string
+     *
      * @param key The base64 encoded key
      * @return The private key
      */
@@ -218,42 +143,31 @@ public class Key {
 
     @Nullable
     public static PrivateKey getPrivateKeyFromBytes(byte[] rawKey) {
-        KeyFactory kf = getKeyFactory();
-        if (kf == null) {
-            return null;
-        }
-        PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(rawKey);
-        try {
-            return kf.generatePrivate(ks);
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return new PrivateKey(rawKey);
     }
 
     /**
      * Load public and private keys from the standard files.
+     *
      * @param context The context (needed to read the files)
      * @return A KeyPair with the private and public key.
      */
     public static KeyPair loadKeys(Context context) {
-        PublicKey pubKey = Key.loadPublicKey(context, Key.DEFAULT_PUB_KEY_FILE);
         PrivateKey privateKey = Key.loadPrivateKey(context, Key.DEFAULT_PRIV_KEY_FILE);
-        if(pubKey == null || privateKey == null) {
-            return null;
-        }
-        return new KeyPair(pubKey, privateKey);
+        Raw encoder = new Raw();
+        return new KeyPair(encoder.encode(privateKey.toBytes()), encoder);
     }
 
     /**
      * Write a key to storage
+     *
      * @param context Context (needed to write to the file)
-     * @param file  The file to write to
-     * @param key The key to be written
+     * @param file    The file to write to
+     * @param key     The key to be written
      * @return True if successful, false if not
      */
-    public static boolean saveKey(Context context, String file, java.security.Key key) {
-        return Util.writeToFile(context, file, Base64.encodeToString(key.getEncoded(), Base64.DEFAULT));
+    public static boolean saveKey(Context context, String file, byte[] key) {
+        return Util.writeToFile(context, file, Base64.encodeToString(key, Base64.DEFAULT));
     }
 
 

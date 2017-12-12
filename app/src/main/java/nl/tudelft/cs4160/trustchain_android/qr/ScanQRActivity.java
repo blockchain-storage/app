@@ -14,8 +14,12 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.zxing.Result;
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import org.libsodium.jni.Sodium;
+import org.libsodium.jni.encoders.Raw;
+import org.libsodium.jni.keys.KeyPair;
+
+import java.math.BigInteger;
+import java.util.Arrays;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import nl.tudelft.cs4160.trustchain_android.R;
@@ -90,14 +94,30 @@ public class ScanQRActivity extends AppCompatActivity {
                         .setNeutralButton(android.R.string.ok, null)
                         .show();
                 vibrator.vibrate(100);
-                PrivateKey privKey = Key.getPrivateKeyFromBytes(result.getRawBytes());
-                PublicKey pubKey = Key.getPublicKeyFromBytes(result.getRawBytes());
-                Key.saveKey(ScanQRActivity.this, Key.DEFAULT_PRIV_KEY_FILE, privKey);
-                Key.saveKey(ScanQRActivity.this, Key.DEFAULT_PUB_KEY_FILE, pubKey);
+
+                processBytes(result.getRawBytes());
+
                 scannerView.resumeCameraPreview(this);
             }
         });
         scannerView.startCamera();
+    }
+
+    private void processBytes(byte[] bytes) {
+        int pkLength = Sodium.crypto_box_secretkeybytes();
+        int vkLength = Sodium.crypto_sign_ed25519_bytes();
+
+        if (bytes.length != pkLength + vkLength)
+            throw new RuntimeException("Should be " + (pkLength + vkLength) + " length but was " + bytes.length);
+
+        byte[] pk = Arrays.copyOfRange(bytes, 0, pkLength);
+        byte[] vk = Arrays.copyOfRange(bytes, pkLength, vkLength);
+
+        System.out.println("pk: " + new BigInteger(1, pk).toString(16));
+        System.out.println("vk: " + new BigInteger(1, vk).toString(16));
+
+        KeyPair kp = new KeyPair(new Raw().encode(vk), new Raw());
+        Key.saveKeyPair(ScanQRActivity.this, kp);
     }
 
     private boolean hasCameraPermission() {
