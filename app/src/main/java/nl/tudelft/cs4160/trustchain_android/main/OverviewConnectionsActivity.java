@@ -149,6 +149,11 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
 
+    public void onClickInfo(View view) {
+        Intent intent = new Intent(this, ConnectionExplanationActivity.class);
+        startActivity(intent);
+    }
+
     private void initExitButton() {
         mExitButton = (Button) findViewById(R.id.exit_button);
         mExitButton.setOnClickListener(new View.OnClickListener() {

@@ -30,6 +30,8 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".chainExplorer.ChainExplorerActivity" />
         <activity
+            android:name=".main.ConnectionExplanationActivity" />
+        <activity
             android:name=".main.OverviewConnectionsActivity"
             android:configChanges="orientation|screenLayout|screenSize">
 
