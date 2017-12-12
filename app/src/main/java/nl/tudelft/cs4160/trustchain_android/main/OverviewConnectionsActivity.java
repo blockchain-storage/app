@@ -34,6 +34,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -41,6 +42,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.WanVote;
@@ -51,7 +53,12 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Message
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Puncture;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.PunctureRequest;
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReadException;
+import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
+import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
+import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
+
+import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS_SEQ;
 
 public class OverviewConnectionsActivity extends AppCompatActivity {
 
@@ -93,6 +100,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_overview);
         initVariables(savedInstanceState);
         initExitButton();
+        initKey();
         openChannel();
         updateConnectionType();
         addInitialPeer();
@@ -121,6 +129,32 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             default:
                 return true;
         }
+    }
+
+    private void initKey(){
+        KeyPair kp = Key.loadKeys(getApplicationContext());
+        TrustChainDBHelper dbHelper = new TrustChainDBHelper(this);
+        if (kp == null) {
+            kp = Key.createNewKeyPair();
+            Key.saveKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE, kp.getPublic());
+            Key.saveKey(getApplicationContext(), Key.DEFAULT_PRIV_KEY_FILE, kp.getPrivate());
+        }
+        if (isStartedFirstTime(dbHelper, kp)) {
+            MessageProto.TrustChainBlock block = TrustChainBlock.createGenesisBlock(kp);
+            dbHelper.insertInDB(block);
+        }
+    }
+
+    /**
+     * Checks if this is the first time the app is started and returns a boolean value indicating
+     * this state.
+     *
+     * @return state - false if the app has been initialized before, true if first time app started
+     */
+    public boolean isStartedFirstTime(TrustChainDBHelper dbHelper, KeyPair kp) {
+        // check if a genesis block is present in database
+        MessageProto.TrustChainBlock genesisBlock = dbHelper.getBlock(kp.getPublic().getEncoded(), GENESIS_SEQ);
+        return (genesisBlock == null);
     }
 
     private void openChannel() {
