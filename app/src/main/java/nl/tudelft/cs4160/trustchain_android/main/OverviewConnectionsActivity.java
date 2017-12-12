@@ -154,11 +154,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     public boolean isStartedFirstTime(TrustChainDBHelper dbHelper, KeyPair kp) {
         // check if a genesis block is present in database
         MessageProto.TrustChainBlock genesisBlock = dbHelper.getBlock(kp.getPublic().getEncoded(), GENESIS_SEQ);
-
-        if (genesisBlock == null) {
-            return true;
-        }
-        return false;
+        return (genesisBlock == null);
     }
 
     private void openChannel() {
