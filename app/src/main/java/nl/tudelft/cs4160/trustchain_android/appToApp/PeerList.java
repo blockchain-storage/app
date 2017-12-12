@@ -1,7 +1,6 @@
 package nl.tudelft.cs4160.trustchain_android.appToApp;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by timbu on 02/12/2017.

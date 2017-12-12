@@ -26,16 +26,11 @@ import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
-import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
 import nl.tudelft.cs4160.trustchain_android.connection.network.NetworkCommunication;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
-import nl.tudelft.cs4160.trustchain_android.main.bluetooth.BluetoothActivity;
-import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
-
-import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS_SEQ;
 
 
 public class TrustChainActivity extends AppCompatActivity implements CommunicationListener {
