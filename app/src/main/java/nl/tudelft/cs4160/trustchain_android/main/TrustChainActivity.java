@@ -27,15 +27,11 @@ import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
-import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
 import nl.tudelft.cs4160.trustchain_android.connection.network.NetworkCommunication;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
-import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
-
-import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS_SEQ;
 
 public class TrustChainActivity extends AppCompatActivity implements CommunicationListener {
 
@@ -146,16 +142,8 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
 
     private void init() {
         dbHelper = new TrustChainDBHelper(thisActivity);
-
-
-        //create or load keys
-        initKeys();
-
-        if (isStartedFirstTime()) {
-            MessageProto.TrustChainBlock block = TrustChainBlock.createGenesisBlock(kp);
-            dbHelper.insertInDB(block);
-        }
-
+        //load keys
+        KeyPair kp = Key.loadKeys(getApplicationContext());
         communication = new NetworkCommunication(dbHelper, kp, this);
 
         updateIP();
@@ -164,32 +152,6 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
         //start listening for messages
         communication.start();
 
-    }
-
-    private void initKeys() {
-        kp = Key.loadKeys(getApplicationContext());
-        if (kp == null) {
-            kp = Key.createNewKeyPair();
-            Key.saveKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE, kp.getPublic());
-            Key.saveKey(getApplicationContext(), Key.DEFAULT_PRIV_KEY_FILE, kp.getPrivate());
-            Log.i(TAG, "New keys created");
-        }
-    }
-
-    /**
-     * Checks if this is the first time the app is started and returns a boolean value indicating
-     * this state.
-     *
-     * @return state - false if the app has been initialized before, true if first time app started
-     */
-    public boolean isStartedFirstTime() {
-        // check if a genesis block is present in database
-        MessageProto.TrustChainBlock genesisBlock = dbHelper.getBlock(kp.getPublic().getEncoded(), GENESIS_SEQ);
-
-        if (genesisBlock == null) {
-            return true;
-        }
-        return false;
     }
 
     /**
