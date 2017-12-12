@@ -11,12 +11,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 
 import com.google.zxing.Result;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.Decoder;
 
 import org.libsodium.jni.Sodium;
+import org.libsodium.jni.encoders.Encoder;
 import org.libsodium.jni.encoders.Raw;
-import org.libsodium.jni.keys.KeyPair;
 
 import java.math.BigInteger;
 import java.util.Arrays;
@@ -24,6 +27,7 @@ import java.util.Arrays;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 
 public class ScanQRActivity extends AppCompatActivity {
     private Vibrator vibrator;
@@ -95,7 +99,9 @@ public class ScanQRActivity extends AppCompatActivity {
                         .show();
                 vibrator.vibrate(100);
 
-                processBytes(result.getRawBytes());
+                System.out.println("QR code says " + result.getText());
+                processBytes(Base64.decode(result.getText(), Base64.DEFAULT));
+
 
                 scannerView.resumeCameraPreview(this);
             }
@@ -103,20 +109,28 @@ public class ScanQRActivity extends AppCompatActivity {
         scannerView.startCamera();
     }
 
+    public static String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder(a.length * 2);
+        for(byte b: a)
+            sb.append(String.format("%02x", b));
+        return sb.toString();
+    }
+
     private void processBytes(byte[] bytes) {
         int pkLength = Sodium.crypto_box_secretkeybytes();
-        int vkLength = Sodium.crypto_sign_ed25519_bytes();
+        int vkLength = Sodium.crypto_box_seedbytes();
+        System.out.println(byteArrayToHex(bytes));
 
         if (bytes.length != pkLength + vkLength)
             throw new RuntimeException("Should be " + (pkLength + vkLength) + " length but was " + bytes.length);
 
         byte[] pk = Arrays.copyOfRange(bytes, 0, pkLength);
-        byte[] vk = Arrays.copyOfRange(bytes, pkLength, vkLength);
+        byte[] vk = Arrays.copyOfRange(bytes, pkLength, pkLength+vkLength);
 
         System.out.println("pk: " + new BigInteger(1, pk).toString(16));
         System.out.println("vk: " + new BigInteger(1, vk).toString(16));
 
-        KeyPair kp = new KeyPair(new Raw().encode(vk), new Raw());
+        KeyPair kp = new KeyPair(pk);
         Key.saveKeyPair(ScanQRActivity.this, kp);
     }
 

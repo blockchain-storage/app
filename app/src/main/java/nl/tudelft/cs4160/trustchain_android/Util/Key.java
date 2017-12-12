@@ -1,13 +1,11 @@
 package nl.tudelft.cs4160.trustchain_android.Util;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
 
 import org.libsodium.jni.Sodium;
 import org.libsodium.jni.encoders.Raw;
-import org.libsodium.jni.keys.KeyPair;
 import org.libsodium.jni.keys.PrivateKey;
 import org.libsodium.jni.keys.PublicKey;
 
@@ -22,12 +20,13 @@ public class Key {
 
 
     public static KeyPair ensureKeysExist(Context context) {
-        KeyPair keyPair = loadKeys(context);
-
-        if (keyPair == null) {
+        try {
+            KeyPair keyPair = loadKeys(context);
+            return keyPair;
+        } catch (Exception e) {
+            Log.e(TAG, "Keys could not be found", e);
             return createAndSaveKeys(context);
         }
-        return keyPair;
     }
 
     public static KeyPair createAndSaveKeys(Context context) {
@@ -48,8 +47,7 @@ public class Key {
      */
     public static KeyPair createNewKeyPair() {
         byte[] vk = new byte[Sodium.crypto_box_secretkeybytes()];
-        Raw encoder = new Raw();
-        return new KeyPair(encoder.encode(vk), encoder);
+        return new KeyPair(vk);
     }
 
 
@@ -62,7 +60,7 @@ public class Key {
      */
     public static byte[] sign(PrivateKey privateKey, byte[] data) {
         byte[] out = new byte[Sodium.crypto_sign_ed25519_bytes()];
-        Sodium.crypto_sign_detached(out, null, data, data.length, privateKey.toBytes());
+        Sodium.crypto_sign_detached(out, new int[] { out.length }, data, data.length, privateKey.toBytes());
         return out;
     }
 
@@ -88,9 +86,6 @@ public class Key {
      */
     public static PublicKey loadPublicKey(Context context, String file) {
         String key = Util.readFile(context, file);
-        if (key == null) {
-            return null;
-        }
         Log.i(TAG, "PUBLIC FROM FILE: " + key);
         return loadPublicKey(key);
     }
@@ -109,7 +104,6 @@ public class Key {
         return null;
     }
 
-    @Nullable
     public static PublicKey getPublicKeyFromBytes(byte[] rawKey) {
         return new PublicKey(rawKey);
     }
@@ -123,9 +117,6 @@ public class Key {
      */
     public static PrivateKey loadPrivateKey(Context context, String file) {
         String key = Util.readFile(context, file);
-        if (key == null) {
-            return null;
-        }
         Log.i(TAG, "PRIVATE FROM FILE: " + key);
         return loadPrivateKey(key);
     }
@@ -141,7 +132,6 @@ public class Key {
         return getPrivateKeyFromBytes(rawKey);
     }
 
-    @Nullable
     public static PrivateKey getPrivateKeyFromBytes(byte[] rawKey) {
         return new PrivateKey(rawKey);
     }
@@ -154,8 +144,7 @@ public class Key {
      */
     public static KeyPair loadKeys(Context context) {
         PrivateKey privateKey = Key.loadPrivateKey(context, Key.DEFAULT_PRIV_KEY_FILE);
-        Raw encoder = new Raw();
-        return new KeyPair(encoder.encode(privateKey.toBytes()), encoder);
+        return new KeyPair(privateKey.toBytes());
     }
 
     /**

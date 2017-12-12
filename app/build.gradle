@@ -33,7 +33,7 @@ dependencies {
     compile 'me.dm7.barcodescanner:zxing:1.9.8'
     compile 'com.android.support:design:26.1.0'
 
-    compile 'com.github.joshjdevl.libsodiumjni:libsodium-jni:1.0.7'
+    compile 'com.github.joshjdevl.libsodiumjni:libsodium-jni-aar:1.0.7'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.7.22'

@@ -8,11 +8,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.libsodium.jni.keys.KeyPair;
-
 import java.security.Security;
 
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 
 public class KeyActivity extends AppCompatActivity {
 

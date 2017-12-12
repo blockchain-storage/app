@@ -6,7 +6,6 @@ import android.util.Base64;
 import com.google.protobuf.ByteString;
 
 import org.libsodium.jni.Sodium;
-import org.libsodium.jni.keys.KeyPair;
 import org.libsodium.jni.keys.PrivateKey;
 import org.libsodium.jni.keys.PublicKey;
 
@@ -15,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 

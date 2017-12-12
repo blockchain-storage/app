@@ -16,8 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.libsodium.jni.keys.KeyPair;
-
+import org.libsodium.jni.NaCl;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Collections;
@@ -27,6 +26,7 @@ import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
+import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
@@ -36,6 +36,10 @@ import nl.tudelft.cs4160.trustchain_android.qr.ScanQRActivity;
 
 
 public class TrustChainActivity extends AppCompatActivity implements CommunicationListener {
+
+    static {
+        NaCl.sodium();
+    }
 
 
     public final static String TRANSACTION = "Hello world!";
