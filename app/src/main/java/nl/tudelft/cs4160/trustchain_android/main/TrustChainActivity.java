@@ -16,9 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.libsodium.jni.keys.KeyPair;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.security.KeyPair;
 import java.util.Collections;
 import java.util.List;
 

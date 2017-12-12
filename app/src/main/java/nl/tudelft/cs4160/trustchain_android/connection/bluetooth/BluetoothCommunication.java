@@ -2,7 +2,7 @@ package nl.tudelft.cs4160.trustchain_android.connection.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 
-import java.security.KeyPair;
+import org.libsodium.jni.keys.KeyPair;
 
 import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;

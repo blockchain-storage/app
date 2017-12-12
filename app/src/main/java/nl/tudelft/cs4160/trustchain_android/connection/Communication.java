@@ -4,8 +4,9 @@ import android.util.Log;
 
 import com.google.protobuf.ByteString;
 
+import org.libsodium.jni.keys.KeyPair;
+
 import java.io.UnsupportedEncodingException;
-import java.security.KeyPair;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -155,7 +156,7 @@ public abstract class Communication {
                 getMyPublicKey(),
                 linkedBlock,peer.getPublicKey());
 
-        block = sign(block, keyPair.getPrivate());
+        block = sign(block, keyPair.getPrivateKey());
 
         ValidationResult validation;
         try {
@@ -192,7 +193,7 @@ public abstract class Communication {
         MessageProto.TrustChainBlock block =
                 createBlock(transaction,dbHelper,
                         getMyPublicKey(),null,peer.getPublicKey());
-        block = sign(block, keyPair.getPrivate());
+        block = sign(block, keyPair.getPrivateKey());
 
         ValidationResult validation;
         try {
@@ -404,7 +405,7 @@ public abstract class Communication {
     }
 
     public byte[] getMyPublicKey() {
-        return keyPair.getPublic().getEncoded();
+        return keyPair.getPublicKey().toBytes();
     }
 
 

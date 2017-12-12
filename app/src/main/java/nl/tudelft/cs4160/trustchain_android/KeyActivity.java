@@ -8,7 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.security.KeyPair;
+import org.libsodium.jni.keys.KeyPair;
+
 import java.security.Security;
 
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
@@ -39,7 +40,7 @@ public class KeyActivity extends AppCompatActivity {
         verifySignature = findViewById(R.id.verify_sig);
 
         KeyPair kp = Key.ensureKeysExist(getApplicationContext());
-        textPrivateKey.setText(Base64.encodeToString(kp.getPrivate().getEncoded(), Base64.DEFAULT));
+        textPrivateKey.setText(Base64.encodeToString(kp.getPrivateKey().toBytes(), Base64.DEFAULT));
 
         verifySignature.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,7 +48,7 @@ public class KeyActivity extends AppCompatActivity {
                 KeyPair kp = Key.loadKeys(getApplicationContext());
                 byte[] sig = Base64.decode(signedData.getText().toString(), Base64.DEFAULT);
                 byte[] data = new byte[] {0x30, 0x30, 0x30, 0x30,0x30, 0x30, 0x30, 0x30};
-                if(Key.verify(kp.getPublic(), data, sig)) {
+                if(Key.verify(kp.getPublicKey(), data, sig)) {
                     Toast.makeText(getApplicationContext(), R.string.valid_signature, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.invalid_signature, Toast.LENGTH_SHORT).show();
@@ -59,7 +60,7 @@ public class KeyActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 KeyPair kp = Key.createAndSaveKeys(getApplicationContext());
-                textPrivateKey.setText(Base64.encodeToString(kp.getPrivate().getEncoded(), Base64.DEFAULT));
+                textPrivateKey.setText(Base64.encodeToString(kp.getPrivateKey().toBytes(), Base64.DEFAULT));
 
             }
         });
@@ -68,7 +69,7 @@ public class KeyActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 KeyPair kp = Key.loadKeys(getApplicationContext());
-                byte[] sig = Key.sign( kp.getPrivate(), new byte[] {0x30, 0x30, 0x30, 0x30,0x30, 0x30, 0x30, 0x30});
+                byte[] sig = Key.sign( kp.getPrivateKey(), new byte[] {0x30, 0x30, 0x30, 0x30,0x30, 0x30, 0x30, 0x30});
                 if(sig == null) {
                     System.out.println("No sig received");
                 }

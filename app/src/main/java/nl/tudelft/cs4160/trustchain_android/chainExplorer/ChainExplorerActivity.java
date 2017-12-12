@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import java.security.KeyPair;
+import org.libsodium.jni.keys.KeyPair;
 
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
@@ -53,7 +53,7 @@ public class ChainExplorerActivity extends AppCompatActivity {
         dbHelper = new TrustChainDBHelper(this);
         KeyPair kp = Key.loadKeys(getApplicationContext());
         try {
-            adapter = new ChainExplorerAdapter(this, dbHelper.getAllBlocks(), kp.getPublic().getEncoded());
+            adapter = new ChainExplorerAdapter(this, dbHelper.getAllBlocks(), kp.getPublicKey().toBytes());
             blocksList.setAdapter(adapter);
         } catch (Exception e) {
             e.printStackTrace();

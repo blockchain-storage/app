@@ -1,6 +1,6 @@
 package nl.tudelft.cs4160.trustchain_android.connection.network;
 
-import java.security.KeyPair;
+import org.libsodium.jni.keys.KeyPair;
 
 import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;

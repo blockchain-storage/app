@@ -5,11 +5,11 @@ import android.util.Base64;
 
 import com.google.protobuf.ByteString;
 
-import java.security.KeyPair;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import org.libsodium.jni.Sodium;
+import org.libsodium.jni.keys.KeyPair;
+import org.libsodium.jni.keys.PrivateKey;
+import org.libsodium.jni.keys.PublicKey;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,14 +37,14 @@ public class TrustChainBlock {
     public static MessageProto.TrustChainBlock createGenesisBlock(KeyPair kp) {
         MessageProto.TrustChainBlock block = MessageProto.TrustChainBlock.newBuilder()
                 .setTransaction(ByteString.EMPTY)
-                .setPublicKey(ByteString.copyFrom(kp.getPublic().getEncoded()))
+                .setPublicKey(ByteString.copyFrom(kp.getPublicKey().toBytes()))
                 .setSequenceNumber(GENESIS_SEQ)
                 .setLinkPublicKey(EMPTY_PK)
                 .setLinkSequenceNumber(UNKNOWN_SEQ)
                 .setPreviousHash(GENESIS_HASH)
                 .setSignature(EMPTY_SIG)
                 .build();
-        block = sign(block, kp.getPrivate());
+        block = sign(block, kp.getPrivateKey());
         return block;
     }
 
@@ -101,15 +101,10 @@ public class TrustChainBlock {
      * @return the sha256 hash of the byte array of the block
      */
     public static byte[] hash(MessageProto.TrustChainBlock block) {
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        //remove the signature (if there is any)
-        MessageProto.TrustChainBlock rawBlock = block.toBuilder().setSignature(EMPTY_SIG).build();
-        return md.digest(rawBlock.toByteArray());
+        byte[] blockBytes = block.toByteArray();
+        byte[] hashOut = new byte[Sodium.crypto_hash_sha256_bytes()];
+        Sodium.crypto_hash_sha256(hashOut, blockBytes, blockBytes.length);
+        return blockBytes;
     }
 
 
