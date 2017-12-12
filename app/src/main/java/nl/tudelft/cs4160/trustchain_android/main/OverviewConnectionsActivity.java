@@ -62,7 +62,7 @@ import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS
 
 public class OverviewConnectionsActivity extends AppCompatActivity {
 
-    public final static String CONNECTABLE_ADDRESS = "145.94.155.32";
+    public final static String CONNECTABLE_ADDRESS = "130.161.211.254";
     final static int UNKNOWN_PEER_LIMIT = 20;
     final static String HASH_ID = "hash_id";
     final static int DEFAULT_PORT = 1873;
