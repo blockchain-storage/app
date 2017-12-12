@@ -8,6 +8,31 @@
     android:paddingTop="8dp"
     tools:context=".main.OverviewConnectionsActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="@string/connect_bootstrap_ip" />
+
+        <EditText
+            android:id="@+id/bootstrap_IP"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/connect_bootstrap_ip_hint" />
+
+        <Button
+            android:id="@+id/change_bootstrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClickConnect"
+            android:text="@string/change_bootstrap" />
+    </LinearLayout>
+
     <TableLayout
         android:id="@+id/overviewButtons"
         android:layout_width="match_parent"
