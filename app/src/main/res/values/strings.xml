@@ -8,6 +8,7 @@
     <string name="connect_to">Connect to IP</string>
     <string name="connect">connect</string>
     <string name="reset_database_button">Clear Database (closes app)</string>
+    <string name="button_info_text">Connections info</string>
 
     <string name="title_activity_key">Key management</string>
     <string name="bluetooth_connection">bluetooth_connection</string>

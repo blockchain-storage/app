@@ -68,12 +68,13 @@
         </TableRow>
         <TableRow android:layout_marginBottom="10dp">
 
-            <ImageButton
+            <Button
                 android:id="@+id/info_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onClickInfo"
-                android:src="@android:drawable/ic_menu_info_details" />
+                android:text="@string/button_info_text"
+                android:drawableLeft="@android:drawable/ic_menu_info_details" />
 
         </TableRow>
 <!--
