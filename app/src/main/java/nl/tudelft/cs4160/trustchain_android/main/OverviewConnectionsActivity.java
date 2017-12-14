@@ -32,7 +32,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
-import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -41,6 +40,7 @@ import java.util.UUID;
 
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.WanVote;
@@ -149,7 +149,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      */
     public boolean isStartedFirstTime(TrustChainDBHelper dbHelper, KeyPair kp) {
         // check if a genesis block is present in database
-        MessageProto.TrustChainBlock genesisBlock = dbHelper.getBlock(kp.getPublic().getEncoded(), GENESIS_SEQ);
+        MessageProto.TrustChainBlock genesisBlock = dbHelper.getBlock(kp.getPublicKey().toBytes(), GENESIS_SEQ);
         return (genesisBlock == null);
     }
 

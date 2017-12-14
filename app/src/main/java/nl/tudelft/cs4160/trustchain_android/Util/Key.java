@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 
+import org.libsodium.jni.NaCl;
 import org.libsodium.jni.Sodium;
-import org.libsodium.jni.encoders.Raw;
 import org.libsodium.jni.keys.PrivateKey;
 import org.libsodium.jni.keys.PublicKey;
 
@@ -13,6 +13,11 @@ import org.libsodium.jni.keys.PublicKey;
  * Manages key operations.
  */
 public class Key {
+
+    static {
+        NaCl.sodium();
+    }
+
     private final static String TAG = "KEY";
 
     public final static String DEFAULT_PUB_KEY_FILE = "pub.key";
@@ -143,8 +148,10 @@ public class Key {
      * @return A KeyPair with the private and public key.
      */
     public static KeyPair loadKeys(Context context) {
-        PrivateKey privateKey = Key.loadPrivateKey(context, Key.DEFAULT_PRIV_KEY_FILE);
-        return new KeyPair(privateKey.toBytes());
+        try {
+            PrivateKey privateKey = Key.loadPrivateKey(context, Key.DEFAULT_PRIV_KEY_FILE);
+            return new KeyPair(privateKey.toBytes());
+        } catch (Throwable t) { return null; }
     }
 
     /**
