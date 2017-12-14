@@ -12,16 +12,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.zxing.Result;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.decoder.Decoder;
 
 import org.libsodium.jni.Sodium;
-import org.libsodium.jni.encoders.Encoder;
-import org.libsodium.jni.encoders.Raw;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -35,6 +31,8 @@ public class ScanQRActivity extends AppCompatActivity {
     private ZXingScannerView scannerView;
 
     public static final int PERMISSIONS_REQUEST_CAMERA = 0;
+
+    public static final String TAG = "ScanQRActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,49 +87,55 @@ public class ScanQRActivity extends AppCompatActivity {
         }
     }
 
+    private ZXingScannerView.ResultHandler scanResultHandler = new ZXingScannerView.ResultHandler() {
+        public void handleResult(Result result) {
+            vibrator.vibrate(100);
+            processResult(result);
+        }
+    };
+
     private void startCamera() {
-        scannerView.setResultHandler(new ZXingScannerView.ResultHandler() {
-            public void handleResult(Result result) {
-                new AlertDialog.Builder(ScanQRActivity.this)
-                        .setTitle(result.getBarcodeFormat().toString())
-                        .setMessage(result.getText())
-                        .setNeutralButton(android.R.string.ok, null)
-                        .show();
-                vibrator.vibrate(100);
-
-                System.out.println("QR code says " + result.getText());
-                processBytes(Base64.decode(result.getText(), Base64.DEFAULT));
-
-
-                scannerView.resumeCameraPreview(this);
-            }
-        });
+        scannerView.setResultHandler(scanResultHandler);
         scannerView.startCamera();
     }
 
-    public static String byteArrayToHex(byte[] a) {
-        StringBuilder sb = new StringBuilder(a.length * 2);
-        for(byte b: a)
-            sb.append(String.format("%02x", b));
-        return sb.toString();
-    }
-
-    private void processBytes(byte[] bytes) {
+    private void processResult(Result result) {
+        byte[] decoded = Base64.decode(result.getText(), Base64.DEFAULT);
         int pkLength = Sodium.crypto_box_secretkeybytes();
         int vkLength = Sodium.crypto_box_seedbytes();
-        System.out.println(byteArrayToHex(bytes));
 
-        if (bytes.length != pkLength + vkLength)
-            throw new RuntimeException("Should be " + (pkLength + vkLength) + " length but was " + bytes.length);
+        int expectedLength = pkLength + vkLength;
+        if (decoded.length != expectedLength) {
+            Log.i(TAG, "QR data " + result.getText() + " doesn't match expected key length of " + expectedLength);
+            new AlertDialog.Builder(this)
+                    .setTitle("Error")
+                    .setMessage("The scanned QR code doesn't seem to be a wallet key.")
+                    .setNeutralButton(android.R.string.ok, null)
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            scannerView.resumeCameraPreview(scanResultHandler);
+                        }
+                    }).show();
+            return;
+        }
 
-        byte[] pk = Arrays.copyOfRange(bytes, 0, pkLength);
-        byte[] vk = Arrays.copyOfRange(bytes, pkLength, pkLength+vkLength);
+        byte[] pk = Arrays.copyOfRange(decoded, 0, pkLength); // first group is pk
+        byte[] vk = Arrays.copyOfRange(decoded, pkLength, pkLength + vkLength); // second group is seedkey // TODO: find out what this maps to in the jni bindings of libsodium
 
-        System.out.println("pk: " + new BigInteger(1, pk).toString(16));
-        System.out.println("vk: " + new BigInteger(1, vk).toString(16));
+        KeyPair pair = new KeyPair(pk);
+        Key.saveKeyPair(ScanQRActivity.this, pair);
 
-        KeyPair kp = new KeyPair(pk);
-        Key.saveKeyPair(ScanQRActivity.this, kp);
+        new AlertDialog.Builder(this)
+                .setTitle("Success")
+                .setMessage("Successfully imported wallet.")
+                .setNeutralButton(android.R.string.ok, null)
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        ScanQRActivity.this.finish();
+                    }
+                }).show();
     }
 
     private boolean hasCameraPermission() {
