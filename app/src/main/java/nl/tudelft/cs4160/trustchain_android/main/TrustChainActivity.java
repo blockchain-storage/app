@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.libsodium.jni.NaCl;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Collections;
@@ -25,14 +26,13 @@ import java.util.List;
 import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
-import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
+import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
 import nl.tudelft.cs4160.trustchain_android.connection.network.NetworkCommunication;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
-import nl.tudelft.cs4160.trustchain_android.qr.ScanQRActivity;
 
 
 public class TrustChainActivity extends AppCompatActivity implements CommunicationListener {
@@ -51,7 +51,6 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
     TextView localIPText;
     TextView statusText;
     Button connectionButton;
-    Button scanQRButton;
     EditText editTextDestinationIP;
     EditText editTextDestinationPort;
 
@@ -96,13 +95,6 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
             Toast.makeText(getApplicationContext(), "Requires at least API 19 (KitKat)", Toast.LENGTH_LONG).show();
         }
     }
-
-    View.OnClickListener scanQRListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            startActivity(new Intent(TrustChainActivity.this, ScanQRActivity.class));
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +142,6 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
         editTextDestinationIP = findViewById(R.id.destination_IP);
         editTextDestinationPort = findViewById(R.id.destination_port);
         connectionButton = findViewById(R.id.connection_button);
-        scanQRButton = findViewById(R.id.qr_scan_button);
     }
 
     private void init() {
@@ -161,8 +152,6 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
 
         updateIP();
         updateLocalIPField(getLocalIPAddress());
-
-        scanQRButton.setOnClickListener(scanQRListener);
 
         //start listening for messages
         communication.start();

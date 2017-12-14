@@ -5,4 +5,9 @@
         android:id="@+id/chain_menu"
         android:title="@string/menu_item_1"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/import_wallet"
+        android:title="@string/import_wallet"
+        app:showAsAction="never" />
 </menu>
