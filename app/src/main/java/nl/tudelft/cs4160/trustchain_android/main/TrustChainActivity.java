@@ -37,15 +37,12 @@ import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
-import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
 import nl.tudelft.cs4160.trustchain_android.connection.network.NetworkCommunication;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
-
-import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS_SEQ;
 
 public class TrustChainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, CommunicationListener {
 
@@ -75,11 +72,6 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
     private Communication communication;
 
     /**
-     * Key pair of user
-     */
-    static KeyPair kp;
-
-    /**
      * Listener for the connection button.
      * On click a block is created and send to a peerAppToApp.
      * When we encounter an unknown peerAppToApp, send a crawl request to that peerAppToApp in order to get its
@@ -95,38 +87,6 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
      * the network is not compromised due to not using dispersy.
      */
 
-    public void onClickConnect(View view) {
-        String destinationIp = "";
-        String potentialPort = "";
-        int destinationPort = 0;
-        // input validation when the use adjusts the IP and/or port of the destination address.
-        try{
-            destinationIp = editTextDestinationIP.getText().toString();
-            String len = destinationIp.replace(".", "");
-            if(len.length() < 6 || len.length() > 15){
-                throw new Exception("IP is not of a valid length");
-            }
-            Object res = InetAddress.getByName(destinationIp);
-            if(!(res instanceof Inet4Address) && !(res instanceof Inet6Address)){
-                Log.i("Destination IP Adress: ", res.toString());
-                throw new Exception("IP is not a valid IP4 or IP6 address.");
-            }
-            potentialPort = editTextDestinationPort.getText().toString();
-            Toast.makeText(thisActivity, potentialPort, Toast.LENGTH_LONG);
-            Log.i("Potential Port: ", potentialPort);
-            destinationPort = Integer.parseInt(potentialPort);
-            if (destinationPort < 1024 || destinationPort > 5000) {
-                Log.i("Destination port: ", Integer.toString(destinationPort));
-                throw new Exception("Only use a range of valid ports.");
-            }
-        } catch (Exception e){
-            Toast.makeText(thisActivity, "The destination port or the IP adress is not a valid. Port: " + potentialPort + " IP: " + destinationIp, Toast.LENGTH_SHORT).show();
-//            e.printStackTrace();
-        }
-        peer = new Peer(null,destinationIp , destinationPort);
-        communication.connectToPeer(peer);
-    }
-
     public void onClickSend(View view) throws UnsupportedEncodingException {
         Log.d("testLogs", "onClickSend");
         if (isConnected()) {
@@ -134,15 +94,32 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
             byte[] transactionData = TRANSACTION_DATA.getBytes("UTF-8");
             communication.signBlock(transactionData, peer);
         } else {
-            if (developerMode) {
                 peer = new Peer(null, editTextDestinationIP.getText().toString(),
                         Integer.parseInt(editTextDestinationPort.getText().toString()));
                 communication.connectToPeer(peer);
-
-            } else {
-                connectToPeer();
-            }
         }
+    }
+    private boolean isConnected() {
+        if (peer != null) {
+            if (communication.getPublicKey(peer.getIpAddress()) != null) {
+                return true;
+            } else {
+                Log.d("testLogs", "getPublicKey == null");
+            }
+        } else {
+
+            Log.d("testLogs", "peer == null");
+        }
+        return false;
+    }
+    private void enableMessage() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messageEditText.setVisibility(View.VISIBLE);
+                sendButton.setText(getResources().getString(R.string.send));
+            }
+        });
     }
 
     @Override
@@ -163,8 +140,6 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
             String name = peerAppToApp.getPeerId();
             editTextDestinationIP.setText(address);
             editTextDestinationPort.setText(port + "");
-            peer = new Peer(null, address, port, name);
-            communication.connectToPeer(peer);
         }
     }
 
@@ -212,68 +187,14 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
 
     private void init() {
         dbHelper = new TrustChainDBHelper(thisActivity);
-        //create or load keys
-        initKeys();
-        if (isStartedFirstTime()) {
-            MessageProto.TrustChainBlock block = TrustChainBlock.createGenesisBlock(kp);
-            dbHelper.insertInDB(block);
-        }
+        //load keys
+        KeyPair kp = Key.loadKeys(getApplicationContext());
         communication = new NetworkCommunication(dbHelper, kp, this);
         updateIP();
         updateLocalIPField(getLocalIPAddress());
         //start listening for messages
         communication.start();
 
-    }
-
-    private void initKeys() {
-        kp = Key.loadKeys(getApplicationContext());
-        if (kp == null) {
-            kp = Key.createNewKeyPair();
-            Key.saveKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE, kp.getPublic());
-            Key.saveKey(getApplicationContext(), Key.DEFAULT_PRIV_KEY_FILE, kp.getPrivate());
-            Log.i(TAG, "New keys created");
-        }
-    }
-
-    private boolean isConnected() {
-        if (peer != null) {
-            if (communication.getPublicKey(peer.getIpAddress()) != null) {
-                return true;
-            } else {
-                Log.d("testLogs", "getPublicKey == null");
-            }
-        } else {
-
-            Log.d("testLogs", "peer == null");
-        }
-        return false;
-    }
-
-    private void enableMessage() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                messageEditText.setVisibility(View.VISIBLE);
-                sendButton.setText(getResources().getString(R.string.send));
-            }
-        });
-    }
-
-    /**
-     * Checks if this is the first time the app is started and returns a boolean value indicating
-     * this state.
-     *
-     * @return state - false if the app has been initialized before, true if first time app started
-     */
-    public boolean isStartedFirstTime() {
-        // check if a genesis block is present in database
-        MessageProto.TrustChainBlock genesisBlock = dbHelper.getBlock(kp.getPublic().getEncoded(), GENESIS_SEQ);
-
-        if (genesisBlock == null) {
-            return true;
-        }
-        return false;
     }
 
     /**
