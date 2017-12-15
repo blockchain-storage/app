@@ -297,7 +297,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendIntroductionRequest(PeerAppToApp peer) throws IOException {
-        IntroductionRequest request = new IntroductionRequest(hashId, peer.getAddress(), connectionType, networkOperator);
+        IntroductionRequest request = new IntroductionRequest(hashId, peer.getAddress(), connectionType, networkOperator, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(request, peer);
     }
 
@@ -309,7 +309,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPunctureRequest(PeerAppToApp peer, PeerAppToApp puncturePeer) throws IOException {
-        PunctureRequest request = new PunctureRequest(hashId, peer.getAddress(), internalSourceAddress, puncturePeer);
+        PunctureRequest request = new PunctureRequest(hashId, peer.getAddress(), internalSourceAddress, puncturePeer, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(request, peer);
     }
 
@@ -320,7 +320,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPuncture(PeerAppToApp peer) throws IOException {
-        Puncture puncture = new Puncture(hashId, peer.getAddress(), internalSourceAddress);
+        Puncture puncture = new Puncture(hashId, peer.getAddress(), internalSourceAddress, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(puncture, peer);
     }
 
@@ -338,7 +338,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 pexPeers.add(p);
         }
         IntroductionResponse response = new IntroductionResponse(hashId, internalSourceAddress, peer
-                .getAddress(), invitee, connectionType, pexPeers, networkOperator);
+                .getAddress(), invitee, connectionType, pexPeers, networkOperator, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(response, peer);
     }
 
@@ -446,6 +446,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         try {
             Message message = Message.createFromByteBuffer(data);
             Log.d("App-To-App Log", "Received " + message);
+            Log.d("App-To-App Log", "Msg pub key " + message.get("public_key"));
             String id = message.getPeerId();
             if (wanVote.vote(message.getDestination())) {
                 Log.d("App-To-App Log", "Address changed to " + wanVote.getAddress());

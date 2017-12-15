@@ -7,9 +7,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
 
+import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.ByteBufferOutputStream;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.ByteBufferinputStream;
@@ -41,11 +43,11 @@ public abstract class Message extends HashMap {
      * @param peerId the unique id of self.
      * @param destination the destination address.
      */
-    public Message(int type, String peerId, InetSocketAddress destination) {
+    public Message(int type, String peerId, InetSocketAddress destination, String pubKey) {
         put(TYPE, type);
         put(PEER_ID, peerId);
         put(DESTINATION, createAddressMap(destination));
-        put(PUB_KEY, TrustChainActivity.kp.getPublic());
+        put(PUB_KEY, pubKey);
     }
 
     /**
