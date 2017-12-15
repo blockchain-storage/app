@@ -16,6 +16,7 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.connection.ByteBufferinputS
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReadException;
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReader;
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeWriter;
+import nl.tudelft.cs4160.trustchain_android.main.TrustChainActivity;
 
 /**
  * Created by jaap on 5/31/16.
@@ -32,6 +33,7 @@ public abstract class Message extends HashMap {
     final protected static String PORT = "port";
     final protected static String ADDRESS = "address";
     final protected static String PEER_ID = "peer_id";
+    final protected static String PUB_KEY = "public_key";
 
     /**
      * Create a message.
@@ -43,6 +45,7 @@ public abstract class Message extends HashMap {
         put(TYPE, type);
         put(PEER_ID, peerId);
         put(DESTINATION, createAddressMap(destination));
+        put(PUB_KEY, TrustChainActivity.kp.getPublic());
     }
 
     /**

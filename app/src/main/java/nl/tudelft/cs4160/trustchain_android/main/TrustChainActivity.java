@@ -57,7 +57,7 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
     /**
      * Key pair of user
      */
-    static KeyPair kp;
+    public static KeyPair kp;
 
     /**
      * Listener for the connection button.
