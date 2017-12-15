@@ -10,4 +10,8 @@
         android:id="@+id/import_wallet"
         android:title="@string/import_wallet"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/export_wallet"
+        android:title="@string/export_wallet"
+        app:showAsAction="never" />
 </menu>

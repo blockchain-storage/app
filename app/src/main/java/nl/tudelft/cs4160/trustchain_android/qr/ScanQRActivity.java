@@ -102,9 +102,9 @@ public class ScanQRActivity extends AppCompatActivity {
     private void processResult(Result result) {
         byte[] decoded = Base64.decode(result.getText(), Base64.DEFAULT);
         int pkLength = Sodium.crypto_box_secretkeybytes();
-        int vkLength = Sodium.crypto_box_seedbytes();
+        int seedLength = Sodium.crypto_box_seedbytes();
 
-        int expectedLength = pkLength + vkLength;
+        int expectedLength = pkLength + seedLength;
         if (decoded.length != expectedLength) {
             Log.i(TAG, "QR data " + result.getText() + " doesn't match expected key length of " + expectedLength);
             new AlertDialog.Builder(this)
@@ -121,9 +121,9 @@ public class ScanQRActivity extends AppCompatActivity {
         }
 
         byte[] pk = Arrays.copyOfRange(decoded, 0, pkLength); // first group is pk
-        byte[] vk = Arrays.copyOfRange(decoded, pkLength, pkLength + vkLength); // second group is seedkey // TODO: find out what this maps to in the jni bindings of libsodium
+        byte[] seed = Arrays.copyOfRange(decoded, pkLength, pkLength + seedLength); // second group is seed
 
-        KeyPair pair = new KeyPair(pk);
+        KeyPair pair = new KeyPair(pk, seed);
         Key.saveKeyPair(ScanQRActivity.this, pair);
 
         new AlertDialog.Builder(this)

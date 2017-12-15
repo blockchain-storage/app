@@ -64,4 +64,5 @@
     <string name="exit_prompt">Exit</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="import_wallet">Import Wallet</string>
+    <string name="export_wallet">Export Wallet</string>
 </resources>
