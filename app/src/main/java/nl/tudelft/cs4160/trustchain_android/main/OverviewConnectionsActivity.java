@@ -69,7 +69,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     final static int DEFAULT_PORT = 1873;
     final static int KNOWN_PEER_LIMIT = 10;
     private static final int BUFFER_SIZE = 2048;
-    private static Map<String, List<String>> recordedAddressesPerPubKeyMap = new HashMap<>();
+    private static Map<String, List<String>> recordedAddressesPerPubKeyMap = new HashMap<>();  // Map(pubkey -> list<ip>) which tracks ip addresses per public key.
 
     private TextView mWanVote;
     private Button mExitButton;
@@ -452,8 +452,11 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
             String id = message.getPeerId();
             String pubKey = message.getPubKey();
-            String ip = address.getAddress().toString();
-            recordAddressByPubKey(pubKey, ip);
+
+            if(pubKey != null) {
+                String ip = address.getAddress().toString();
+                recordAddressByPubKey(pubKey, ip);
+            }
 
             Log.d("App-To-App", "pubkey address map " + recordedAddressesPerPubKeyMap.toString());
 
@@ -485,6 +488,12 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Store the ip address in the hashmap by public key.
+     * Does nothing if the ip is already contained in the list.
+     * @param pubKey
+     * @param ip
+     */
     protected static void recordAddressByPubKey(String pubKey, String ip) {
         List<String> addresses;
 
@@ -493,7 +502,9 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             addresses.add(ip);
         } else {
             addresses = getAddressesByPubKey(pubKey);
-            addresses.add(ip);
+            if(!addresses.contains(ip)) {
+                addresses.add(ip);
+            }
         }
         recordedAddressesPerPubKeyMap.put(pubKey, addresses);
     }
