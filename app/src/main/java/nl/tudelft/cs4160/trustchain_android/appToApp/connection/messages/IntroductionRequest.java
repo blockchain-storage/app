@@ -10,7 +10,7 @@ public class IntroductionRequest extends Message {
     final private static String CONNECTION_TYPE = "connection_type";
     final private static String NETWORK_OPERATOR = "network_operator";
 
-    public IntroductionRequest(String peerId, InetSocketAddress destination, long connectionType, String pubKey, String networkOperator) {
+    public IntroductionRequest(String peerId, InetSocketAddress destination, long connectionType, String networkOperator, String pubKey) {
         super(INTRODUCTION_REQUEST, peerId, destination, pubKey);
         put(CONNECTION_TYPE, connectionType);
         put(NETWORK_OPERATOR, networkOperator);
