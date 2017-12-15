@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
@@ -40,6 +39,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
@@ -68,6 +69,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     final static int DEFAULT_PORT = 1873;
     final static int KNOWN_PEER_LIMIT = 10;
     private static final int BUFFER_SIZE = 2048;
+    private static Map<String, List<String>> recordedAddressesPerPubKeyMap = new HashMap<>();
+
     private TextView mWanVote;
     private Button mExitButton;
     private PeerListAdapter incomingPeerAdapter;
@@ -446,8 +449,14 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         try {
             Message message = Message.createFromByteBuffer(data);
             Log.d("App-To-App Log", "Received " + message);
-            Log.d("App-To-App Log", "Msg pub key " + message.get("public_key"));
+
             String id = message.getPeerId();
+            String pubKey = message.getPubKey();
+            String ip = address.getAddress().toString();
+            recordAddressByPubKey(pubKey, ip);
+
+            Log.d("App-To-App", "pubkey address map " + recordedAddressesPerPubKeyMap.toString());
+
             if (wanVote.vote(message.getDestination())) {
                 Log.d("App-To-App Log", "Address changed to " + wanVote.getAddress());
                 showLocalIpAddress();
@@ -474,6 +483,23 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         } catch (BencodeReadException | IOException | MessageException e) {
             e.printStackTrace();
         }
+    }
+
+    protected static void recordAddressByPubKey(String pubKey, String ip) {
+        List<String> addresses;
+
+        if(recordedAddressesPerPubKeyMap.get(pubKey) == null) {
+            addresses = new ArrayList<>();
+            addresses.add(ip);
+        } else {
+            addresses = getAddressesByPubKey(pubKey);
+            addresses.add(ip);
+        }
+        recordedAddressesPerPubKeyMap.put(pubKey, addresses);
+    }
+
+    static List<String> getAddressesByPubKey(String pubKey) {
+        return recordedAddressesPerPubKeyMap.get(pubKey);
     }
 
     /**

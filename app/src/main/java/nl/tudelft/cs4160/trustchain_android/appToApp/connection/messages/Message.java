@@ -180,6 +180,10 @@ public abstract class Message extends HashMap {
         return (String) get(PEER_ID);
     }
 
+    public String getPubKey() {
+        return (String) get(PUB_KEY);
+    }
+
     /**
      * Get the type of this message.
      * @return the type.
