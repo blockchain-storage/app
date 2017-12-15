@@ -22,6 +22,7 @@ public class Key {
 
     public final static String DEFAULT_PUB_KEY_FILE = "pub.key";
     public final static String DEFAULT_PRIV_KEY_FILE = "priv.key";
+    public final static String DEFAULT_SEED_KEY_FILE = "seed.key";
 
 
     public static KeyPair ensureKeysExist(Context context) {
@@ -51,10 +52,8 @@ public class Key {
      * @return KeyPair.
      */
     public static KeyPair createNewKeyPair() {
-        byte[] vk = new byte[Sodium.crypto_box_secretkeybytes()];
-        return new KeyPair(vk);
+        return new KeyPair();
     }
-
 
     /**
      * Sign a message using the given private key.
@@ -141,6 +140,17 @@ public class Key {
         return new PrivateKey(rawKey);
     }
 
+    public static byte[] loadSeed(Context context, String file) {
+        String contents = Util.readFile(context, file);
+        Log.i(TAG, "PRIVATE FROM FILE: " + contents);
+        return loadSeed(contents);
+    }
+
+    public static byte[] loadSeed(String b64) {
+        byte[] seed = Base64.decode(b64, Base64.DEFAULT);
+        return seed;
+    }
+
     /**
      * Load public and private keys from the standard files.
      *
@@ -150,7 +160,8 @@ public class Key {
     public static KeyPair loadKeys(Context context) {
         try {
             PrivateKey privateKey = Key.loadPrivateKey(context, Key.DEFAULT_PRIV_KEY_FILE);
-            return new KeyPair(privateKey.toBytes());
+            byte[] seed = Key.loadSeed(context, Key.DEFAULT_SEED_KEY_FILE);
+            return new KeyPair(privateKey.toBytes(), seed);
         } catch (Throwable t) { return null; }
     }
 

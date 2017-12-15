@@ -15,6 +15,8 @@ package nl.tudelft.cs4160.trustchain_android.Util;
  * limitations under the License.
  */
 
+import org.libsodium.jni.NaCl;
+import org.libsodium.jni.Sodium;
 import org.libsodium.jni.crypto.Point;
 import org.libsodium.jni.crypto.Util;
 import org.libsodium.jni.encoders.Encoder;
@@ -33,10 +35,18 @@ public class KeyPair {
     private byte[] seed;
     private final byte[] secretKey;
 
+    public KeyPair() {
+        this.secretKey = Util.zeros(32);
+        this.publicKey = Util.zeros(32);
+        NaCl.sodium();
+        Sodium.crypto_box_curve25519xsalsa20poly1305_keypair(this.publicKey, this.secretKey);
+    }
 
-    public KeyPair(byte[] secretKey) {
+    public KeyPair(byte[] secretKey, byte[] seed) {
         this.secretKey = secretKey;
         checkLength(this.secretKey, SECRETKEY_BYTES);
+        this.seed = seed;
+        checkLength(this.seed, Sodium.crypto_box_seedbytes());
     }
 
     public PublicKey getPublicKey() {
@@ -47,5 +57,8 @@ public class KeyPair {
 
     public PrivateKey getPrivateKey() {
         return new PrivateKey(secretKey);
+    }
+    public byte[] getSeed() {
+        return seed;
     }
 }
