@@ -45,7 +45,13 @@ public class ExportWalletQRActivity extends AppCompatActivity {
     private void exportQRCode() {
         try {
             KeyPair keyPair = Key.loadKeys(this);
-            String keyString = Base64.encodeToString(keyPair.getPrivateKey().toBytes(), Base64.DEFAULT);
+            byte[] privateKey = keyPair.getPrivateKey().toBytes();
+            byte[] seedKey = keyPair.getSeed();
+            byte[] concatted = new byte[privateKey.length + seedKey.length];
+            System.arraycopy(privateKey, 0, concatted, 0, privateKey.length);
+            System.arraycopy(seedKey, 0, concatted, privateKey.length, seedKey.length);
+
+            String keyString = Base64.encodeToString(concatted, Base64.DEFAULT);
             MultiFormatWriter writer = new MultiFormatWriter();
             int size = 500;
             BitMatrix matrix = writer.encode(keyString, BarcodeFormat.QR_CODE, size, size);
