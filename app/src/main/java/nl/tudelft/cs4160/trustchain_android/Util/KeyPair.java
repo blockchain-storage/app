@@ -38,6 +38,7 @@ public class KeyPair {
     public KeyPair() {
         this.secretKey = Util.zeros(32);
         this.publicKey = Util.zeros(32);
+        this.seed = Util.zeros(Sodium.crypto_box_seedbytes());
         NaCl.sodium();
         Sodium.crypto_box_curve25519xsalsa20poly1305_keypair(this.publicKey, this.secretKey);
     }
