@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import nl.tudelft.cs4160.trustchain_android.R;
@@ -18,12 +19,14 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 
 public class ConnectionExplanationActivity extends AppCompatActivity {
 
-    private int[] listOfColors = {R.color.colorStatusConnected, R.color.colorStatusConnecting, R.color.colorStatusCantConnect, R.color.colorSent, R.color.colorReceived};
-    private String[] explanationText = {"Test", "Test", "test", "Test", "Test"};
+    private ArrayList<String> symbolList;
+    private String[] explanationText = {"Connected with peer", "Connecting with peer", "Cannot connect with peer", "Received a packet from peer", "Sent a packet to peer"};
+    private int[] colorList = {R.color.colorStatusConnected, R.color.colorStatusConnecting, R.color.colorStatusCantConnect, R.color.colorReceived, R.color.colorSent};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createSymbolList();
         setContentView(R.layout.activity_connection_explanation);
         createConnectionExplanationList();
     }
@@ -39,10 +42,27 @@ public class ConnectionExplanationActivity extends AppCompatActivity {
                         (
                             getApplicationContext(),
                             R.layout.connection_explanation_list_item,
-                            listOfColors,
-                            explanationText
+                            symbolList,
+                            explanationText,
+                            colorList
                         );
 
         connectionExplanationListView.setAdapter(connectionExplanationListAdapter);
+    }
+
+    /**
+     * Create the list of symbols for the list view.
+     */
+    private void createSymbolList() {
+        symbolList = new ArrayList<String>();
+        for (int i = 0; i < 3; i++) {
+            String symbol = this.getString(R.string.circle_symbol);
+            symbolList.add(symbol);
+        }
+
+        for (int i = 0; i < 2; i++) {
+            String symbol = this.getString(R.string.indicator_symbol);
+            symbolList.add(symbol);
+        }
     }
 }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,25 +25,32 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 /**
  * Adapter for creating the items in the color explanation screen.
  */
-public class ConnectionExplanationListAdapter extends ArrayAdapter<String> {
+public class ConnectionExplanationListAdapter extends ArrayAdapter {
 
-    private int[] colorList;
+    private final Context context;
+    private ArrayList<String> symbolList;
     private String[] colorExplanationText;
-    private LayoutInflater mInflater;
+    private int[] colorList;
 
-    public ConnectionExplanationListAdapter(Context context, int resource, int[] colorList, String[] colorExplanationText) {
-        super(context, resource);
-        this.colorList = colorList;
+    public ConnectionExplanationListAdapter(Context context, int resource, ArrayList<String> symbolList, String[] colorExplanationText, int[] colorList) {
+        super(context, resource, colorExplanationText);
+        this.symbolList = symbolList;
+        this.context = context;
         this.colorExplanationText = colorExplanationText;
+        this.colorList = colorList;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = mInflater.inflate(R.layout.connection_explanation_list_item, parent, false);
-        TextView symbol = (TextView) convertView.findViewById(R.id.colorSymbol);
-        TextView symbolMeaning = (TextView) convertView.findViewById(R.id.symbolMeaning);
-        symbol.setText(colorList[position]);
-        symbolMeaning.setText(colorExplanationText[position]);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if(convertView == null) {
+            convertView = inflater.inflate(R.layout.connection_explanation_list_item, null, true);
+            TextView symbol = (TextView) convertView.findViewById(R.id.colorSymbol);
+            TextView symbolMeaning = (TextView) convertView.findViewById(R.id.symbolMeaning);
+            symbol.setText(symbolList.get(position));
+            symbol.setTextColor(context.getResources().getColor(colorList[position]));
+            symbolMeaning.setText(colorExplanationText[position]);
+        }
         return convertView;
     }
 
