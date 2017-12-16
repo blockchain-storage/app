@@ -132,6 +132,7 @@
 
             <TextView
                 android:id="@+id/pub_key"
+                android:onClick="onClickPublicKey"
                 android:textSize="13sp"/>
         </TableRow>
 
@@ -143,6 +144,7 @@
 
             <TextView
                 android:id="@+id/link_pub_key"
+                android:onClick="onClickPublicKey"
                 android:textSize="13sp"/>
         </TableRow>
 
