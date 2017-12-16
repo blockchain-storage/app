@@ -37,6 +37,7 @@
 
     <!-- Menu -->
     <string name="menu_item_1">My Chain</string>
+    <string name="find_peer">Find peer</string>
 
     <!--- app to app strings -->
     <string name="start_connection">Attempt connection</string>
