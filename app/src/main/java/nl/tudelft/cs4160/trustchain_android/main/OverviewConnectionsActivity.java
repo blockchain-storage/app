@@ -108,6 +108,9 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
     public void onClickConnect(View view) {
         bootstrapView = (EditText) findViewById(R.id.bootstrap_IP);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("ConnectableAddress", bootstrapView.getText().toString());
         CONNECTABLE_ADDRESS = bootstrapView.getText().toString();
         addInitialPeer();
     }
@@ -185,6 +188,13 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      */
     private void addInitialPeer() {
         try {
+//            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//            String address = preferences.getString("ConnectableAddress", null);
+//            if(address != "" && address != null) {
+//                addPeer(null, new InetSocketAddress(InetAddress.getByName(address), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
+//            } else {
+//                addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
+//            }
             addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
         } catch (UnknownHostException e) {
             e.printStackTrace();
