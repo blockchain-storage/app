@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -188,14 +189,15 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      */
     private void addInitialPeer() {
         try {
-//            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//            String address = preferences.getString("ConnectableAddress", null);
-//            if(address != "" && address != null) {
-//                addPeer(null, new InetSocketAddress(InetAddress.getByName(address), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
-//            } else {
-//                addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
-//            }
-            addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String address = preferences.getString("ConnectableAddress", null);
+            if(address != "" && address != null) {
+                Log.d("Connection making", "Trying to connect to " + address);
+                addPeer(null, new InetSocketAddress(InetAddress.getByName(address), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
+            } else {
+                Log.d("Connection making", "Trying to connect to " + CONNECTABLE_ADDRESS);
+                addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
+            }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
