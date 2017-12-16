@@ -8,11 +8,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
         android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
             android:layout_marginTop="40dp"
             android:text="@string/connect_bootstrap_ip" />
 
@@ -22,10 +24,19 @@
             android:layout_height="wrap_content"
             android:hint="@string/connect_bootstrap_ip_hint" />
 
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
         <Button
             android:id="@+id/change_bootstrap"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:paddingLeft="20dp"
+            android:layout_marginBottom="20dp"
+            android:paddingRight="20dp"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
             android:onClick="onClickConnect"
             android:text="@string/change_bootstrap" />
     </LinearLayout>
