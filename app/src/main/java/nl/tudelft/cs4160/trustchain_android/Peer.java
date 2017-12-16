@@ -11,12 +11,20 @@ public class Peer {
     private String ipAddress;
     private int port;
     private BluetoothDevice device;
+    private String name;
 
+    public Peer(byte[] pubKey, String ip, int port, String name) {
+        this.publicKey = pubKey;
+        this.ipAddress = ip;
+        this.port = port;
+        this.name = name;
+
+    }
     public Peer(byte[] pubKey, String ip, int port) {
         this.publicKey = pubKey;
         this.ipAddress = ip;
         this.port = port;
-
+        this.name = ip;
     }
 
     public Peer(BluetoothDevice device) {
@@ -70,4 +78,11 @@ public class Peer {
         return new String(hexChars);
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

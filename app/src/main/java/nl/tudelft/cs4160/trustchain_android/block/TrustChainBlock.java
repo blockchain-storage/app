@@ -5,6 +5,7 @@ import android.util.Base64;
 
 import com.google.protobuf.ByteString;
 
+import java.io.UnsupportedEncodingException;
 import java.security.KeyPair;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -393,6 +394,17 @@ public class TrustChainBlock {
         res += "\tSequence Number: " + block.getSequenceNumber() + "\n";
         res += "\tLink Public Key: " + pubKeyToString(block.getLinkPublicKey().toByteArray(),32) + "\n";
         res += "\tLink Sequence Number: " + block.getLinkSequenceNumber() + "\n";
+        res += "}";
+        return res;
+    }
+
+    public static String transferDataToString(MessageProto.TrustChainBlock block){
+        String res = "Trustchainblock: { ";
+        try {
+            res += " data: " + block.getTransaction().toString("UTF-8") + "\n";
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         res += "}";
         return res;
     }
