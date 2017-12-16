@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.google.protobuf.ByteString;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.main.TrustChainActivity;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
@@ -122,7 +124,9 @@ public class ChainExplorerAdapter extends BaseAdapter {
 
         // expanded view
         TextView pubKey = (TextView) convertView.findViewById(R.id.pub_key);
+        setOnClickListener(pubKey);
         TextView linkPubKey = (TextView) convertView.findViewById(R.id.link_pub_key);
+        setOnClickListener(linkPubKey);
         TextView prevHash = (TextView) convertView.findViewById(R.id.prev_hash);
         TextView signature = (TextView) convertView.findViewById(R.id.signature);
         TextView expTransaction = (TextView) convertView.findViewById(R.id.expanded_transaction);
@@ -140,13 +144,19 @@ public class ChainExplorerAdapter extends BaseAdapter {
         }
         return convertView;
     }
+public void setOnClickListener(View view){
 
-    public void onClickPublicKey(View view) {
-        TextView tv = (TextView) view;
-        Intent intent = new Intent(context, ChainExplorerActivity.class);
-        intent.putExtra("publicKey", hexStringToByteArray(tv.getText().toString()));
-        context.startActivity(intent);
-    }
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            TextView tv = (TextView) v;
+            Intent intent = new Intent(context, ChainExplorerActivity.class);
+            intent.putExtra("publicKey", hexStringToByteArray(tv.getText().toString()));
+            context.startActivity(intent);
+        }
+    };
+    view.setOnClickListener(onClickListener);
+}
 
     public static byte[] hexStringToByteArray(String s) {
         int len = s.length();
