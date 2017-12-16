@@ -192,10 +192,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             String address = preferences.getString("ConnectableAddress", null);
             if(address != "" && address != null) {
-                Log.d("Connection making", "Trying to connect to " + address);
                 addPeer(null, new InetSocketAddress(InetAddress.getByName(address), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
             } else {
-                Log.d("Connection making", "Trying to connect to " + CONNECTABLE_ADDRESS);
                 addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
             }
         } catch (UnknownHostException e) {
