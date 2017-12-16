@@ -49,7 +49,9 @@ public class ConnectionExplanationListAdapter extends ArrayAdapter {
             TextView symbolMeaning = (TextView) convertView.findViewById(R.id.symbolMeaning);
             symbol.setText(symbolList.get(position));
             symbol.setTextColor(context.getResources().getColor(colorList[position]));
+            symbol.setTextSize(18.f);
             symbolMeaning.setText(colorExplanationText[position]);
+            symbolMeaning.setTextSize(18.f);
         }
         return convertView;
     }

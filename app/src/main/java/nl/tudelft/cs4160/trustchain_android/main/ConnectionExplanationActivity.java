@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +39,8 @@ public class ConnectionExplanationActivity extends AppCompatActivity {
      * Create the items that provides the explanation of the colors.
      */
     private void createConnectionExplanationList() {
+        TextView connectionInfoHeaderText = (TextView) findViewById(R.id.connectionInfoHeaderText);
+        connectionInfoHeaderText.setTextSize(18.f);
         ListView connectionExplanationListView = (ListView) findViewById(R.id.connectionColorExplanationList);
         ConnectionExplanationListAdapter connectionExplanationListAdapter =
                 new ConnectionExplanationListAdapter

@@ -8,6 +8,13 @@
     android:paddingTop="8dp"
     tools:context=".main.ConnectionExplanationActivity">
 
+    <TextView
+        android:id="@+id/connectionInfoHeaderText"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="15dp"
+        android:text="@string/connectionInfoText"/>
+
     <ListView
         android:id="@+id/connectionColorExplanationList"
         android:layout_width="match_parent"

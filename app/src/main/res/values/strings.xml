@@ -67,6 +67,8 @@
 
     <!-- Connection explanation view -->
     <string name="symbolMeaningText">Meaning:</string>
+    <string name="connectionInfoText">Here we provide an explanation of each symbol and their corresponding color.</string>
+    <string name="symbolExplanationText">Explanation</string>
 
 
 </resources>
