@@ -50,9 +50,9 @@ public class PeerTest extends TestCase {
 
     @Test
     public void testToString(){
-        //Peer peer1 = new Peer(null, id1, port);
-        //assertEquals("<Peer: [" + peer1.getPublicKey() + ":" + peer1.getPort() + ",PubKey: " + bytesToHex(peer1.getPublicKey()) + "]>"
-        //        ,peer1.toString());
+        Peer peer1 = new Peer(new byte[] {0x00}, id1, port);
+        assertEquals("<Peer: [" + peer1.getPublicKey() + ":" + peer1.getPort() + ",PubKey: " + bytesToHex(peer1.getPublicKey()) + "]>"
+                ,peer1.toString());
     }
 
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
