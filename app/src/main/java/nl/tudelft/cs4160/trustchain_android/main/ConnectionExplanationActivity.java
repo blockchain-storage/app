@@ -3,6 +3,7 @@ package nl.tudelft.cs4160.trustchain_android.main;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -17,6 +18,9 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 
 public class ConnectionExplanationActivity extends AppCompatActivity {
 
+    private int[] listOfColors = {R.color.colorStatusConnected, R.color.colorStatusConnecting, R.color.colorStatusCantConnect, R.color.colorSent, R.color.colorReceived};
+    private String[] explanationText = {"Test", "Test", "test", "Test", "Test"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,24 +34,15 @@ public class ConnectionExplanationActivity extends AppCompatActivity {
      */
     private void createConnectionExplanationList() {
         ListView connectionExplanationListView = (ListView) findViewById(R.id.connectionColorExplanationList);
-        int[] colorsList = {R.color.colorStatusConnected, R.color.colorStatusConnecting, R.color.colorStatusCantConnect, R.color.colorSent, R.color.colorReceived};
-        HashMap<Integer, String> colorExplanationText = createExplanationTextMap();
-
         ConnectionExplanationListAdapter connectionExplanationListAdapter =
                 new ConnectionExplanationListAdapter
                         (
                             getApplicationContext(),
                             R.layout.connection_explanation_list_item,
-                            colorsList,
-                            colorExplanationText
+                            listOfColors,
+                            explanationText
                         );
 
         connectionExplanationListView.setAdapter(connectionExplanationListAdapter);
     }
-
-    private HashMap createExplanationTextMap() {
-        HashMap<Integer, String> result = new HashMap<Integer, String>();
-        return result;
-    }
-
 }

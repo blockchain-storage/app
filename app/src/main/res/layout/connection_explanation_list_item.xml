@@ -10,14 +10,14 @@
         android:layout_weight="0.15">
 
         <TextView
-                android:id="@+id/status_indicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/circle_symbol"
-                android:layout_marginStart="10dp"
-                android:textAlignment="center"
-                android:textColor="@color/colorAccent"
-                android:textSize="20sp"/>
+            android:id="@+id/colorSymbol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/circle_symbol"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp" />
 
     </TableLayout>
 
