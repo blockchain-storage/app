@@ -1,5 +1,7 @@
 package nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -55,7 +57,7 @@ public abstract class Message extends HashMap {
         BencodeReader reader = new BencodeReader(stream);
         Map<String, Object> dict = reader.readDict();
         if (!dict.containsKey(TYPE)) {
-            System.out.println("Dictionary " + dict + " doesn't contain type");
+            Log.d("App-To-App Log", "Dictionary " + dict + " doesn't contain type");
             throw new MessageException("Invalid message");
         }
         int messageType = (int) (long) dict.get(TYPE);

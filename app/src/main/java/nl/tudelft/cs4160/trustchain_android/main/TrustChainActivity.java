@@ -129,10 +129,10 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
         setContentView(R.layout.activity_main);
         initVariables();
         init();
-        connectToPeer();
+        setPeerDetails();
     }
 
-    private void connectToPeer() {
+    private void setPeerDetails() {
         peerAppToApp = (PeerAppToApp) getIntent().getSerializableExtra("PeerAppToApp");
         if (peerAppToApp != null) {
             String address = peerAppToApp.getExternalAddress().toString().substring(1);
