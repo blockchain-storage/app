@@ -567,10 +567,12 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(InetAddress inetAddress) {
                 super.onPostExecute(inetAddress);
-                internalSourceAddress = new InetSocketAddress(inetAddress, DEFAULT_PORT);
-                System.out.println("Local ip: " + inetAddress);
-                TextView localIp = (TextView) findViewById(R.id.local_ip_address_view);
-                localIp.setText(inetAddress.toString());
+                if(inetAddress != null) {
+                    internalSourceAddress = new InetSocketAddress(inetAddress, DEFAULT_PORT);
+                    System.out.println("Local ip: " + inetAddress);
+                    TextView localIp = (TextView) findViewById(R.id.local_ip_address_view);
+                    localIp.setText(inetAddress.toString());
+                }
             }
         }.execute();
     }
