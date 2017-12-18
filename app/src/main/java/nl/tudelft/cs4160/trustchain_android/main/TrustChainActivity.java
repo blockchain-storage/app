@@ -1,11 +1,15 @@
 package nl.tudelft.cs4160.trustchain_android.main;
 
 import android.app.ActivityManager;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -13,10 +17,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -34,32 +42,34 @@ import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
 import nl.tudelft.cs4160.trustchain_android.connection.network.NetworkCommunication;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
+import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
-public class TrustChainActivity extends AppCompatActivity implements CommunicationListener {
+public class TrustChainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, CommunicationListener {
 
 
-    public final static String TRANSACTION = "Hello world!";
+    public static String TRANSACTION_DATA = "Hello world!";
     private final static String TAG = TrustChainActivity.class.toString();
+    private Context context;
 
     TrustChainDBHelper dbHelper;
 
+    boolean developerMode = false;
     TextView externalIPText;
     TextView localIPText;
     TextView statusText;
-    Button connectionButton;
+    TextView developerModeText;
+    Button sendButton;
     EditText editTextDestinationIP;
     EditText editTextDestinationPort;
+    EditText messageEditText;
+    SwitchCompat switchDeveloperMode;
+    LinearLayout extraInformationPanel;
 
     TrustChainActivity thisActivity;
     PeerAppToApp peerAppToApp;
     Peer peer;
 
     private Communication communication;
-
-    /**
-     * Key pair of user
-     */
-    static KeyPair kp;
 
     /**
      * Listener for the connection button.
@@ -77,50 +87,45 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
      * the network is not compromised due to not using dispersy.
      */
 
-    public void onClickConnect(View view) {
-        String destinationIp = "";
-        String potentialPort = "";
-        int destinationPort = 0;
-        // input validation when the use adjusts the IP and/or port of the destination address.
-        try{
-            destinationIp = editTextDestinationIP.getText().toString();
-            String len = destinationIp.replace(".", "");
-            if(len.length() < 6 || len.length() > 15){
-                throw new Exception("IP is not of a valid length");
-            }
-            Object res = InetAddress.getByName(destinationIp);
-            if(!(res instanceof Inet4Address) && !(res instanceof Inet6Address)){
-                Log.i("Destination IP Adress: ", res.toString());
-                throw new Exception("IP is not a valid IP4 or IP6 address.");
-            }
-            potentialPort = editTextDestinationPort.getText().toString();
-            Toast.makeText(thisActivity, potentialPort, Toast.LENGTH_LONG);
-            Log.i("Potential Port: ", potentialPort);
-            destinationPort = Integer.parseInt(potentialPort);
-            if (destinationPort < 1024 || destinationPort > 5000) {
-                Log.i("Destination port: ", Integer.toString(destinationPort));
-                throw new Exception("Only use a range of valid ports.");
-            }
-        } catch (Exception e){
-            Toast.makeText(thisActivity, "The destination port or the IP adress is not a valid. Port: " + potentialPort + " IP: " + destinationIp, Toast.LENGTH_SHORT).show();
-//            e.printStackTrace();
-        }
-        peer = new Peer(null,destinationIp , destinationPort);
-        communication.connectToPeer(peer);
-    }
-
-    public void onClickReset(View view) {
-        if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
-            ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE))
-                    .clearApplicationUserData();
+    public void onClickSend(View view) throws UnsupportedEncodingException {
+        Log.d("testLogs", "onClickSend");
+        if (isConnected()) {
+            TRANSACTION_DATA = messageEditText.getText().toString();
+            byte[] transactionData = TRANSACTION_DATA.getBytes("UTF-8");
+            communication.signBlock(transactionData, peer);
         } else {
-            Toast.makeText(getApplicationContext(), "Requires at least API 19 (KitKat)", Toast.LENGTH_LONG).show();
+                peer = new Peer(null, editTextDestinationIP.getText().toString(),
+                        Integer.parseInt(editTextDestinationPort.getText().toString()));
+                communication.connectToPeer(peer);
         }
+    }
+    private boolean isConnected() {
+        if (peer != null) {
+            if (communication.getPublicKey(peer.getIpAddress()) != null) {
+                return true;
+            } else {
+                Log.d("testLogs", "getPublicKey == null");
+            }
+        } else {
+
+            Log.d("testLogs", "peer == null");
+        }
+        return false;
+    }
+    private void enableMessage() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messageEditText.setVisibility(View.VISIBLE);
+                sendButton.setText(getResources().getString(R.string.send));
+            }
+        });
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.context = this;
         setContentView(R.layout.activity_main);
         initVariables();
         init();
@@ -129,9 +134,10 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
 
     private void setPeerDetails() {
         peerAppToApp = (PeerAppToApp) getIntent().getSerializableExtra("PeerAppToApp");
-        if(peerAppToApp != null) {
+        if (peerAppToApp != null) {
             String address = peerAppToApp.getExternalAddress().toString().substring(1);
             int port = peerAppToApp.getPort();
+            String name = peerAppToApp.getPeerId();
             editTextDestinationIP.setText(address);
             editTextDestinationPort.setText(port + "");
         }
@@ -140,7 +146,7 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+        inflater.inflate(R.menu.trustchain_menu, menu);
         return true;
     }
 
@@ -150,6 +156,13 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
                 Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
                 startActivity(chainExplorerActivity);
                 return true;
+            case R.id.close:
+                if (Build.VERSION_CODES.KITKAT <= Build.VERSION.SDK_INT) {
+                    ((ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE))
+                            .clearApplicationUserData();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Requires at least API 19 (KitKat)", Toast.LENGTH_LONG).show();
+                }
             default:
                 return true;
         }
@@ -163,7 +176,13 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
         statusText.setMovementMethod(new ScrollingMovementMethod());
         editTextDestinationIP = (EditText) findViewById(R.id.destination_IP);
         editTextDestinationPort = (EditText) findViewById(R.id.destination_port);
-        connectionButton = (Button) findViewById(R.id.connection_button);
+        sendButton = (Button) findViewById(R.id.send_button);
+        messageEditText = (EditText) findViewById(R.id.message_edit_text);
+        extraInformationPanel = (LinearLayout) findViewById(R.id.extra_information_panel);
+        developerModeText = (TextView) findViewById(R.id.developer_mode_text);
+        switchDeveloperMode = (SwitchCompat) findViewById(R.id.switch_developer_mode);
+        switchDeveloperMode.setOnCheckedChangeListener(this);
+
     }
 
     private void init() {
@@ -171,10 +190,8 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
         //load keys
         KeyPair kp = Key.loadKeys(getApplicationContext());
         communication = new NetworkCommunication(dbHelper, kp, this);
-
         updateIP();
         updateLocalIPField(getLocalIPAddress());
-
         //start listening for messages
         communication.start();
 
@@ -259,4 +276,57 @@ public class TrustChainActivity extends AppCompatActivity implements Communicati
             }
         });
     }
+
+    @Override
+    public void requestPermission(final MessageProto.TrustChainBlock block, final Peer peer) {
+        //just to be sure run it on the ui thread
+        //this is not necessary when this function is called from a AsyncTask
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
+                } else {
+                    builder = new AlertDialog.Builder(context);
+                }
+                try {
+                    builder.setMessage("Do you want to sign Block[ " + block.getTransaction().toString("UTF-8") + " ] from " + peer.getName() + "?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    communication.acceptTransaction(block, peer);
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // do nothing?
+                                }
+                            });
+                    builder.create();
+                    builder.show();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void connectionSuccessful(byte[] publicKey) {
+        this.peer.setPublicKey(publicKey);
+        enableMessage();
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        developerMode = isChecked;
+        if (isChecked) {
+            extraInformationPanel.setVisibility(View.VISIBLE);
+            developerModeText.setTextColor(getResources().getColor(R.color.colorAccent));
+        } else {
+            extraInformationPanel.setVisibility(View.GONE);
+            developerModeText.setTextColor(getResources().getColor(R.color.colorGray));
+        }
+    }
+
 }

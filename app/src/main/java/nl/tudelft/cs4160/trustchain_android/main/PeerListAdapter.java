@@ -3,6 +3,8 @@ package nl.tudelft.cs4160.trustchain_android.main;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.nfc.Tag;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +58,12 @@ public class PeerListAdapter extends ArrayAdapter<PeerAppToApp> {
             if (peer.getConnectionType() == ConnectivityManager.TYPE_MOBILE) {
                 holder.mCarrier.setText(peer.getNetworkOperator());
             } else {
-                holder.mCarrier.setText(connectionTypeString(peer.getConnectionType()));
+
+                if(peer.getExternalAddress().getHostAddress().toString().equals(OverviewConnectionsActivity.CONNECTABLE_ADDRESS)){
+                    holder.mCarrier.setText("Server");
+                }else {
+                    holder.mCarrier.setText(connectionTypeString(peer.getConnectionType()));
+                }
             }
         } else {
             holder.mCarrier.setText("");
