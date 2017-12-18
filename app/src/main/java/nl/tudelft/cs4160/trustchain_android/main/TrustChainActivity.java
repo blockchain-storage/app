@@ -30,6 +30,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.security.KeyPair;
+import java.security.PublicKey;
 import java.util.Collections;
 import java.util.List;
 
@@ -94,11 +95,21 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
             byte[] transactionData = TRANSACTION_DATA.getBytes("UTF-8");
             communication.signBlock(transactionData, peer);
         } else {
-                peer = new Peer(null, editTextDestinationIP.getText().toString(),
-                        Integer.parseInt(editTextDestinationPort.getText().toString()));
-                communication.connectToPeer(peer);
+            peer = new Peer(null, editTextDestinationIP.getText().toString(),
+                    Integer.parseInt(editTextDestinationPort.getText().toString()));
+            communication.connectToPeer(peer);
         }
     }
+
+    public void onClickViewChain(View view) {
+        if (peer != null && peer.getIpAddress() != null) {
+            byte[] publicKey = communication.getPublicKey(peer.getIpAddress());
+            Intent intent = new Intent(context, ChainExplorerActivity.class);
+            intent.putExtra("publicKey", publicKey);
+            startActivity(intent);
+        }
+    }
+
     private boolean isConnected() {
         if (peer != null) {
             if (communication.getPublicKey(peer.getIpAddress()) != null) {
@@ -112,6 +123,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
         }
         return false;
     }
+
     private void enableMessage() {
         runOnUiThread(new Runnable() {
             @Override
