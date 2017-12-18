@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.SharedPreferencesStorage;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.UserNameStorage;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyStorage;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
@@ -450,7 +451,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 recordAddressByPubKey(pubKey, ip);
             }
 
-            Log.d("App-To-App", "pubkey address map " + recordedAddressesPerPubKeyMap.toString());
+            Log.d("App-To-App", "pubkey address map " + SharedPreferencesStorage.getAll(this).toString());
 
             if (wanVote.vote(message.getDestination())) {
                 Log.d("App-To-App Log", "Address changed to " + wanVote.getAddress());

@@ -3,6 +3,8 @@ package nl.tudelft.cs4160.trustchain_android.SharedPreferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Map;
+
 /**
  * Created by timbu on 18/12/2017.
  */
@@ -44,6 +46,11 @@ public final class SharedPreferencesStorage {
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt(key, value);
         editor.apply();
+    }
+
+    public static Map<String, ?> getAll(Context context) {
+        SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+        return settings.getAll();
     }
 
 }
