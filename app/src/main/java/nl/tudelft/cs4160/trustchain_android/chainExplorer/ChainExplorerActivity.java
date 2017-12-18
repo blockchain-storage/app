@@ -75,9 +75,8 @@ public class ChainExplorerActivity extends AppCompatActivity {
                     expandedItem.setVisibility(View.GONE);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         expandArrow.setImageDrawable(getDrawable(R.drawable.ic_expand_more_black_24dp));
-                        expandArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_more_black_24dp));
                     } else {
-
+                        expandArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_more_black_24dp));
                     }
                 }
             }
