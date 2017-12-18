@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -29,15 +30,16 @@ public class BootstrapActivity extends AppCompatActivity {
         try{
             Object res = InetAddress.getByName(bootstrapView.getText().toString());
             if(!(res instanceof Inet4Address) && !(res instanceof Inet6Address)){
-                Log.i("Destination IP Adress: ", res.toString());
+                Log.i("Bootstrap IP Adress: ", res.toString());
                 throw new Exception("Bootstrap IP is not a valid IP4 or IP6 address.");
             }
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra("ConnectableAddress",bootstrapView.getText().toString());
+            setResult(OverviewConnectionsActivity.RESULT_OK,returnIntent);
+            finish();
         } catch (Exception e){
-             e.printStackTrace();
+            Toast.makeText(this, "The bootstrap IP address is not a valid IP address: " + bootstrapView.getText().toString(), Toast.LENGTH_SHORT).show();
+//             e.printStackTrace();
         }
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("ConnectableAddress",bootstrapView.getText().toString());
-        setResult(OverviewConnectionsActivity.RESULT_OK,returnIntent);
-        finish();
     }
 }
