@@ -72,12 +72,14 @@
                 android:id="@+id/info_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:onClick="onClickInfo"
-                android:text="@string/button_info_text"
+                android:paddingLeft="5dp"
+                android:layout_marginBottom="20dp"
+                android:paddingRight="5dp"
                 android:background="@color/colorPrimary"
-                android:textColor="#fff"
-                android:drawableStart="@drawable/ic_info_circle_symbol" />
+                android:textColor="@android:color/white"
+                android:text="@string/button_info_text"
+                android:onClick="onClickInfo"
+                android:drawableStart="@drawable/ic_info_circle_symbol"/>
 
         </TableRow>
 <!--
