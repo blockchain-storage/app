@@ -73,6 +73,11 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
     private Communication communication;
 
     /**
+     * Key pair of user
+     */
+    public static KeyPair kp;
+
+    /**
      * Listener for the connection button.
      * On click a block is created and send to a peerAppToApp.
      * When we encounter an unknown peerAppToApp, send a crawl request to that peerAppToApp in order to get its
@@ -141,10 +146,10 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
         setContentView(R.layout.activity_main);
         initVariables();
         init();
-        connectToPeer();
+        setPeerDetails();
     }
 
-    private void connectToPeer() {
+    private void setPeerDetails() {
         peerAppToApp = (PeerAppToApp) getIntent().getSerializableExtra("PeerAppToApp");
         if (peerAppToApp != null) {
             String address = peerAppToApp.getExternalAddress().toString().substring(1);

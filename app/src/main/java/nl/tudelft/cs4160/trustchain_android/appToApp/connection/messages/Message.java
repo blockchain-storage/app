@@ -1,19 +1,24 @@
 package nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.security.KeyPair;
 import java.util.HashMap;
 import java.util.Map;
 
+import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.ByteBufferOutputStream;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.ByteBufferinputStream;
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReadException;
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReader;
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeWriter;
+import nl.tudelft.cs4160.trustchain_android.main.TrustChainActivity;
 
 /**
  * Created by jaap on 5/31/16.
@@ -30,6 +35,7 @@ public abstract class Message extends HashMap {
     final protected static String PORT = "port";
     final protected static String ADDRESS = "address";
     final protected static String PEER_ID = "peer_id";
+    final protected static String PUB_KEY = "public_key";
 
     /**
      * Create a message.
@@ -37,10 +43,11 @@ public abstract class Message extends HashMap {
      * @param peerId the unique id of self.
      * @param destination the destination address.
      */
-    public Message(int type, String peerId, InetSocketAddress destination) {
+    public Message(int type, String peerId, InetSocketAddress destination, String pubKey) {
         put(TYPE, type);
         put(PEER_ID, peerId);
         put(DESTINATION, createAddressMap(destination));
+        put(PUB_KEY, pubKey);
     }
 
     /**
@@ -55,7 +62,7 @@ public abstract class Message extends HashMap {
         BencodeReader reader = new BencodeReader(stream);
         Map<String, Object> dict = reader.readDict();
         if (!dict.containsKey(TYPE)) {
-            System.out.println("Dictionary " + dict + " doesn't contain type");
+            Log.d("App-To-App Log", "Dictionary " + dict + " doesn't contain type");
             throw new MessageException("Invalid message");
         }
         int messageType = (int) (long) dict.get(TYPE);
@@ -171,6 +178,10 @@ public abstract class Message extends HashMap {
      */
     public String getPeerId() {
         return (String) get(PEER_ID);
+    }
+
+    public String getPubKey() {
+        return (String) get(PUB_KEY);
     }
 
     /**

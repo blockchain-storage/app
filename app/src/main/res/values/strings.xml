@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">TrustChain Android</string>
     <string name="my_external_ip">My external ip is:</string>
+    <string name="connect_bootstrap_ip">The IP address of a peer:</string>
+    <string name="change_bootstrap">Change bootstrap</string>
+    <string name="connect_bootstrap_ip_hint">145.94.155.32</string>
     <string name="my_local_ip">My local ip is:</string>
     <string name="connect_ip_hint">127.0.0.1</string>
     <string name="connect_port_hint">port</string>
@@ -9,6 +12,7 @@
     <string name="connect">connect</string>
     <string name="view_chain">View Chain</string>
     <string name="reset_database_button">Clear Database (closes app)</string>
+    <string name="connection_info_text">Info</string>
 
     <string name="title_activity_key">Key management</string>
     <string name="bluetooth_connection">bluetooth_connection</string>
@@ -39,6 +43,7 @@
     <!-- Menu -->
     <string name="menu_item_1">My Chain</string>
     <string name="menu_info">Info</string>
+    <string name="find_peer">Find peer</string>
 
     <!--- app to app strings -->
     <string name="start_connection">Attempt connection</string>
@@ -65,4 +70,11 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_user">UserActivity</string>
     <string name="title_activity_info_chain_explorer">UserActivity</string>
+
+    <!-- Connection explanation view -->
+    <string name="symbolMeaningText">Meaning:</string>
+    <string name="connectionInfoText">Here we provide an explanation of each symbol and their corresponding color.</string>
+    <string name="symbolExplanationText">Explanation</string>
+
+
 </resources>

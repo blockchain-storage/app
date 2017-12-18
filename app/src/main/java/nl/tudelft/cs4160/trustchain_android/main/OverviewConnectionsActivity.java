@@ -1,5 +1,6 @@
 package nl.tudelft.cs4160.trustchain_android.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,7 +12,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.text.method.ScrollingMovementMethod;
+
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
@@ -19,7 +20,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,13 +35,19 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.security.KeyPair;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.SharedPreferencesStorage;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.UserNameStorage;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyStorage;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
@@ -55,6 +61,7 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Punctur
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReadException;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
+import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBContract;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
@@ -62,12 +69,13 @@ import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS
 
 public class OverviewConnectionsActivity extends AppCompatActivity {
 
-    public final static String CONNECTABLE_ADDRESS = "130.161.211.254";
+    public static String CONNECTABLE_ADDRESS = "130.161.211.254";
     final static int UNKNOWN_PEER_LIMIT = 20;
     final static String HASH_ID = "hash_id";
     final static int DEFAULT_PORT = 1873;
     final static int KNOWN_PEER_LIMIT = 10;
     private static final int BUFFER_SIZE = 2048;
+
     private TextView mWanVote;
     private Button mExitButton;
     private PeerListAdapter incomingPeerAdapter;
@@ -88,6 +96,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     private Thread listenThread;
 
     private boolean willExit = false;
+
+    private TrustChainDBHelper dbHelper;
 
     /**
      * Initialize views, start send and receive threads if necessary.
@@ -126,6 +136,13 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
                 startActivity(chainExplorerActivity);
                 return true;
+            case R.id.connection_explanation_menu:
+                Intent ConnectionExplanationActivity = new Intent(this, ConnectionExplanationActivity.class);
+                startActivity(ConnectionExplanationActivity);
+                return true;
+            case R.id.find_peer:
+                Intent bootstrapActivity = new Intent(this, BootstrapActivity.class);
+                startActivityForResult(bootstrapActivity, 1);
             default:
                 return true;
         }
@@ -133,7 +150,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
     private void initKey(){
         KeyPair kp = Key.loadKeys(getApplicationContext());
-        TrustChainDBHelper dbHelper = new TrustChainDBHelper(this);
         if (kp == null) {
             kp = Key.createNewKeyPair();
             Key.saveKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE, kp.getPublic());
@@ -178,11 +194,17 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         outBuffer = ByteBuffer.allocate(BUFFER_SIZE);
         mWanVote = (TextView) findViewById(R.id.wanvote);
 
+        dbHelper = new TrustChainDBHelper(this);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        hashId = preferences.getString(HASH_ID, null);
+        hashId = UserNameStorage.getUserName(this);
         ((TextView) findViewById(R.id.peer_id)).setText(hashId);
     }
 
+
+    public void onClickInfo(View view) {
+        Intent intent = new Intent(this, ConnectionExplanationActivity.class);
+        startActivity(intent);
+    }
 
     private void initExitButton() {
         mExitButton = (Button) findViewById(R.id.exit_button);
@@ -207,12 +229,34 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         outgoingPeerConnectionListView.setAdapter(outgoingPeerAdapter);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if( resultCode == Activity.RESULT_OK ){
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("ConnectableAddress", data.getStringExtra("ConnectableAddress"));
+                editor.commit();
+                addInitialPeer();
+            }
+        }
+    }
+
     /**
      * Add the intial hard-coded connectable peerAppToApp to the peerAppToApp list.
      */
-    private void addInitialPeer() {
+   public void addInitialPeer() {
         try {
-            addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String address = preferences.getString("ConnectableAddress", null);
+            if(address != "" && address != null) {
+                Log.d("Connection making", "Trying to connect to " + address);
+                addPeer(null, new InetSocketAddress(InetAddress.getByName(address), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
+            } else {
+                Log.d("Connection making", "Trying to connect to " + CONNECTABLE_ADDRESS);
+                addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
+            }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
@@ -234,23 +278,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 .setText(cm.getActiveNetworkInfo().getTypeName() + " " + cm.getActiveNetworkInfo().getSubtypeName());
     }
 
-    /**
-     * Retrieve the local peerAppToApp id from storage.
-     *
-     * @return the peerAppToApp id.
-     */
-    private String getId() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String id = preferences.getString(HASH_ID, null);
-        if (id == null) {
-            System.out.println("Generating new ID");
-            id = generateHash();
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(HASH_ID, id);
-            editor.apply();
-        }
-        return id;
-    }
 
     /**
      * Generate a new hash to be used as peerAppToApp id.
@@ -285,11 +312,11 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                         break;
                     }
                 } while (!Thread.interrupted());
-                System.out.println("Send thread stopped");
+                Log.d("App-To-App Log", "Send thread stopped");
             }
         });
         sendThread.start();
-        System.out.println("Send thread started");
+        Log.d("App-To-App Log", "Send thread started");
     }
 
     /**
@@ -299,7 +326,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendIntroductionRequest(PeerAppToApp peer) throws IOException {
-        IntroductionRequest request = new IntroductionRequest(hashId, peer.getAddress(), connectionType, networkOperator);
+        IntroductionRequest request = new IntroductionRequest(hashId, peer.getAddress(), connectionType, networkOperator, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(request, peer);
     }
 
@@ -311,7 +338,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPunctureRequest(PeerAppToApp peer, PeerAppToApp puncturePeer) throws IOException {
-        PunctureRequest request = new PunctureRequest(hashId, peer.getAddress(), internalSourceAddress, puncturePeer);
+        PunctureRequest request = new PunctureRequest(hashId, peer.getAddress(), internalSourceAddress, puncturePeer, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(request, peer);
     }
 
@@ -322,7 +349,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPuncture(PeerAppToApp peer) throws IOException {
-        Puncture puncture = new Puncture(hashId, peer.getAddress(), internalSourceAddress);
+        Puncture puncture = new Puncture(hashId, peer.getAddress(), internalSourceAddress, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(puncture, peer);
     }
 
@@ -340,7 +367,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 pexPeers.add(p);
         }
         IntroductionResponse response = new IntroductionResponse(hashId, internalSourceAddress, peer
-                .getAddress(), invitee, connectionType, pexPeers, networkOperator);
+                .getAddress(), invitee, connectionType, pexPeers, networkOperator, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(response, peer);
     }
 
@@ -352,7 +379,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private synchronized void sendMesssage(Message message, PeerAppToApp peer) throws IOException {
-        System.out.println("Sending " + message);
+        Log.d("App-To-App Log", "Sending " + message);
         outBuffer.clear();
         message.writeToByteBuffer(outBuffer);
         outBuffer.flip();
@@ -375,7 +402,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             }
         }
         if (eligiblePeers.size() == 0) {
-            System.out.println("No elegible peers!");
+            Log.d("App-To-App Log", "No elegible peers!");
             return null;
         }
         Random random = new Random();
@@ -399,12 +426,12 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                         dataReceived(inputBuffer, (InetSocketAddress) address);
                     }
                 } catch (IOException e) {
-                    System.out.println("Listen thread stopped");
+                    Log.d("App-To-App Log", "Listen thread stopped");
                 }
             }
         });
         listenThread.start();
-        System.out.println("Listen thread started");
+        Log.d("App-To-App Log", "Listen thread started");
     }
 
     /**
@@ -420,7 +447,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             for (PeerAppToApp peer : peerList.getList()) {
                 if (id.equals(peer.getPeerId())) {
                     if (!address.equals(peer.getAddress())) {
-                        System.out.println("Peer address differs from known address");
+                        Log.d("App-To-App Log", "Peer address differs from known address");
                         peer.setAddress(address);
                         peerList.removeDuplicates();
                     }
@@ -447,10 +474,19 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     private void dataReceived(ByteBuffer data, InetSocketAddress address) {
         try {
             Message message = Message.createFromByteBuffer(data);
-            System.out.println("Received " + message);
+            Log.d("App-To-App Log", "Received " + message);
+
             String id = message.getPeerId();
+            String pubKey = message.getPubKey();
+
+            String ip = address.getAddress().toString();
+            PubKeyStorage.addAddress(this, pubKey, ip);
+            Log.d("App-To-App", "Stored following ip for pubkey: " + pubKey + " " + PubKeyStorage.getAddress(this, pubKey));
+
+            Log.d("App-To-App", "pubkey address map " + SharedPreferencesStorage.getAll(this).toString());
+
             if (wanVote.vote(message.getDestination())) {
-                System.out.println("Address changed to " + wanVote.getAddress());
+                Log.d("App-To-App Log", "Address changed to " + wanVote.getAddress());
                 showLocalIpAddress();
             }
             setWanvote(wanVote.getAddress().toString());
@@ -459,7 +495,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             peer.received(data);
             switch (message.getType()) {
                 case Message.INTRODUCTION_REQUEST:
-                    handlIntroductionRequest(peer, (IntroductionRequest) message);
+                    handleIntroductionRequest(peer, (IntroductionRequest) message);
                     break;
                 case Message.INTRODUCTION_RESPONSE:
                     handleIntroductionResponse(peer, (IntroductionResponse) message);
@@ -484,7 +520,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @param message the message.
      * @throws IOException
      */
-    private void handlIntroductionRequest(PeerAppToApp peer, IntroductionRequest message) throws IOException {
+    private void handleIntroductionRequest(PeerAppToApp peer, IntroductionRequest message) throws IOException {
         peer.setNetworkOperator(message.getNetworkOperator());
         peer.setConnectionType((int) message.getConnectionType());
         if (peerList.size() > 1) {
@@ -492,10 +528,10 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             if (invitee != null) {
                 sendIntroductionResponse(peer, invitee);
                 sendPunctureRequest(invitee, peer);
-                System.out.println("Introducing " + invitee.getAddress() + " to " + peer.getAddress());
+                Log.d("App-To-App Log", "Introducing " + invitee.getAddress() + " to " + peer.getAddress());
             }
         } else {
-            System.out.println("Peerlist too small, can't handle introduction request");
+            Log.d("App-To-App Log", "Peerlist too small, can't handle introduction request");
             sendIntroductionResponse(peer, null);
         }
     }
@@ -567,10 +603,12 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(InetAddress inetAddress) {
                 super.onPostExecute(inetAddress);
-                internalSourceAddress = new InetSocketAddress(inetAddress, DEFAULT_PORT);
-                System.out.println("Local ip: " + inetAddress);
-                TextView localIp = (TextView) findViewById(R.id.local_ip_address_view);
-                localIp.setText(inetAddress.toString());
+                if(inetAddress != null) {
+                    internalSourceAddress = new InetSocketAddress(inetAddress, DEFAULT_PORT);
+                    Log.d("App-To-App Log", "Local ip: " + inetAddress);
+                    TextView localIp = (TextView) findViewById(R.id.local_ip_address_view);
+                    localIp.setText(inetAddress.toString());
+                }
             }
         }.execute();
     }
@@ -613,7 +651,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      */
     private synchronized PeerAppToApp addPeer(String peerId, InetSocketAddress address, String username, boolean incoming) {
         if (hashId.equals(peerId)) {
-            System.out.println("Not adding self");
+            Log.d("App-To-App Log", "Not adding self");
             PeerAppToApp self = null;
             for (PeerAppToApp p : peerList.getList()) {
                 if (p.getAddress().equals(wanVote.getAddress()))
@@ -621,12 +659,12 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             }
             if (self != null) {
                 peerList.getList().remove(self);
-                System.out.println("Removed self");
+                Log.d("App-To-App Log", "Removed self");
             }
             return null;
         }
         if (wanVote.getAddress() != null && wanVote.getAddress().equals(address)) {
-            System.out.println("Not adding peerAppToApp with same address as wanVote");
+            Log.d("App-To-App Log", "Not adding peerAppToApp with same address as wanVote");
             return null;
         }
         for (PeerAppToApp peer : peerList.getList()) {
@@ -646,7 +684,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 splitPeerList();
                 incomingPeerAdapter.notifyDataSetChanged();
                 outgoingPeerAdapter.notifyDataSetChanged();
-                System.out.println("Added " + peer);
+                Log.d("App-To-App Log", "Added " + peer);
             }
         });
         return peer;
