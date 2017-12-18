@@ -45,14 +45,14 @@ public class MessageTest {
     public void testCreateAddressMap() {
         Map<String, Object> m = Message.createAddressMap(source);
         assertEquals(m.get("port"), (long) 11);
-        assertEquals(m.get("address"), "111.111.11.11");
+        assertEquals("111.111.11.11", m.get("address"));
     }
 
     @Test
     public void testCreatePeerMap() {
         Map<String, Object> m = Message.createPeerMap(peer1);
         assertEquals(m.get("port"), (long) 33);
-        assertEquals(m.get("peer_id"), "123");
+        assertEquals("123", m.get("peer_id"));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class MessageTest {
         addressMap.put("address", "444.444.44.44");
         addressMap.put("port", (long) 44);
         InetSocketAddress socketAddress = Message.createMapAddress(addressMap);
-        assertEquals(socketAddress.getPort(), 44);
+        assertEquals(44, socketAddress.getPort());
     }
 
     @Test
@@ -71,7 +71,7 @@ public class MessageTest {
         m.put("port", (long) 55);
         m.put("peer_id", "567");
         PeerAppToApp peer = Message.createMapPeer(m);
-        assertEquals(peer.getPeerId(),"567");
-        assertEquals(peer.getPort(), 55);
+        assertEquals("567", peer.getPeerId());
+        assertEquals(55, peer.getPort());
     }
 }
