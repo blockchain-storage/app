@@ -12,7 +12,7 @@ public class PubKeyStorage {
 
     public static void addAddress(Context context, String pubkey, String ipAddress) {
         if(pubkey == null || ipAddress == null) {
-            throw new RuntimeException("Pubkey and ip may not be null");
+            return;
         }
         SharedPreferencesStorage.writeSharedPreferences(context, pubKeyStorageKey + pubkey, ipAddress);
     }

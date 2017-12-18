@@ -446,6 +446,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
             String ip = address.getAddress().toString();
             PubKeyStorage.addAddress(this, pubKey, ip);
+            System.out.println(PubKeyStorage.getAddress(this, pubKey));
 
             if(pubKey != null) {
                 recordAddressByPubKey(pubKey, ip);
