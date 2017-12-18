@@ -13,6 +13,8 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by Boning on 12/17/2017.
@@ -25,14 +27,19 @@ public class PeerListTest {
 
     @Before
     public void initialization(){
-        PeerAppToApp peer1 = new PeerAppToApp(Mockito.mock(String.class), Mockito.mock(InetSocketAddress.class));
-        PeerAppToApp peer2 = new PeerAppToApp(Mockito.mock(String.class), Mockito.mock(InetSocketAddress.class));
-        PeerAppToApp peer3 = new PeerAppToApp(Mockito.mock(String.class), Mockito.mock(InetSocketAddress.class));
+        PeerAppToApp peer1 = new PeerAppToApp("peer1", any(InetSocketAddress.class));
+        PeerAppToApp peer2 = new PeerAppToApp("peer2", any(InetSocketAddress.class));
+        PeerAppToApp peer3 = new PeerAppToApp("peer3", any(InetSocketAddress.class));
         originalIpList = new ArrayList<PeerAppToApp>();
         originalIpList.add(peer1);
         originalIpList.add(peer2);
         originalIpList.add(peer3);
         originalIpList.add(peer1);
+
+        expectedIpList = new ArrayList<PeerAppToApp>();
+        expectedIpList.add(peer1);
+        expectedIpList.add(peer2);
+        expectedIpList.add(peer3);
 
         peerlist = new PeerList(originalIpList);
     }
@@ -44,7 +51,7 @@ public class PeerListTest {
         boolean failed = false;
 
         for (PeerAppToApp peer: newIPPeerList) {
-            if(expectedIpList.remove(peer) == false){
+            if(!expectedIpList.remove(peer)){
                 failed = true;
                 break;
             }
@@ -57,7 +64,7 @@ public class PeerListTest {
 
     @Test
     public void peerExistsInListTest(){
-        PeerAppToApp peer4 = new PeerAppToApp(Mockito.mock(String.class), Mockito.mock(InetSocketAddress.class));
+        PeerAppToApp peer4 = new PeerAppToApp("peer4", any(InetSocketAddress.class));
         assertTrue(peerlist.peerExistsInList(originalIpList.get(0)));
         assertFalse(peerlist.peerExistsInList(peer4));
     }
