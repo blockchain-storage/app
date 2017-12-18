@@ -2,9 +2,11 @@ package nl.tudelft.cs4160.trustchain_android.main;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.SharedPreferencesStorage;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.UserNameStorage;
 
 import static nl.tudelft.cs4160.trustchain_android.main.OverviewConnectionsActivity.HASH_ID;
 
@@ -23,12 +27,13 @@ import static nl.tudelft.cs4160.trustchain_android.main.OverviewConnectionsActiv
  */
 
 public class UserConfigurationActivity extends AppCompatActivity{
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if(preferences.getString(HASH_ID, null) == null) {
+        context = this;
+        if(UserNameStorage.getUserName(this) == null) {
             setContentView(R.layout.user_configuration);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
@@ -50,11 +55,7 @@ public class UserConfigurationActivity extends AppCompatActivity{
                     if(!userNameInput.getText().toString().matches("")) {
                         Intent myIntent = new Intent(UserConfigurationActivity.this, OverviewConnectionsActivity.class);
                         EditText mEdit = (EditText)findViewById(R.id.username);
-                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(v.getContext());
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putString(HASH_ID, mEdit.getText().toString());
-                        editor.apply();
-
+                        UserNameStorage.setUserName(context,mEdit.getText().toString());
                         myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         UserConfigurationActivity.this.startActivity(myIntent);
                     } else {

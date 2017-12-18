@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.UserNameStorage;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
@@ -184,7 +185,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
         dbHelper = new TrustChainDBHelper(this);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        hashId = preferences.getString(HASH_ID, null);
+        hashId = UserNameStorage.getUserName(this);
         ((TextView) findViewById(R.id.peer_id)).setText(hashId);
     }
 
@@ -239,23 +240,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 .setText(cm.getActiveNetworkInfo().getTypeName() + " " + cm.getActiveNetworkInfo().getSubtypeName());
     }
 
-    /**
-     * Retrieve the local peerAppToApp id from storage.
-     *
-     * @return the peerAppToApp id.
-     */
-    private String getId() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String id = preferences.getString(HASH_ID, null);
-        if (id == null) {
-            Log.d("App-To-App Log", "Generating new ID");
-            id = generateHash();
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(HASH_ID, id);
-            editor.apply();
-        }
-        return id;
-    }
 
     /**
      * Generate a new hash to be used as peerAppToApp id.
