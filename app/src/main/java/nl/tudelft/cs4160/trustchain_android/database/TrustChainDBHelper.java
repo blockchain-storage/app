@@ -100,6 +100,26 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         return db.insert(TrustChainDBContract.PubKeyNetAddressLink.TABLE_NAME, null, values);
     }
 
+    public List<String> getNetAddressess(byte[] pubkey) {
+        SQLiteDatabase dbReadable = getReadableDatabase();
+        String whereClause = TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_PUBLIC_KEY + " = ?";
+        String[] whereArgs = new String[] { Base64.encodeToString(pubkey, Base64.DEFAULT)};
+
+        Cursor cursor = dbReadable.query(TrustChainDBContract.PubKeyNetAddressLink.TABLE_NAME,
+                null,
+                whereClause,
+                whereArgs,
+                null,
+                null,
+                null
+        );
+
+        List<String> res = buildNetAddressList(cursor);
+        cursor.close();
+
+        return res;
+    }
+
     /**
      * Retrieves the block associated with the given public key and sequence number from the database
      * @param pubkey - Public key of which the latest block should be found
@@ -391,6 +411,17 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
                     "max(" + TrustChainDBContract.BlockEntry.COLUMN_NAME_INSERT_TIME + ")"));
         }
         cursor.close();
+        return res;
+    }
+
+    private List<String> buildNetAddressList(Cursor cursor) {
+        List<String> res = new ArrayList<>();
+
+        while(cursor.moveToNext()) {
+            String netAddress = cursor.getString(cursor.getColumnIndex(TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_NET_ADDRESS));
+            res.add(netAddress);
+        }
+
         return res;
     }
 
