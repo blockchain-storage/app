@@ -1,21 +1,10 @@
 package nl.tudelft.cs4160.trustchain_android;
 
-import android.support.test.runner.AndroidJUnit4;
-
 import junit.framework.TestCase;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import static org.mockito.Mockito.mock;
-
-/**
- * Instrumentation test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-@RunWith(AndroidJUnit4.class)
 public class PeerTest extends TestCase {
     String id1;
     String id2;
