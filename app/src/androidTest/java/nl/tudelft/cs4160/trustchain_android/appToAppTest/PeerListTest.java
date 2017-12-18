@@ -6,13 +6,12 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
 
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Boning on 12/17/2017.
@@ -57,6 +56,8 @@ public class PeerListTest {
 
     @Test
     public void peerExistsInListTest(){
-
+        PeerAppToApp peer4 = Mockito.mock(PeerAppToApp.class);
+        assertTrue(peerlist.peerExistsInList(originalIpList.get(0)));
+        assertFalse(peerlist.peerExistsInList(peer4));
     }
 }
