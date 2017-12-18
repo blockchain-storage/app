@@ -11,6 +11,7 @@
     <string name="connect_to">Connect to IP</string>
     <string name="connect">connect</string>
     <string name="reset_database_button">Clear Database (closes app)</string>
+    <string name="connection_info_text">Info</string>
 
     <string name="title_activity_key">Key management</string>
     <string name="bluetooth_connection">bluetooth_connection</string>
@@ -66,4 +67,12 @@
     <string name="exit_prompt">Exit</string>
     <string name="title_activity_detail">DetailActivity</string>
     <string name="title_activity_user">UserActivity</string>
+
+
+    <!-- Connection explanation view -->
+    <string name="symbolMeaningText">Meaning:</string>
+    <string name="connectionInfoText">Here we provide an explanation of each symbol and their corresponding color.</string>
+    <string name="symbolExplanationText">Explanation</string>
+
+
 </resources>

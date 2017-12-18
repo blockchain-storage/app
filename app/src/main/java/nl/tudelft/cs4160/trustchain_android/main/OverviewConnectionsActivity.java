@@ -36,6 +36,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.security.KeyPair;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -127,6 +128,10 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
                 startActivity(chainExplorerActivity);
                 return true;
+            case R.id.connection_explanation_menu:
+                Intent ConnectionExplanationActivity = new Intent(this, ConnectionExplanationActivity.class);
+                startActivity(ConnectionExplanationActivity);
+                return true;
             case R.id.find_peer:
                 Intent bootstrapActivity = new Intent(this, BootstrapActivity.class);
                 startActivityForResult(bootstrapActivity, 1);
@@ -187,6 +192,11 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.peer_id)).setText(hashId);
     }
 
+
+    public void onClickInfo(View view) {
+        Intent intent = new Intent(this, ConnectionExplanationActivity.class);
+        startActivity(intent);
+    }
 
     private void initExitButton() {
         mExitButton = (Button) findViewById(R.id.exit_button);
