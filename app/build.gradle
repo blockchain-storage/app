@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
-apply plugin: 'jacoco-android'
-apply plugin: 'com.palantir.jacoco-full-report'
-//apply plugin: 'jacoco-everywhere'
+apply plugin: 'jacoco-everywhere'
 
 android {
     compileSdkVersion 25
