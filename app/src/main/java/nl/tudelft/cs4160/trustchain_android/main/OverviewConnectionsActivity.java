@@ -35,6 +35,7 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.security.KeyPair;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -125,6 +126,10 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             case R.id.chain_menu:
                 Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
                 startActivity(chainExplorerActivity);
+                return true;
+            case R.id.connection_explanation_menu:
+                Intent ConnectionExplanationActivity = new Intent(this, ConnectionExplanationActivity.class);
+                startActivity(ConnectionExplanationActivity);
                 return true;
             default:
                 return true;
