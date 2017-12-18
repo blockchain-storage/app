@@ -7,31 +7,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e8ea7b43-e4a4-4754-bc86-c259c8482fe4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/res/menu/trustchain_menu.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/outputs/apk/debug/app-debug.apk" afterPath="$PROJECT_DIR$/build/outputs/apk/debug/app-debug.apk" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.travis.yml" afterPath="$PROJECT_DIR$/../.travis.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../README.md" afterPath="$PROJECT_DIR$/../README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToApp.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/PeerAppToApp.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerList.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/PeerList.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connection/ByteBufferOutputStream.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/ByteBufferOutputStream.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connection/ByteBufferinputStream.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/ByteBufferinputStream.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connection/WanVote.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/WanVote.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connection/messages/IntroductionRequest.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/messages/IntroductionRequest.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connection/messages/IntroductionResponse.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/messages/IntroductionResponse.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connection/messages/Message.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/messages/Message.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connection/messages/MessageException.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/messages/MessageException.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connection/messages/Puncture.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/messages/Puncture.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connection/messages/PunctureRequest.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/messages/PunctureRequest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build.gradle" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/Peer.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/Peer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/block/TrustChainBlock.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/block/TrustChainBlock.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/connection/Communication.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/connection/Communication.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/connection/CommunicationListener.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/connection/CommunicationListener.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/connection/network/ClientTask.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/connection/network/ClientTask.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/connection/network/Server.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/connection/network/Server.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/PeerTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/PeerTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToAppTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToAppTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerListTest.java" afterPath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerListTest.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/OverviewConnectionsActivity.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/OverviewConnectionsActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/PeerListAdapter.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/PeerListAdapter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/TrustChainActivity.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/TrustChainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/bluetooth/BluetoothActivity.java" afterPath="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/bluetooth/BluetoothActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/activity_main.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/res/layout/peer_connection_list_item.xml" afterPath="$PROJECT_DIR$/src/main/res/layout/peer_connection_list_item.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/src/main/res/values/colors.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../build.gradle" afterPath="$PROJECT_DIR$/../build.gradle" />
     </list>
     <ignored path="app.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -99,15 +91,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Peer.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Peer.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/Peer.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="364">
-              <caret line="73" column="53" lean-forward="true" selection-start-line="73" selection-start-column="53" selection-end-line="73" selection-end-column="53" />
+              <caret line="73" column="53" lean-forward="false" selection-start-line="73" selection-start-column="53" selection-end-line="73" selection-end-column="53" />
               <folding>
                 <element signature="e#799#800#0" expanded="true" />
                 <element signature="e#831#832#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PeerListAdapter.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/PeerListAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="84">
+              <caret line="4" column="39" lean-forward="false" selection-start-line="4" selection-start-column="39" selection-end-line="4" selection-end-column="39" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1902,6 +1904,7 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/connection/Communication.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/Peer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/PeerListAdapter.java" />
       </list>
     </option>
   </component>
@@ -1974,6 +1977,90 @@
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CS4160-trustchain-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trustchain_android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="appToAppTest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CS4160-trustchain-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trustchain_android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CS4160-trustchain-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trustchain_android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CS4160-trustchain-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trustchain_android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="appToApp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -2040,7 +2127,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513590541578" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513590636292" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
@@ -2113,7 +2200,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513590541578" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513590636292" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2161,7 +2248,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513590541578" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513590636293" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2344,7 +2431,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513590541579" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513590636294" />
       </method>
     </configuration>
     <list size="2">
@@ -2450,17 +2537,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_chain_explorer.xml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/Peer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="544">
@@ -2863,11 +2939,19 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/Peer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="364">
-          <caret line="73" column="53" lean-forward="true" selection-start-line="73" selection-start-column="53" selection-end-line="73" selection-end-column="53" />
+          <caret line="73" column="53" lean-forward="false" selection-start-line="73" selection-start-column="53" selection-end-line="73" selection-end-column="53" />
           <folding>
             <element signature="e#799#800#0" expanded="true" />
             <element signature="e#831#832#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/PeerListAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="4" column="39" lean-forward="false" selection-start-line="4" selection-start-column="39" selection-end-line="4" selection-end-column="39" />
+          <folding />
         </state>
       </provider>
     </entry>
