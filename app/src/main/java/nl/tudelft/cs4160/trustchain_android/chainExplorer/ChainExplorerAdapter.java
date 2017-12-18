@@ -21,6 +21,8 @@ import java.util.List;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
+import nl.tudelft.cs4160.trustchain_android.color.ChainColor;
+import nl.tudelft.cs4160.trustchain_android.main.ChainExplorerInfoActivity;
 import nl.tudelft.cs4160.trustchain_android.main.TrustChainActivity;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
@@ -99,13 +101,13 @@ public class ChainExplorerAdapter extends BaseAdapter {
         if (block.getSequenceNumber() == 0) {
             seqNumStr = "unknown";
         } else {
-            seqNumStr = String.valueOf(block.getSequenceNumber());
+            seqNumStr = "seq: " + String.valueOf(block.getSequenceNumber());
         }
 
         if (block.getLinkSequenceNumber() == 0) {
             linkSeqNumStr = "unknown";
         } else {
-            linkSeqNumStr = String.valueOf(block.getLinkSequenceNumber());
+            linkSeqNumStr = "seq: " + String.valueOf(block.getLinkSequenceNumber());
         }
 
         // collapsed view
@@ -114,6 +116,8 @@ public class ChainExplorerAdapter extends BaseAdapter {
         TextView linkPeer = (TextView) convertView.findViewById(R.id.link_peer);
         TextView linkSeqNum = (TextView) convertView.findViewById(R.id.link_sequence_number);
         TextView transaction = (TextView) convertView.findViewById(R.id.transaction);
+        View ownChainIndicator = convertView.findViewById(R.id.own_chain_indicator);
+        View linkChainIndicator = convertView.findViewById(R.id.link_chain_indicator);
 
         // For the collapsed view, set the public keys to the aliases we gave them.
         peer.setText(peerAlias);
@@ -137,26 +141,44 @@ public class ChainExplorerAdapter extends BaseAdapter {
         signature.setText(bytesToHex(block.getSignature().toByteArray()));
         expTransaction.setText(block.getTransaction().toStringUtf8());
 
-        if (peerAlias.equals("me") || linkPeerAlias.equals("me")) {
-            convertView.findViewById(R.id.own_chain_indicator).setBackgroundColor(Color.GREEN);
-        } else {
-            convertView.findViewById(R.id.own_chain_indicator).setBackgroundColor(Color.TRANSPARENT);
+        if (peerAlias.equals("me")) {
+            ownChainIndicator.setBackgroundColor(ChainColor.getMyColor(context));
+        }else{
+            ownChainIndicator.setBackgroundColor(ChainColor.getColor(context,bytesToHex(pubKeyByteStr.toByteArray())));
         }
+        if (linkPeerAlias.equals("me")) {
+            linkChainIndicator.setBackgroundColor(ChainColor.getMyColor(context));
+        }else{
+            linkChainIndicator.setBackgroundColor(ChainColor.getColor(context,bytesToHex(pubKeyByteStr.toByteArray())));
+        }
+
+        setOnClickListenerColor(ownChainIndicator);
         return convertView;
     }
-public void setOnClickListener(View view){
 
-    View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            TextView tv = (TextView) v;
-            Intent intent = new Intent(context, ChainExplorerActivity.class);
-            intent.putExtra("publicKey", hexStringToByteArray(tv.getText().toString()));
-            context.startActivity(intent);
-        }
-    };
-    view.setOnClickListener(onClickListener);
-}
+    public void setOnClickListener(View view) {
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView tv = (TextView) v;
+                Intent intent = new Intent(context, ChainExplorerActivity.class);
+                intent.putExtra("publicKey", hexStringToByteArray(tv.getText().toString()));
+                context.startActivity(intent);
+            }
+        };
+        view.setOnClickListener(onClickListener);
+    }
+
+    public void setOnClickListenerColor(View view){
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ChainExplorerInfoActivity.class);
+                context.startActivity(intent);
+            }
+        };
+        view.setOnClickListener(onClickListener);
+    }
 
     public static byte[] hexStringToByteArray(String s) {
         int len = s.length();

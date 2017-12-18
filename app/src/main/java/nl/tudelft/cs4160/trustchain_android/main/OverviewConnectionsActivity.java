@@ -776,8 +776,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        if (!willExit)
-            showToast("App will continue in background.");
         super.onStop();
     }
 
