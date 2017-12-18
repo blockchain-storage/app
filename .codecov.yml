@@ -2,9 +2,9 @@
 ## Configuration for codecov coverage####
 #########################################
 coverage:
+  ignore:
+  - app/src/main/java/nl/tudelft/cs4160/trustchain_android/main/.*
   status:
     project:
       default:
         threshold: 50%
-ignore:
-  - app/src/main/java/nl/tudelft/cs4160/trustchain_android/main/*
