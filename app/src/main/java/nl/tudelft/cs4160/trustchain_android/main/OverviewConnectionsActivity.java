@@ -73,7 +73,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     final static int DEFAULT_PORT = 1873;
     final static int KNOWN_PEER_LIMIT = 10;
     private static final int BUFFER_SIZE = 2048;
-    private static Map<String, List<String>> recordedAddressesPerPubKeyMap = new HashMap<>();  // Map(pubkey -> list<ip>) which tracks ip addresses per public key.
 
     private TextView mWanVote;
     private Button mExitButton;
@@ -446,11 +445,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
             String ip = address.getAddress().toString();
             PubKeyStorage.addAddress(this, pubKey, ip);
-            System.out.println(PubKeyStorage.getAddress(this, pubKey));
-
-            if(pubKey != null) {
-                recordAddressByPubKey(pubKey, ip);
-            }
+            Log.d("App-To-App", "Stored following ip for pubkey: " + pubKey + " " + PubKeyStorage.getAddress(this, pubKey));
 
             Log.d("App-To-App", "pubkey address map " + SharedPreferencesStorage.getAll(this).toString());
 
@@ -480,30 +475,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         } catch (BencodeReadException | IOException | MessageException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Store the ip address in the hashmap by public key.
-     * Does nothing if the ip is already contained in the list.
-     * @param pubKey
-     * @param ip
-     */
-    private void recordAddressByPubKey(String pubKey, String ip) {
-        List<String> addresses;
-        if(recordedAddressesPerPubKeyMap.get(pubKey) == null) {
-            addresses = new ArrayList<>();
-            addresses.add(ip);
-        } else {
-            addresses = getAddressesByPubKey(pubKey);
-            if(!addresses.contains(ip)) {
-                addresses.add(ip);
-            }
-        }
-        recordedAddressesPerPubKeyMap.put(pubKey, addresses);
-    }
-
-    private List<String> getAddressesByPubKey(String pubKey) {
-        return recordedAddressesPerPubKeyMap.get(pubKey);
     }
 
     /**
