@@ -24,18 +24,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-task jacocoTestReport(type: JacocoReport) {
-    reports {
-        xml  { enabled true }
-        html { enabled true }
-    }
-
-    afterEvaluate {
-        classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it,
-                    exclude: ['**/**Activity.java', '**/**Adapter.java'])
-        })
-    }
-}
-
