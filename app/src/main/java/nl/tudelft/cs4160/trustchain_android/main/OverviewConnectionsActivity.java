@@ -12,7 +12,7 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.text.method.ScrollingMovementMethod;
+
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
@@ -20,7 +20,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,8 +41,13 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.SharedPreferencesStorage;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.UserNameStorage;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyStorage;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
@@ -57,6 +61,7 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Punctur
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReadException;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
+import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBContract;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
@@ -70,6 +75,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     final static int DEFAULT_PORT = 1873;
     final static int KNOWN_PEER_LIMIT = 10;
     private static final int BUFFER_SIZE = 2048;
+
     private TextView mWanVote;
     private Button mExitButton;
     private PeerListAdapter incomingPeerAdapter;
@@ -90,6 +96,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     private Thread listenThread;
 
     private boolean willExit = false;
+
+    private TrustChainDBHelper dbHelper;
 
     /**
      * Initialize views, start send and receive threads if necessary.
@@ -142,7 +150,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
     private void initKey(){
         KeyPair kp = Key.loadKeys(getApplicationContext());
-        TrustChainDBHelper dbHelper = new TrustChainDBHelper(this);
         if (kp == null) {
             kp = Key.createNewKeyPair();
             Key.saveKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE, kp.getPublic());
@@ -187,8 +194,9 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         outBuffer = ByteBuffer.allocate(BUFFER_SIZE);
         mWanVote = (TextView) findViewById(R.id.wanvote);
 
+        dbHelper = new TrustChainDBHelper(this);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        hashId = preferences.getString(HASH_ID, null);
+        hashId = UserNameStorage.getUserName(this);
         ((TextView) findViewById(R.id.peer_id)).setText(hashId);
     }
 
@@ -270,23 +278,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 .setText(cm.getActiveNetworkInfo().getTypeName() + " " + cm.getActiveNetworkInfo().getSubtypeName());
     }
 
-    /**
-     * Retrieve the local peerAppToApp id from storage.
-     *
-     * @return the peerAppToApp id.
-     */
-    private String getId() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String id = preferences.getString(HASH_ID, null);
-        if (id == null) {
-            Log.d("App-To-App Log", "Generating new ID");
-            id = generateHash();
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(HASH_ID, id);
-            editor.apply();
-        }
-        return id;
-    }
 
     /**
      * Generate a new hash to be used as peerAppToApp id.
@@ -335,7 +326,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendIntroductionRequest(PeerAppToApp peer) throws IOException {
-        IntroductionRequest request = new IntroductionRequest(hashId, peer.getAddress(), connectionType, networkOperator);
+        IntroductionRequest request = new IntroductionRequest(hashId, peer.getAddress(), connectionType, networkOperator, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(request, peer);
     }
 
@@ -347,7 +338,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPunctureRequest(PeerAppToApp peer, PeerAppToApp puncturePeer) throws IOException {
-        PunctureRequest request = new PunctureRequest(hashId, peer.getAddress(), internalSourceAddress, puncturePeer);
+        PunctureRequest request = new PunctureRequest(hashId, peer.getAddress(), internalSourceAddress, puncturePeer, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(request, peer);
     }
 
@@ -358,7 +349,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPuncture(PeerAppToApp peer) throws IOException {
-        Puncture puncture = new Puncture(hashId, peer.getAddress(), internalSourceAddress);
+        Puncture puncture = new Puncture(hashId, peer.getAddress(), internalSourceAddress, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(puncture, peer);
     }
 
@@ -376,7 +367,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 pexPeers.add(p);
         }
         IntroductionResponse response = new IntroductionResponse(hashId, internalSourceAddress, peer
-                .getAddress(), invitee, connectionType, pexPeers, networkOperator);
+                .getAddress(), invitee, connectionType, pexPeers, networkOperator, Key.loadKeys(getApplicationContext()).getPublic().toString());
         sendMesssage(response, peer);
     }
 
@@ -484,7 +475,16 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         try {
             Message message = Message.createFromByteBuffer(data);
             Log.d("App-To-App Log", "Received " + message);
+
             String id = message.getPeerId();
+            String pubKey = message.getPubKey();
+
+            String ip = address.getAddress().toString();
+            PubKeyStorage.addAddress(this, pubKey, ip);
+            Log.d("App-To-App", "Stored following ip for pubkey: " + pubKey + " " + PubKeyStorage.getAddress(this, pubKey));
+
+            Log.d("App-To-App", "pubkey address map " + SharedPreferencesStorage.getAll(this).toString());
+
             if (wanVote.vote(message.getDestination())) {
                 Log.d("App-To-App Log", "Address changed to " + wanVote.getAddress());
                 showLocalIpAddress();
@@ -495,7 +495,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             peer.received(data);
             switch (message.getType()) {
                 case Message.INTRODUCTION_REQUEST:
-                    handlIntroductionRequest(peer, (IntroductionRequest) message);
+                    handleIntroductionRequest(peer, (IntroductionRequest) message);
                     break;
                 case Message.INTRODUCTION_RESPONSE:
                     handleIntroductionResponse(peer, (IntroductionResponse) message);
@@ -520,7 +520,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @param message the message.
      * @throws IOException
      */
-    private void handlIntroductionRequest(PeerAppToApp peer, IntroductionRequest message) throws IOException {
+    private void handleIntroductionRequest(PeerAppToApp peer, IntroductionRequest message) throws IOException {
         peer.setNetworkOperator(message.getNetworkOperator());
         peer.setConnectionType((int) message.getConnectionType());
         if (peerList.size() > 1) {

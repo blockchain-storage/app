@@ -72,6 +72,11 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
     private Communication communication;
 
     /**
+     * Key pair of user
+     */
+    public static KeyPair kp;
+
+    /**
      * Listener for the connection button.
      * On click a block is created and send to a peerAppToApp.
      * When we encounter an unknown peerAppToApp, send a crawl request to that peerAppToApp in order to get its

@@ -12,8 +12,8 @@ public class PunctureRequest extends Message {
     final private static String SOURCE = "source";
     final private static String PUNCTURE_PEER = "puncture_peer";
 
-    public PunctureRequest(String peerId, InetSocketAddress destination, InetSocketAddress source, PeerAppToApp puncturePeer) {
-        super(PUNCTURE_REQUEST, peerId, destination);
+    public PunctureRequest(String peerId, InetSocketAddress destination, InetSocketAddress source, PeerAppToApp puncturePeer, String pubKey) {
+        super(PUNCTURE_REQUEST, peerId, destination, pubKey);
         put(SOURCE, createAddressMap(source));
         put(PUNCTURE_PEER, createPeerMap(puncturePeer));
     }
@@ -23,7 +23,8 @@ public class PunctureRequest extends Message {
         InetSocketAddress destination = Message.createMapAddress((Map) map.get(DESTINATION));
         InetSocketAddress source = Message.createMapAddress((Map) map.get(SOURCE));
         PeerAppToApp puncturePeer = Message.createMapPeer((Map) map.get(PUNCTURE_PEER));
-        return new PunctureRequest(peerId, destination, source, puncturePeer);
+        String pubKey = (String) map.get(PUB_KEY);
+        return new PunctureRequest(peerId, destination, source, puncturePeer, pubKey);
     }
 
     public PeerAppToApp getPuncturePeer() throws MessageException {
