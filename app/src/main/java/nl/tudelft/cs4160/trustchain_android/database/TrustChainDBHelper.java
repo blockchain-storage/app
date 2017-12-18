@@ -52,6 +52,10 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
+
+        System.out.println("----------------------------");
+        System.out.println(SQL_CREATE_ENTRIES);
+        System.out.println("----------------------------");
     }
 
     /**
@@ -100,10 +104,10 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         return db.insert(TrustChainDBContract.PubKeyNetAddressLink.TABLE_NAME, null, values);
     }
 
-    public List<String> getNetAddressess(byte[] pubkey) {
+    public List<String> getNetAddressess(String pubkey) {
         SQLiteDatabase dbReadable = getReadableDatabase();
         String whereClause = TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_PUBLIC_KEY + " = ?";
-        String[] whereArgs = new String[] { Base64.encodeToString(pubkey, Base64.DEFAULT)};
+        String[] whereArgs = new String[] { pubkey };
 
         Cursor cursor = dbReadable.query(TrustChainDBContract.PubKeyNetAddressLink.TABLE_NAME,
                 null,

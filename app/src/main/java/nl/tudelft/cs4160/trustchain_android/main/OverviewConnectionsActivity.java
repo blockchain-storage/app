@@ -92,6 +92,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
     private boolean willExit = false;
 
+    private TrustChainDBHelper dbHelper;
+
     /**
      * Initialize views, start send and receive threads if necessary.
      *
@@ -136,7 +138,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
     private void initKey(){
         KeyPair kp = Key.loadKeys(getApplicationContext());
-        TrustChainDBHelper dbHelper = new TrustChainDBHelper(this);
         if (kp == null) {
             kp = Key.createNewKeyPair();
             Key.saveKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE, kp.getPublic());
@@ -182,6 +183,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         wanVote = new WanVote();
         outBuffer = ByteBuffer.allocate(BUFFER_SIZE);
         mWanVote = (TextView) findViewById(R.id.wanvote);
+
+        dbHelper = new TrustChainDBHelper(this);
     }
 
 
@@ -456,9 +459,14 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             if(pubKey != null) {
                 String ip = address.getAddress().toString();
                 recordAddressByPubKey(pubKey, ip);
+                dbHelper.insertInDB(pubKey, ip);
             }
 
             Log.d("App-To-App", "pubkey address map " + recordedAddressesPerPubKeyMap.toString());
+
+            List<String> addresses = dbHelper.getNetAddressess(pubKey);
+
+            Log.d("App-To-App", "pubkey database " + pubKey + " " + addresses.toString());
 
             if (wanVote.vote(message.getDestination())) {
                 Log.d("App-To-App Log", "Address changed to " + wanVote.getAddress());
@@ -494,9 +502,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @param pubKey
      * @param ip
      */
-    protected static void recordAddressByPubKey(String pubKey, String ip) {
+    private void recordAddressByPubKey(String pubKey, String ip) {
         List<String> addresses;
-
         if(recordedAddressesPerPubKeyMap.get(pubKey) == null) {
             addresses = new ArrayList<>();
             addresses.add(ip);
@@ -509,7 +516,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         recordedAddressesPerPubKeyMap.put(pubKey, addresses);
     }
 
-    static List<String> getAddressesByPubKey(String pubKey) {
+    private List<String> getAddressesByPubKey(String pubKey) {
         return recordedAddressesPerPubKeyMap.get(pubKey);
     }
 
