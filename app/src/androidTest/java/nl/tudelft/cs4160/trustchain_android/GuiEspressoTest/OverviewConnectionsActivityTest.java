@@ -29,25 +29,20 @@ public class OverviewConnectionsActivityTest {
     public ActivityTestRule<OverviewConnectionsActivity> mActivityRule = new ActivityTestRule<>(
             OverviewConnectionsActivity.class);
 
-//    @Before
-//    public void initialize() {
-//        // Eventually login if you need to login.
-//    }
-
     @Test
     public void gotoBootstrapActivity(){
-//        onView(withId(R.id.change_bootstrap))            // withId(R.id.my_view) is a ViewMatcher
-//                .perform(click())               // click() is a ViewAction
-//                .check(matches(isDisplayed())); // matches(isDisplayed()) is a ViewAssertion
-        //TODO wait for the PR
+        // Open the ActionBar
+        openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+        // Why not able to find by: withId(R.id.find_peer)
+        onView(withText("Find peer"))   // withId(R.id.my_view) is a ViewMatcher
+                .perform(click());            // click() is a ViewAction
+        onView(withId(R.id.bootstrap_IP)).check(matches(isDisplayed()));
     }
 
     @Test
     public void gotoTrustchainActivityTest() {
         // in this unit test it is not possible to go the trustchain activity
         // integration test needs to be made here.
-        onView(withId(R.id.incoming_peer_connection_list_view))
-                .perform(click());
         //TODO
     }
 
