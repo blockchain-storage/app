@@ -151,8 +151,6 @@ public class ChainExplorerAdapter extends BaseAdapter {
         }else{
             linkChainIndicator.setBackgroundColor(ChainColor.getColor(context,bytesToHex(pubKeyByteStr.toByteArray())));
         }
-
-        setOnClickListenerColor(ownChainIndicator);
         return convertView;
     }
 
@@ -163,17 +161,6 @@ public class ChainExplorerAdapter extends BaseAdapter {
                 TextView tv = (TextView) v;
                 Intent intent = new Intent(context, ChainExplorerActivity.class);
                 intent.putExtra("publicKey", hexStringToByteArray(tv.getText().toString()));
-                context.startActivity(intent);
-            }
-        };
-        view.setOnClickListener(onClickListener);
-    }
-
-    public void setOnClickListenerColor(View view){
-        View.OnClickListener onClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, ChainExplorerInfoActivity.class);
                 context.startActivity(intent);
             }
         };
