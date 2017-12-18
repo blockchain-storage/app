@@ -11,6 +11,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
+import java.util.HashMap;
 import java.util.Map;
 
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
@@ -41,13 +42,6 @@ public class MessageTest {
     }
 
     @Test
-    public void testConstructor() throws BencodeReadException, MessageException, IOException {
-        //InputStream anyInputStream = new ByteArrayInputStream("test data".getBytes());
-        //Message m = Message.createFromStream(anyInputStream);
-        //Log.d("Test-B", m.toString());
-    }
-
-    @Test
     public void testCreateAddressMap() {
         Map<String, Object> m = Message.createAddressMap(source);
         assertEquals(m.get("port"), (long) 11);
@@ -59,5 +53,25 @@ public class MessageTest {
         Map<String, Object> m = Message.createPeerMap(peer1);
         assertEquals(m.get("port"), (long) 33);
         assertEquals(m.get("peer_id"), "123");
+    }
+
+    @Test
+    public void testCreateMapAddress() throws MessageException {
+        Map<String, Object> addressMap = new HashMap<>();
+        addressMap.put("address", "444.444.44.44");
+        addressMap.put("port", (long) 44);
+        InetSocketAddress socketAddress = Message.createMapAddress(addressMap);
+        assertEquals(socketAddress.getPort(), 44);
+    }
+
+    @Test
+    public void testCreateMapPeer() throws MessageException{
+        Map<String, Object> m = new HashMap<>();
+        m.put("address", "555.555.55.55");
+        m.put("port", (long) 55);
+        m.put("peer_id", "567");
+        PeerAppToApp peer = Message.createMapPeer(m);
+        assertEquals(peer.getPeerId(),"567");
+        assertEquals(peer.getPort(), 55);
     }
 }
