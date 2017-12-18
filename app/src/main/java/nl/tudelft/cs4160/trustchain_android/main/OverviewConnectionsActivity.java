@@ -1,5 +1,6 @@
 package nl.tudelft.cs4160.trustchain_android.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -81,7 +82,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     private WanVote wanVote;
     private int connectionType;
     private ByteBuffer outBuffer;
-    private EditText bootstrapView;
     private InetSocketAddress internalSourceAddress;
 
     private Thread sendThread;
@@ -113,15 +113,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickConnect(View view) {
-        bootstrapView = (EditText) findViewById(R.id.bootstrap_IP);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("ConnectableAddress", bootstrapView.getText().toString());
-        CONNECTABLE_ADDRESS = bootstrapView.getText().toString();
-        addInitialPeer();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -135,6 +126,9 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
                 startActivity(chainExplorerActivity);
                 return true;
+            case R.id.find_peer:
+                Intent bootstrapActivity = new Intent(this, BootstrapActivity.class);
+                startActivityForResult(bootstrapActivity, 1);
             default:
                 return true;
         }
@@ -216,10 +210,24 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         outgoingPeerConnectionListView.setAdapter(outgoingPeerAdapter);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if( resultCode == Activity.RESULT_OK ){
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("ConnectableAddress", data.getStringExtra("ConnectableAddress"));
+                editor.commit();
+                addInitialPeer();
+            }
+        }
+    }
+
     /**
      * Add the intial hard-coded connectable peerAppToApp to the peerAppToApp list.
      */
-    private void addInitialPeer() {
+   public void addInitialPeer() {
         try {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             String address = preferences.getString("ConnectableAddress", null);
