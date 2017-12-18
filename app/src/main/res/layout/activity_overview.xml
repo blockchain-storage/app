@@ -8,6 +8,7 @@
     android:paddingTop="8dp"
     tools:context=".main.OverviewConnectionsActivity">
 
+
     <TableLayout
         android:id="@+id/overviewButtons"
         android:layout_width="match_parent"
