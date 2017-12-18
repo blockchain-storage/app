@@ -1,0 +1,8 @@
+#########################################
+## Configuration for codecov coverage####
+#########################################
+coverage:
+  status:
+    project:
+      default:
+        threshold: 50%

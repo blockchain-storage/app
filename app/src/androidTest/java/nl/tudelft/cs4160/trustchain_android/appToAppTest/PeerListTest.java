@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
@@ -24,9 +25,9 @@ public class PeerListTest {
 
     @Before
     public void initialization(){
-        PeerAppToApp peer1 = Mockito.mock(PeerAppToApp.class);
-        PeerAppToApp peer2 = Mockito.mock(PeerAppToApp.class);
-        PeerAppToApp peer3 = Mockito.mock(PeerAppToApp.class);
+        PeerAppToApp peer1 = new PeerAppToApp(Mockito.mock(String.class), Mockito.mock(InetSocketAddress.class));
+        PeerAppToApp peer2 = new PeerAppToApp(Mockito.mock(String.class), Mockito.mock(InetSocketAddress.class));
+        PeerAppToApp peer3 = new PeerAppToApp(Mockito.mock(String.class), Mockito.mock(InetSocketAddress.class));
         originalIpList = new ArrayList<PeerAppToApp>();
         originalIpList.add(peer1);
         originalIpList.add(peer2);
@@ -56,7 +57,7 @@ public class PeerListTest {
 
     @Test
     public void peerExistsInListTest(){
-        PeerAppToApp peer4 = Mockito.mock(PeerAppToApp.class);
+        PeerAppToApp peer4 = new PeerAppToApp(Mockito.mock(String.class), Mockito.mock(InetSocketAddress.class));
         assertTrue(peerlist.peerExistsInList(originalIpList.get(0)));
         assertFalse(peerlist.peerExistsInList(peer4));
     }
