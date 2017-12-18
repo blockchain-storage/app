@@ -3,7 +3,8 @@
 #########################################
 coverage:
   ignore:
-  - app/src/main/java/nl/tudelft/cs4160/trustchain_android/main/.*
+    "app/src/main/java/nl/tudelft/cs4160/trustchain_android/main.*"
+    "app/src/test.*"
   status:
     project:
       default:
