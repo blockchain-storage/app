@@ -10,4 +10,8 @@
         android:id="@+id/connection_explanation_menu"
         android:title="@string/connection_info_text"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/find_peer"
+        android:title="@string/find_peer"
+        app:showAsAction="never" />
 </menu>

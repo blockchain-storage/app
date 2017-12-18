@@ -1,5 +1,6 @@
 package nl.tudelft.cs4160.trustchain_android.main;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -63,7 +64,7 @@ import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS
 
 public class OverviewConnectionsActivity extends AppCompatActivity {
 
-    public final static String CONNECTABLE_ADDRESS = "130.161.211.254";
+    public static String CONNECTABLE_ADDRESS = "130.161.211.254";
     final static int UNKNOWN_PEER_LIMIT = 20;
     final static String HASH_ID = "hash_id";
     final static int DEFAULT_PORT = 1873;
@@ -131,6 +132,9 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 Intent ConnectionExplanationActivity = new Intent(this, ConnectionExplanationActivity.class);
                 startActivity(ConnectionExplanationActivity);
                 return true;
+            case R.id.find_peer:
+                Intent bootstrapActivity = new Intent(this, BootstrapActivity.class);
+                startActivityForResult(bootstrapActivity, 1);
             default:
                 return true;
         }
@@ -217,12 +221,34 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         outgoingPeerConnectionListView.setAdapter(outgoingPeerAdapter);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if( resultCode == Activity.RESULT_OK ){
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("ConnectableAddress", data.getStringExtra("ConnectableAddress"));
+                editor.commit();
+                addInitialPeer();
+            }
+        }
+    }
+
     /**
      * Add the intial hard-coded connectable peerAppToApp to the peerAppToApp list.
      */
-    private void addInitialPeer() {
+   public void addInitialPeer() {
         try {
-            addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            String address = preferences.getString("ConnectableAddress", null);
+            if(address != "" && address != null) {
+                Log.d("Connection making", "Trying to connect to " + address);
+                addPeer(null, new InetSocketAddress(InetAddress.getByName(address), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
+            } else {
+                Log.d("Connection making", "Trying to connect to " + CONNECTABLE_ADDRESS);
+                addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
+            }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
