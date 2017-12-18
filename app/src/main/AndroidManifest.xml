@@ -44,12 +44,12 @@
             <!-- android:screenOrientation="portrait"> -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main.Bootstrap" />
-        <activity android:name=".main.BootstrapActivity"></activity>
+        <activity
+            android:name=".main.BootstrapActivity"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
