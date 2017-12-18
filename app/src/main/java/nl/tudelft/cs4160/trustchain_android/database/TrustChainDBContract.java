@@ -23,4 +23,11 @@ public class TrustChainDBContract {
         public static final String COLUMN_NAME_INSERT_TIME = "insert_time";
         public static final String COLUMN_NAME_BLOCK_HASH = "block_hash";
     }
+
+    public static class PubKeyNetAddressLink implements BaseColumns {
+        public static final String TABLE_NAME = "pubkey_netaddress_link";
+        public static final String COLUMN_NAME_PUBLIC_KEY = "public_key";
+        public static final String COLUMN_NAME_NET_ADDRESS = "net_address";
+        public static final String COLUMN_NAME_INSERT_TIME = "insert_time";
+    }
 }

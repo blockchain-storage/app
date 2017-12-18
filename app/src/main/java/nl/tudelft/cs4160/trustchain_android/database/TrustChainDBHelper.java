@@ -34,6 +34,14 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
             TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + ")" +
             ");" +
 
+            "CREATE TABLE IF NOT EXISTS " + TrustChainDBContract.PubKeyNetAddressLink.TABLE_NAME + " (" +
+            TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_PUBLIC_KEY +
+            TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_NET_ADDRESS +
+            TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_INSERT_TIME +
+            "PRIMARY KEY (" + TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_PUBLIC_KEY + "," +
+            TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_NET_ADDRESS + ")" +
+            ");" +
+
             "CREATE TABLE option(key TEXT PRIMARY KEY, value BLOB);" +
             "INSERT INTO option(key, value) VALUES('database_version','" + DATABASE_VERSION + "');";
 
@@ -80,6 +88,16 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_BLOCK_HASH, Base64.encodeToString(TrustChainBlock.hash(block), Base64.DEFAULT));
 
         return db.insert(TrustChainDBContract.BlockEntry.TABLE_NAME, null, values);
+    }
+
+    public long insertInDB(String pubKey, String netAddress) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_PUBLIC_KEY, pubKey);
+        values.put(TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_NET_ADDRESS, netAddress);
+        values.put(TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_INSERT_TIME, "");
+
+        return db.insert(TrustChainDBContract.PubKeyNetAddressLink.TABLE_NAME, null, values);
     }
 
     /**
