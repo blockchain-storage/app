@@ -43,6 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyStorage;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
@@ -56,6 +57,7 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Punctur
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReadException;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
+import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBContract;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
@@ -457,17 +459,14 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             String id = message.getPeerId();
             String pubKey = message.getPubKey();
 
+            String ip = address.getAddress().toString();
+            PubKeyStorage.addAddress(this, pubKey, ip);
+
             if(pubKey != null) {
-                String ip = address.getAddress().toString();
                 recordAddressByPubKey(pubKey, ip);
-                dbHelper.insertInDB(pubKey, ip);
             }
 
             Log.d("App-To-App", "pubkey address map " + recordedAddressesPerPubKeyMap.toString());
-
-            List<String> addresses = dbHelper.getNetAddressess(pubKey);
-
-            Log.d("App-To-App", "pubkey database " + pubKey + " " + addresses.toString());
 
             if (wanVote.vote(message.getDestination())) {
                 Log.d("App-To-App Log", "Address changed to " + wanVote.getAddress());
