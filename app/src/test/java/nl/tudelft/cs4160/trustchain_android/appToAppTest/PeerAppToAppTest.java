@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 
 public class PeerAppToAppTest extends TestCase {
@@ -64,7 +65,7 @@ public class PeerAppToAppTest extends TestCase {
     public void testHasReceivedData(){
         PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
         assertFalse(peer1.hasReceivedData());
-        peer1.received(mock(ByteBuffer.class));
+        peer1.received(any(ByteBuffer.class));
         assertTrue(peer1.hasReceivedData());
     }
 
@@ -73,7 +74,36 @@ public class PeerAppToAppTest extends TestCase {
         PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
         peer1.setConnectionType(1);
         assertEquals("Peer{" + "address=" + address + ", peerId='" + "firstPEER" + '\'' +
-                       ", hasReceivedData=" + false + ", connectionType=" + 1 + '}'
-                        ,peer1.toString());
+                        ", hasReceivedData=" + false + ", connectionType=" + 1 + '}'
+                ,peer1.toString());
+    }
+
+    @Test
+    public void testChangeParameters() {
+        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        peer1.setConnectionType(1);
+        assertEquals(1, peer1.getConnectionType());
+        peer1.setPeerId("PEER");
+        assertEquals("PEER", peer1.getPeerId());
+        peer1.setAddress(new InetSocketAddress("host", 11));
+        assertEquals(new InetSocketAddress("host", 11), peer1.getAddress());
+    }
+
+    @Test
+    public void testSendData(){
+        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        assertTrue(peer1.isAlive());
+        long lastSendTime = peer1.getLastSendTime();
+        peer1.sentData();
+        assertNotSame(lastSendTime, peer1.getLastSendTime());
+    }
+
+    @Test
+    public void testReceiveData(){
+        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        ByteBuffer buf = ByteBuffer.allocate(100);
+        long lastReceivedTime = peer1.getLastReceiveTime();
+        peer1.received(buf);
+        assertNotSame(lastReceivedTime, peer1.getLastReceiveTime());
     }
 }

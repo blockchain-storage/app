@@ -6,3 +6,5 @@ coverage:
     project:
       default:
         threshold: 50%
+ignore:
+  C:\Users\Boning\Google Drive\TU Delft\Master\Y1\Q2\CS4160 Blockchain Engineering\CS4160-trustchain-android\app\src\main\java\nl\tudelft\cs4160\trustchain_android\main

@@ -10,40 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e8ea7b43-e4a4-4754-bc86-c259c8482fe4" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/MessageProtoTest.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/TrustChainBlockTest.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/PeerTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/PeerTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/UtilTest/KeyTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/UtilTest/KeyTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/UtilTest/UtilTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/UtilTest/UtilTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/ValidationResultTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/ValidationResultTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToAppTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToAppTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerListTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerListTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/IntroductionRequestTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/IntroductionRequestTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/MessageTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/MessageTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/PunctureTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/PunctureTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/databaseTest/TrustChainDBContractTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/databaseTest/TrustChainDBContractTest.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/databaseTest/TrustChainDBHelperTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/databaseTest/TrustChainDBHelperTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_animated_vector_drawable_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_animated_vector_drawable_25_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_appcompat_v7_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_appcompat_v7_25_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_constraint_constraint_layout_1_0_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_constraint_constraint_layout_1_0_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_design_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_design_25_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_recyclerview_v7_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_recyclerview_v7_25_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_compat_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_compat_25_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_core_ui_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_core_ui_25_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_core_utils_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_core_utils_25_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_fragment_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_fragment_25_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_media_compat_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_media_compat_25_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_v4_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_v4_25_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_vector_drawable_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_support_vector_drawable_25_3_1.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_espresso_espresso_core_2_2_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_espresso_espresso_core_2_2_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_espresso_espresso_idling_resource_2_2_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_espresso_espresso_idling_resource_2_2_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_espresso_espresso_intents_2_2_2.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_espresso_espresso_intents_2_2_2.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_exposed_instrumentation_api_publish_0_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_exposed_instrumentation_api_publish_0_5.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_rules_0_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_rules_0_5.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_runner_0_5.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_test_runner_0_5.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/com_android_support_transition_25_3_1.xml" afterPath="$PROJECT_DIR$/.idea/libraries/com_android_support_transition_25_3_1.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/ValidationResultTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/ValidationResultTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToAppTest.java" afterPath="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToAppTest.java" />
     </list>
     <ignored path="app.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -76,80 +45,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="PunctureRequest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/messages/PunctureRequest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="84">
-              <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="UserConfigurationActivity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/main/UserConfigurationActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="28" column="43" lean-forward="false" selection-start-line="28" selection-start-column="43" selection-end-line="28" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PeerTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/PeerTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="19" column="9" lean-forward="false" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PunctureTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/PunctureTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="47" column="140" lean-forward="false" selection-start-line="47" selection-start-column="140" selection-end-line="47" selection-end-column="140" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="IntroductionRequestTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/IntroductionRequestTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="36" column="152" lean-forward="false" selection-start-line="36" selection-start-column="152" selection-end-line="36" selection-end-column="152" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ValidationResultTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/ValidationResultTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PeerAppToAppTest.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PeerAppToAppTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToAppTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="66" column="0" lean-forward="false" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+            <state relative-caret-position="323">
+              <caret line="91" column="23" lean-forward="false" selection-start-line="91" selection-start-column="23" selection-end-line="91" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PeerAppToApp.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/PeerAppToApp.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1084">
+              <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ValidationResultTest.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/ValidationResultTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="28" column="47" lean-forward="false" selection-start-line="28" selection-start-column="47" selection-end-line="28" selection-end-column="47" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1974,10 +1897,11 @@
         <option value="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/MessageTest.java" />
         <option value="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/PunctureTest.java" />
         <option value="$PROJECT_DIR$/src/androidTest/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/IntroductionRequestTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToAppTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/PeerTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/PunctureTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/IntroductionRequestTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToAppTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/ValidationResultTest.java" />
       </list>
     </option>
   </component>
@@ -2048,6 +1972,54 @@
               <option name="myItemId" value="java" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trustchain_android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="appToAppTest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CS4160-trustchain-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trustchain_android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CS4160-trustchain-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trustchain_android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="GuiEspressoTest" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -2089,6 +2061,28 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CS4160-trustchain-android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="trustchain_android" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.android.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="appToApp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
@@ -2115,7 +2109,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Android JUnit.trustchain_android in app">
+  <component name="RunManager" selected="Android JUnit.PeerAppToAppTest">
     <configuration default="false" name="IntroductionRequestT..." type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests" temporary="true" nameIsGenerated="true">
       <module name="app" />
       <option name="TESTING_TYPE" value="2" />
@@ -2161,7 +2155,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513603518403" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513605723828" />
       </method>
     </configuration>
     <configuration default="false" name="ValidationResultTest" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
@@ -2334,7 +2328,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513603518404" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513605723828" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2382,7 +2376,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513603518404" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513605723828" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2565,7 +2559,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513603518405" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513605723829" />
       </method>
     </configuration>
     <list size="6">
@@ -2578,9 +2572,9 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Android JUnit.trustchain_android in app" />
-        <item index="1" class="java.lang.String" itemvalue="Android JUnit.PeerTest" />
-        <item index="2" class="java.lang.String" itemvalue="Android JUnit.PeerAppToAppTest" />
+        <item index="0" class="java.lang.String" itemvalue="Android JUnit.PeerAppToAppTest" />
+        <item index="1" class="java.lang.String" itemvalue="Android JUnit.trustchain_android in app" />
+        <item index="2" class="java.lang.String" itemvalue="Android JUnit.PeerTest" />
         <item index="3" class="java.lang.String" itemvalue="Android JUnit.ValidationResultTest" />
         <item index="4" class="java.lang.String" itemvalue="Android Instrumented Tests.IntroductionRequestT..." />
       </list>
@@ -2621,9 +2615,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="IntroductionRequestT___ - 2017.12.18 at 14h 00m 23s.xml">
-      <configuration name="IntroductionRequestT..." configurationId="AndroidTestRunConfigurationType" />
-    </history-entry>
     <history-entry file="IntroductionRequestT___ - 2017.12.18 at 14h 03m 15s.xml">
       <configuration name="IntroductionRequestT..." configurationId="AndroidTestRunConfigurationType" />
     </history-entry>
@@ -2634,6 +2625,9 @@
       <configuration name="MessageTest" configurationId="AndroidTestRunConfigurationType" />
     </history-entry>
     <history-entry file="PeerAppToAppTest - 2017.12.18 at 14h 17m 55s.xml">
+      <configuration name="PeerAppToAppTest" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="PeerAppToAppTest - 2017.12.18 at 15h 00m 00s.xml">
       <configuration name="PeerAppToAppTest" configurationId="AndroidJUnit" />
     </history-entry>
     <history-entry file="PeerTest - 2017.12.18 at 14h 18m 30s.xml">
@@ -2663,8 +2657,8 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37628278" sideWeight="0.13529412" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37628278" sideWeight="0.86470586" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37172177" sideWeight="0.35935828" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.37172177" sideWeight="0.6406417" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3295325" sideWeight="0.49786097" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Logcat" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.41961232" sideWeight="0.48288772" order="7" side_tool="false" content_ui="tabs" />
@@ -2706,13 +2700,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/KeyActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/res/layout/activity_chain_explorer.xml">
       <provider selected="true" editor-type-id="android-designer2">
         <state />
@@ -2862,6 +2849,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-374">
           <caret line="101" column="42" lean-forward="true" selection-start-line="101" selection-start-column="42" selection-end-line="101" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -2932,13 +2922,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/PeerAppToApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-479">
-          <caret line="17" column="27" lean-forward="true" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/messages/Puncture.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
@@ -2951,16 +2934,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-80">
           <caret line="52" column="13" lean-forward="false" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/MessageTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="74" column="25" lean-forward="false" selection-start-line="74" selection-start-column="25" selection-end-line="74" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -3018,24 +2991,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/MessageProtoTest.java" />
     <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/TrustChainBlockTest.java" />
-    <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/ValidationResultTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/PeerTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="19" column="9" lean-forward="false" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/connection/messages/PunctureRequest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
@@ -3072,13 +3027,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToAppTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/nl/tudelft/cs4160/trustchain_android/appToApp/PeerAppToApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="66" column="0" lean-forward="false" selection-start-line="66" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+        <state relative-caret-position="-1084">
+          <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/Util/UtilTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-370">
+          <caret line="15" column="13" lean-forward="false" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/PeerTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="19" column="9" lean-forward="false" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/connectionTest/messagesTest/MessageTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="609">
+          <caret line="74" column="25" lean-forward="false" selection-start-line="74" selection-start-column="25" selection-end-line="74" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/appToAppTest/PeerAppToAppTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="91" column="23" lean-forward="false" selection-start-line="91" selection-start-column="23" selection-end-line="91" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/nl/tudelft/cs4160/trustchain_android/ValidationResultTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="28" column="47" lean-forward="false" selection-start-line="28" selection-start-column="47" selection-end-line="28" selection-end-column="47" />
+          <folding />
         </state>
       </provider>
     </entry>

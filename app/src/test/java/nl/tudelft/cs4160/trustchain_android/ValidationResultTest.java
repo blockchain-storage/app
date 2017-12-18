@@ -18,57 +18,57 @@ public class ValidationResultTest {
     @Test
     public void testConstructor() {
         ValidationResult vr = new ValidationResult();
-        assertEquals(vr.getStatus(), ValidationResult.VALID);
-        assertEquals(vr.toString(), "<ValidationResult: VALID>");
+        assertEquals(ValidationResult.VALID, vr.getStatus());
+        assertEquals("<ValidationResult: VALID>", vr.toString());
     }
 
     @Test
     public void testPartial() {
         ValidationResult vr = new ValidationResult();
         vr.setPartial();
-        assertEquals(vr.getStatus(), ValidationResult.PARTIAL);
-        assertEquals(vr.toString(), "<ValidationResult: PARTIAL>");
+        assertEquals(ValidationResult.PARTIAL, vr.getStatus());
+        assertEquals("<ValidationResult: PARTIAL>", vr.toString());
     }
 
     @Test
     public void testPartialNext() {
         ValidationResult vr = new ValidationResult();
         vr.setPartialNext();
-        assertEquals(vr.getStatus(), ValidationResult.PARTIAL_NEXT);
-        assertEquals(vr.toString(), "<ValidationResult: PARTIAL_NEXT>");
+        assertEquals(ValidationResult.PARTIAL_NEXT, vr.getStatus());
+        assertEquals("<ValidationResult: PARTIAL_NEXT>", vr.toString());
     }
 
     @Test
     public void testPartialPrevious() {
         ValidationResult vr = new ValidationResult();
         vr.setPartialPrevious();
-        assertEquals(vr.getStatus(), ValidationResult.PARTIAL_PREVIOUS);
-        assertEquals(vr.toString(), "<ValidationResult: PARTIAL_PREVIOUS>");
+        assertEquals(ValidationResult.PARTIAL_PREVIOUS, vr.getStatus());
+        assertEquals("<ValidationResult: PARTIAL_PREVIOUS>", vr.toString());
     }
 
     @Test
     public void testNoInfo() {
         ValidationResult vr = new ValidationResult();
         vr.setNoInfo();
-        assertEquals(vr.getStatus(), ValidationResult.NO_INFO);
-        assertEquals(vr.toString(), "<ValidationResult: NO_INFO>");
+        assertEquals(ValidationResult.NO_INFO, vr.getStatus());
+        assertEquals("<ValidationResult: NO_INFO>", vr.toString());
     }
 
     @Test
     public void testInvalid() {
         ValidationResult vr = new ValidationResult();
         vr.setInvalid();
-        assertEquals(vr.getStatus(), ValidationResult.INVALID);
-        assertEquals(vr.toString(), "<ValidationResult: INVALID>");
+        assertEquals(ValidationResult.INVALID, vr.getStatus());
+        assertEquals("<ValidationResult: INVALID>", vr.toString());
     }
 
     @Test
     public void testGetterSetter() {
         ValidationResult vr = new ValidationResult();
         vr.setStatus(3);
-        assertEquals(vr.getStatus(), ValidationResult.PARTIAL_PREVIOUS);
+        assertEquals(ValidationResult.PARTIAL_PREVIOUS, vr.getStatus());
         vr.setStatus(4);
-        assertEquals(vr.getStatus(), ValidationResult.NO_INFO);
+        assertEquals(ValidationResult.NO_INFO, vr.getStatus());
     }
 
     @Test
@@ -78,6 +78,6 @@ public class ValidationResultTest {
         String test = "test";
         errors.add(test);
         vr.setErrors(errors);
-        assertEquals(vr.getErrors().get(0), test);
+        assertEquals(test, vr.getErrors().get(0));
     }
 }

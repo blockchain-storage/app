@@ -5,4 +5,8 @@
         android:id="@+id/chain_menu"
         android:title="@string/menu_item_1"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/find_peer"
+        android:title="@string/find_peer"
+        app:showAsAction="never" />
 </menu>
