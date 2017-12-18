@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.main.TrustChainActivity;
 
@@ -62,7 +61,6 @@ public class PeerAppToApp implements Serializable {
         this.connectionType = connectionType;
     }
 
-
     public String getPeerId() {
         return peerId;
     }
@@ -90,7 +88,6 @@ public class PeerAppToApp implements Serializable {
     public void setAddress(InetSocketAddress address) {
         this.address = address;
     }
-
 
     /**
      * Method called when data is sent to this peer.
