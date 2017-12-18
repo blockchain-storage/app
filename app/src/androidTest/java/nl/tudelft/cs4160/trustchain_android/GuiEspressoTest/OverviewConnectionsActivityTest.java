@@ -44,7 +44,10 @@ public class OverviewConnectionsActivityTest {
 
     @Test
     public void gotoTrustchainActivityTest() {
-        // if you are connected to the peer in the list
+        // in this unit test it is not possible to go the trustchain activity
+        // integration test needs to be made here.
+        onView(withId(R.id.incoming_peer_connection_list_view))
+                .perform(click());
         //TODO
     }
 

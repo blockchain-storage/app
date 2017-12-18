@@ -34,28 +34,27 @@ public class PunctureTest {
         m.put("peer_id", "34");
 
         sourceAddressMap.put("address", "111.111.11.11");
-        long port = 11;
-        sourceAddressMap.put("port", port);
+        sourceAddressMap.put("port", (long) 11);
         m.put("source", sourceAddressMap);
 
         destAddressMap.put("address", "222.222.22.22");
-        long port2 = 22;
-        destAddressMap.put("port", port2);
+        destAddressMap.put("port", (long) 22);
         m.put("destination", destAddressMap);
     }
 
     @Test
     public void testToString(){
         p = new Puncture("123", dest, source);
-        assertEquals(p.toString(), "Puncture{{peer_id=123, type=4, destination={address=222.222.22.22, port=22}, source={address=111.111.11.11, port=11}}}");
+        assertEquals("Puncture{{destination={address=222.222.22.22, port=22}, source={address=111.111.11.11, port=11}, type=4, peer_id=123}}",
+                p.toString());
     }
 
     @Test
     public void testFromMap() throws MessageException {
         Message message = Puncture.fromMap(m);
-        assertEquals(message.getType(), 4);
-        assertEquals(message.getPeerId(), "34");
-        assertEquals(message.getDestination(), dest);
+        assertEquals(4, message.getType());
+        assertEquals("34", message.getPeerId());
+        assertEquals(dest, message.getDestination());
     }
 
 }
