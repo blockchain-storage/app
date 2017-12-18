@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 
 public class PeerAppToAppTest extends TestCase {
@@ -64,7 +65,7 @@ public class PeerAppToAppTest extends TestCase {
     public void testHasReceivedData(){
         PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
         assertFalse(peer1.hasReceivedData());
-        peer1.received(mock(ByteBuffer.class));
+        peer1.received(any(ByteBuffer.class));
         assertTrue(peer1.hasReceivedData());
     }
 
