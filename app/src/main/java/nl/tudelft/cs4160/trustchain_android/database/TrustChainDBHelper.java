@@ -34,14 +34,6 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
             TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + ")" +
             ");" +
 
-            "CREATE TABLE IF NOT EXISTS " + TrustChainDBContract.PubKeyNetAddressLink.TABLE_NAME + " (" +
-            TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_PUBLIC_KEY +
-            TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_NET_ADDRESS +
-            TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_INSERT_TIME +
-            "PRIMARY KEY (" + TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_PUBLIC_KEY + "," +
-            TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_NET_ADDRESS + ")" +
-            ");" +
-
             "CREATE TABLE option(key TEXT PRIMARY KEY, value BLOB);" +
             "INSERT INTO option(key, value) VALUES('database_version','" + DATABASE_VERSION + "');";
 
@@ -92,36 +84,6 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_BLOCK_HASH, Base64.encodeToString(TrustChainBlock.hash(block), Base64.DEFAULT));
 
         return db.insert(TrustChainDBContract.BlockEntry.TABLE_NAME, null, values);
-    }
-
-    public long insertInDB(String pubKey, String netAddress) {
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_PUBLIC_KEY, pubKey);
-        values.put(TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_NET_ADDRESS, netAddress);
-        values.put(TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_INSERT_TIME, "");
-
-        return db.insert(TrustChainDBContract.PubKeyNetAddressLink.TABLE_NAME, null, values);
-    }
-
-    public List<String> getNetAddressess(String pubkey) {
-        SQLiteDatabase dbReadable = getReadableDatabase();
-        String whereClause = TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_PUBLIC_KEY + " = ?";
-        String[] whereArgs = new String[] { pubkey };
-
-        Cursor cursor = dbReadable.query(TrustChainDBContract.PubKeyNetAddressLink.TABLE_NAME,
-                null,
-                whereClause,
-                whereArgs,
-                null,
-                null,
-                null
-        );
-
-        List<String> res = buildNetAddressList(cursor);
-        cursor.close();
-
-        return res;
     }
 
     /**
@@ -415,17 +377,6 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
                     "max(" + TrustChainDBContract.BlockEntry.COLUMN_NAME_INSERT_TIME + ")"));
         }
         cursor.close();
-        return res;
-    }
-
-    private List<String> buildNetAddressList(Cursor cursor) {
-        List<String> res = new ArrayList<>();
-
-        while(cursor.moveToNext()) {
-            String netAddress = cursor.getString(cursor.getColumnIndex(TrustChainDBContract.PubKeyNetAddressLink.COLUMN_NAME_NET_ADDRESS));
-            res.add(netAddress);
-        }
-
         return res;
     }
 
