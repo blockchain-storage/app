@@ -222,9 +222,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 editor.commit();
                 addInitialPeer();
             }
-            if (resultCode == Activity.RESULT_CANCELED) {
-                //no result
-            }
         }
     }
 
