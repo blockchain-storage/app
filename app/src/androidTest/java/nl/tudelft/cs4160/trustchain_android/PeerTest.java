@@ -8,12 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
-import java.util.concurrent.TimeUnit;
-
-import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
-
 import static org.mockito.Mockito.mock;
 
 /**
