@@ -8,15 +8,13 @@ import android.content.Context;
 
 public class PubKeyStorage {
 
-    static String pubKeyStorageKey = "pubKeyStorageKey";
+    static String pubKeyStorageKey = "pubKeyStorageKey:";
 
-    public static void addKey(Context context, String key, String ip) {
-        //ToDo override??
-        String keyOld = getKey(context, ip);
-        SharedPreferencesStorage.writeSharedPreferences(context, pubKeyStorageKey + ip, key);
+    public static void addAddress(Context context, String pubkey, String ip) {
+        SharedPreferencesStorage.writeSharedPreferences(context, pubKeyStorageKey + pubkey, ip);
     }
 
-    public static String getKey(Context context, String ip) {
-        return SharedPreferencesStorage.readSharedPreferences(context, pubKeyStorageKey + ip);
+    public static String getAddress(Context context, String pubkey) {
+        return SharedPreferencesStorage.readSharedPreferences(context, pubKeyStorageKey + pubkey);
     }
 }
