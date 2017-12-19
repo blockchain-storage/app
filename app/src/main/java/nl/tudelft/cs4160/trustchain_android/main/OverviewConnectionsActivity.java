@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.BootstrapIPStorage;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.SharedPreferencesStorage;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.UserNameStorage;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyStorage;
@@ -248,13 +249,12 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      */
    public void addInitialPeer() {
         try {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String address = preferences.getString("ConnectableAddress", null);
+            String address = BootstrapIPStorage.getIP(this);
             if(address != "" && address != null) {
-                Log.d("Connection making", "Trying to connect to " + address);
+                Log.d("Connection making", "Trying to connect to with new " + address);
                 addPeer(null, new InetSocketAddress(InetAddress.getByName(address), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
             } else {
-                Log.d("Connection making", "Trying to connect to " + CONNECTABLE_ADDRESS);
+                Log.d("Connection making", "Trying to connect to old address: " + CONNECTABLE_ADDRESS);
                 addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
             }
         } catch (UnknownHostException e) {
