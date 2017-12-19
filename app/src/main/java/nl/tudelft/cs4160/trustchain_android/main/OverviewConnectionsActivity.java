@@ -35,19 +35,17 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.security.KeyPair;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import java.util.HashMap;
-import java.util.Map;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.BootstrapIPStorage;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.SharedPreferencesStorage;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.UserNameStorage;
-import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyStorage;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyAndAddressPairStorage;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
@@ -61,10 +59,10 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Punctur
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReadException;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
-import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBContract;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
+import static nl.tudelft.cs4160.trustchain_android.Peer.bytesToHex;
 import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS_SEQ;
 
 public class OverviewConnectionsActivity extends AppCompatActivity {
@@ -248,13 +246,12 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      */
    public void addInitialPeer() {
         try {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-            String address = preferences.getString("ConnectableAddress", null);
+            String address = BootstrapIPStorage.getIP(this);
             if(address != "" && address != null) {
-                Log.d("Connection making", "Trying to connect to " + address);
+                Log.d("Connection making", "Trying to connect to with new " + address);
                 addPeer(null, new InetSocketAddress(InetAddress.getByName(address), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
             } else {
-                Log.d("Connection making", "Trying to connect to " + CONNECTABLE_ADDRESS);
+                Log.d("Connection making", "Trying to connect to old address: " + CONNECTABLE_ADDRESS);
                 addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
             }
         } catch (UnknownHostException e) {
@@ -326,8 +323,10 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendIntroductionRequest(PeerAppToApp peer) throws IOException {
-        IntroductionRequest request = new IntroductionRequest(hashId, peer.getAddress(), connectionType, networkOperator, Key.loadKeys(getApplicationContext()).getPublic().toString());
-        sendMesssage(request, peer);
+        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublic().getEncoded());
+
+        IntroductionRequest request = new IntroductionRequest(hashId, peer.getAddress(), connectionType, networkOperator, publicKey);
+        sendMessage(request, peer);
     }
 
     /**
@@ -338,8 +337,10 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPunctureRequest(PeerAppToApp peer, PeerAppToApp puncturePeer) throws IOException {
-        PunctureRequest request = new PunctureRequest(hashId, peer.getAddress(), internalSourceAddress, puncturePeer, Key.loadKeys(getApplicationContext()).getPublic().toString());
-        sendMesssage(request, peer);
+        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublic().getEncoded());
+
+        PunctureRequest request = new PunctureRequest(hashId, peer.getAddress(), internalSourceAddress, puncturePeer, publicKey);
+        sendMessage(request, peer);
     }
 
     /**
@@ -349,8 +350,10 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPuncture(PeerAppToApp peer) throws IOException {
-        Puncture puncture = new Puncture(hashId, peer.getAddress(), internalSourceAddress, Key.loadKeys(getApplicationContext()).getPublic().toString());
-        sendMesssage(puncture, peer);
+        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublic().getEncoded());
+
+        Puncture puncture = new Puncture(hashId, peer.getAddress(), internalSourceAddress, publicKey);
+        sendMessage(puncture, peer);
     }
 
     /**
@@ -366,9 +369,12 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             if (p.hasReceivedData() && p.getPeerId() != null && p.isAlive())
                 pexPeers.add(p);
         }
+
+        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublic().getEncoded());
+
         IntroductionResponse response = new IntroductionResponse(hashId, internalSourceAddress, peer
-                .getAddress(), invitee, connectionType, pexPeers, networkOperator, Key.loadKeys(getApplicationContext()).getPublic().toString());
-        sendMesssage(response, peer);
+                .getAddress(), invitee, connectionType, pexPeers, networkOperator, publicKey);
+        sendMessage(response, peer);
     }
 
     /**
@@ -378,7 +384,10 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @param peer    the destination peerAppToApp.
      * @throws IOException
      */
-    private synchronized void sendMesssage(Message message, PeerAppToApp peer) throws IOException {
+    private synchronized void sendMessage(Message message, PeerAppToApp peer) throws IOException {
+        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublic().getEncoded());
+        message.putPubKey(publicKey);
+
         Log.d("App-To-App Log", "Sending " + message);
         outBuffer.clear();
         message.writeToByteBuffer(outBuffer);
@@ -480,8 +489,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             String pubKey = message.getPubKey();
 
             String ip = address.getAddress().toString();
-            PubKeyStorage.addAddress(this, pubKey, ip);
-            Log.d("App-To-App", "Stored following ip for pubkey: " + pubKey + " " + PubKeyStorage.getAddress(this, pubKey));
+            PubKeyAndAddressPairStorage.addPubkeyAndAddressPair(this, pubKey, ip);
+            Log.d("App-To-App", "Stored following ip for pubkey: " + pubKey + " " + PubKeyAndAddressPairStorage.getAddressByPubkey(this, pubKey));
 
             Log.d("App-To-App", "pubkey address map " + SharedPreferencesStorage.getAll(this).toString());
 
@@ -814,8 +823,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        if (!willExit)
-            showToast("App will continue in background.");
         super.onStop();
     }
 

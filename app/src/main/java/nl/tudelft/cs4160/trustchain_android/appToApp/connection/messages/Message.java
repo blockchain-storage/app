@@ -184,6 +184,10 @@ public abstract class Message extends HashMap {
         return (String) get(PUB_KEY);
     }
 
+    public void putPubKey(String pubkey) {
+        put(PUB_KEY, pubkey);
+    }
+
     /**
      * Get the type of this message.
      * @return the type.
