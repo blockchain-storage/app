@@ -9,8 +9,8 @@ import java.util.Map;
 public class Puncture extends Message {
     final private static String SOURCE = "source";
 
-    public Puncture(String peerId, InetSocketAddress destination, InetSocketAddress source) {
-        super(PUNCTURE, peerId, destination);
+    public Puncture(String peerId, InetSocketAddress destination, InetSocketAddress source, String pubKey) {
+        super(PUNCTURE, peerId, destination, pubKey);
         put(SOURCE, createAddressMap(source));
     }
 
@@ -18,7 +18,8 @@ public class Puncture extends Message {
         String peerId = (String) map.get(PEER_ID);
         InetSocketAddress source = Message.createMapAddress((Map) map.get(SOURCE));
         InetSocketAddress destination = Message.createMapAddress((Map) map.get(DESTINATION));
-        return new Puncture(peerId, destination, source);
+        String pubKey = (String) map.get(PUB_KEY);
+        return new Puncture(peerId, destination, source, pubKey);
     }
 
     public String toString() {
