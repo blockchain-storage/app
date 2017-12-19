@@ -27,11 +27,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.security.KeyPair;
+import java.security.PublicKey;
 import java.util.Collections;
 import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyAndAddressPairStorage;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
@@ -102,9 +104,17 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
         }
     }
 
-    public void onClickViewChain(View view) {git 
+    public void onClickViewChain(View view) {
+        byte[] publicKey = null;
+
+        // Try to instantiate public key.
         if (peer != null && peer.getIpAddress() != null) {
-            byte[] publicKey = communication.getPublicKey(peer.getIpAddress());
+            publicKey = communication.getPublicKey(peer.getIpAddress());
+        } else {
+            String pubkeyString = PubKeyAndAddressPairStorage.getPubKeyByAddress(context, peerAppToApp.getAddress().toString());
+        }
+
+        if (publicKey != null) {
             Intent intent = new Intent(context, ChainExplorerActivity.class);
             intent.putExtra("publicKey", publicKey);
             startActivity(intent);
