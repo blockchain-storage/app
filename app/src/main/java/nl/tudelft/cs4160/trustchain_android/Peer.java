@@ -20,7 +20,6 @@ public class Peer {
         this.ipAddress = ip;
         this.port = port;
         this.name = name;
-
     }
     public Peer(byte[] pubKey, String ip, int port) {
         this.publicKey = pubKey;
@@ -31,7 +30,6 @@ public class Peer {
 
     public Peer(BluetoothDevice device) {
         this.device = device;
-
     }
 
     public byte[] getPublicKey() {

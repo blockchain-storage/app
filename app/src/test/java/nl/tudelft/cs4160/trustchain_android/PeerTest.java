@@ -19,9 +19,8 @@ public class PeerTest extends TestCase {
 
     @Test
     public void testEqual() {
-        Peer peer1 = new Peer(null, id1, port);
-        Peer peer2 = new Peer(null, id1, port);
-        assertTrue(peer1.equals(peer2));
+        Peer peer1 = new Peer(null, id1, port, "TestName");
+        assertTrue(peer1.equals(peer1));
     }
 
     @Test
@@ -36,6 +35,20 @@ public class PeerTest extends TestCase {
         Peer peer1 = new Peer(new byte[] {0x00}, id1, port);
         assertEquals("<Peer: [" + peer1.getPublicKey() + ":" + peer1.getPort() + ",PubKey: " + bytesToHex(peer1.getPublicKey()) + "]>"
                 ,peer1.toString());
+    }
+
+    @Test
+    public void testFunctions() {
+        Peer peer1 = new Peer(null, id1, port);
+        byte[] pubkey = new byte[]{0x00};
+        peer1.setPublicKey(pubkey);
+        peer1.setIpAddress("111.111.11.11");
+        peer1.setPort(12);
+        peer1.setName("testName");
+        assertEquals("testName", peer1.getName());
+        assertEquals(12, peer1.getPort());
+        assertEquals("111.111.11.11", peer1.getIpAddress());
+        assertEquals(pubkey, peer1.getPublicKey());
     }
 
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
