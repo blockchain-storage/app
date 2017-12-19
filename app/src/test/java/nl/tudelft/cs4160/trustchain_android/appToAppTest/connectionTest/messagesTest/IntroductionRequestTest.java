@@ -29,12 +29,12 @@ public class IntroductionRequestTest {
     @Before
     public void initialization(){
         InetSocketAddress dest = new InetSocketAddress("111.111.11.11", 11);
-        req = new IntroductionRequest("123", dest, (long) 1, "WIFI");
+        req = new IntroductionRequest("123", dest, (long) 1, "WIFI", "jshjsjgwduhw");
     }
 
     @Test
     public void testToString(){
-        assertEquals("IntroductionRequest{{network_operator=WIFI, connection_type=1, destination={address=111.111.11.11, port=11}, type=1, peer_id=123}}",
+        assertEquals("IntroductionRequest{{public_key=jshjsjgwduhw, network_operator=WIFI, connection_type=1, destination={address=111.111.11.11, port=11}, type=1, peer_id=123}}",
                 req.toString());
     }
 

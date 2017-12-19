@@ -44,8 +44,8 @@ public class PunctureTest {
 
     @Test
     public void testToString(){
-        p = new Puncture("123", dest, source);
-        assertEquals("Puncture{{destination={address=222.222.22.22, port=22}, source={address=111.111.11.11, port=11}, type=4, peer_id=123}}",
+        p = new Puncture("123", dest, source, "hhdgwhfdgw");
+        assertEquals("Puncture{{public_key=hhdgwhfdgw, destination={address=222.222.22.22, port=22}, source={address=111.111.11.11, port=11}, type=4, peer_id=123}}",
                 p.toString());
     }
 
