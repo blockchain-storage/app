@@ -42,7 +42,6 @@ public abstract class Communication {
 
     private Map<String, byte[]> peers;
 
-
     private TrustChainDBHelper dbHelper;
 
     private KeyPair keyPair;

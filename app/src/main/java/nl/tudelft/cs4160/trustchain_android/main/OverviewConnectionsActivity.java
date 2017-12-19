@@ -12,7 +12,6 @@ import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Menu;
@@ -248,13 +247,11 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         try {
             String address = BootstrapIPStorage.getIP(this);
             if(address != "" && address != null) {
-                Log.d("Connection making", "Trying to connect to with new " + address);
                 addPeer(null, new InetSocketAddress(InetAddress.getByName(address), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
-            } else {
-                Log.d("Connection making", "Trying to connect to old address: " + CONNECTABLE_ADDRESS);
+            }
                 addPeer(null, new InetSocketAddress(InetAddress.getByName(CONNECTABLE_ADDRESS), DEFAULT_PORT), "", PeerAppToApp.OUTGOING);
             }
-        } catch (UnknownHostException e) {
+        catch (UnknownHostException e) {
             e.printStackTrace();
         }
     }

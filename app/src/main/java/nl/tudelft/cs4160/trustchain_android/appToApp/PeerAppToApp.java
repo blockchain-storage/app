@@ -143,10 +143,6 @@ public class PeerAppToApp implements Serializable {
 
     }
 
-    public boolean isHasSentData() {
-        return hasSentData;
-    }
-
     @Override
     public int hashCode() {
         int result = address != null ? address.hashCode() : 0;
