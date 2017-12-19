@@ -104,14 +104,27 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
         }
     }
 
+    /**
+     * Load all blocks which contain the peer's public key.
+     * The peer's public key is either in the communication if Trustchain blocks have been exchanged,
+     * or will else likely be in the PubkeyAndAddress storage.
+     * @param view
+     */
     public void onClickViewChain(View view) {
         byte[] publicKey = null;
+        Log.d("View-Chain", "Click.");
 
         // Try to instantiate public key.
         if (peer != null && peer.getIpAddress() != null) {
             publicKey = communication.getPublicKey(peer.getIpAddress());
         } else {
-            String pubkeyString = PubKeyAndAddressPairStorage.getPubKeyByAddress(context, peerAppToApp.getAddress().toString());
+            Log.d("View-Chain", "Trying to find pub key in pubkeystorage.");
+            String pubkeyStr = PubKeyAndAddressPairStorage.getPubKeyByAddress(context, peerAppToApp.getAddress().getAddress().toString());
+            Log.d("View-Chain", "address: " +             peerAppToApp.getAddress().toString());
+            Log.d("View-Chain", "pubkey: " + pubkeyStr);
+            if(pubkeyStr != null) {
+                publicKey = pubkeyStr.getBytes();
+            }
         }
 
         if (publicKey != null) {
