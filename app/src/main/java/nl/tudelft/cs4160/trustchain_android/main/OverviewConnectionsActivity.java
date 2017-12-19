@@ -35,19 +35,16 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 import java.security.KeyPair;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import java.util.HashMap;
-import java.util.Map;
 
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.SharedPreferencesStorage;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.UserNameStorage;
-import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyStorage;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyAndAddressPairStorage;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
@@ -61,7 +58,6 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Punctur
 import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReadException;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
-import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBContract;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
@@ -480,8 +476,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             String pubKey = message.getPubKey();
 
             String ip = address.getAddress().toString();
-            PubKeyStorage.addAddress(this, pubKey, ip);
-            Log.d("App-To-App", "Stored following ip for pubkey: " + pubKey + " " + PubKeyStorage.getAddress(this, pubKey));
+            PubKeyAndAddressPairStorage.addPubkeyAndAddressPair(this, pubKey, ip);
+            Log.d("App-To-App", "Stored following ip for pubkey: " + pubKey + " " + PubKeyAndAddressPairStorage.getAddressByPubkey(this, pubKey));
 
             Log.d("App-To-App", "pubkey address map " + SharedPreferencesStorage.getAll(this).toString());
 

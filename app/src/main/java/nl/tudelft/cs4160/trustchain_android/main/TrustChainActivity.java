@@ -20,17 +20,13 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
-import java.net.Inet4Address;
-import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.security.KeyPair;
-import java.security.PublicKey;
 import java.util.Collections;
 import java.util.List;
 
@@ -106,7 +102,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
         }
     }
 
-    public void onClickViewChain(View view) {
+    public void onClickViewChain(View view) {git 
         if (peer != null && peer.getIpAddress() != null) {
             byte[] publicKey = communication.getPublicKey(peer.getIpAddress());
             Intent intent = new Intent(context, ChainExplorerActivity.class);
