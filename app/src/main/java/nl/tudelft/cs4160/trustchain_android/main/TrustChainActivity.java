@@ -34,8 +34,10 @@ import java.util.List;
 import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyAndAddressPairStorage;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.SharedPreferencesStorage;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
+import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerAdapter;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
 import nl.tudelft.cs4160.trustchain_android.connection.network.NetworkCommunication;
@@ -112,18 +114,14 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
      */
     public void onClickViewChain(View view) {
         byte[] publicKey = null;
-        Log.d("View-Chain", "Click.");
 
         // Try to instantiate public key.
         if (peer != null && peer.getIpAddress() != null) {
             publicKey = communication.getPublicKey(peer.getIpAddress());
         } else {
-            Log.d("View-Chain", "Trying to find pub key in pubkeystorage.");
             String pubkeyStr = PubKeyAndAddressPairStorage.getPubKeyByAddress(context, peerAppToApp.getAddress().getAddress().toString());
-            Log.d("View-Chain", "address: " +             peerAppToApp.getAddress().toString());
-            Log.d("View-Chain", "pubkey: " + pubkeyStr);
             if(pubkeyStr != null) {
-                publicKey = pubkeyStr.getBytes();
+                publicKey = ChainExplorerAdapter.hexStringToByteArray(pubkeyStr);
             }
         }
 
