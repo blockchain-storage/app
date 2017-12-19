@@ -1,6 +1,7 @@
 package nl.tudelft.cs4160.trustchain_android.appToAppTest;
 
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -14,6 +15,10 @@ import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.when;
 
 /**
@@ -24,12 +29,15 @@ public class PeerListTest {
     private PeerList peerlist;
     private ArrayList<PeerAppToApp> originalIpList;
     private ArrayList<PeerAppToApp> expectedIpList;
+    InetSocketAddress rnadomInet = new InetSocketAddress(200);
 
     @Before
     public void initialization(){
-        PeerAppToApp peer1 = new PeerAppToApp("peer1", any(InetSocketAddress.class));
-        PeerAppToApp peer2 = new PeerAppToApp("peer2", any(InetSocketAddress.class));
-        PeerAppToApp peer3 = new PeerAppToApp("peer3", any(InetSocketAddress.class));
+        PeerAppToApp peer1 = new PeerAppToApp("peer1", rnadomInet);
+        PeerAppToApp peer2 = new PeerAppToApp("peer2", rnadomInet);
+        PeerAppToApp peer3 = new PeerAppToApp("peer3", rnadomInet);
+//        when(inetMock.equals(any(InetSocketAddress.class))).thenReturn(true);
+
         originalIpList = new ArrayList<PeerAppToApp>();
         originalIpList.add(peer1);
         originalIpList.add(peer2);
@@ -64,8 +72,13 @@ public class PeerListTest {
 
     @Test
     public void peerExistsInListTest(){
-        PeerAppToApp peer4 = new PeerAppToApp("peer4", any(InetSocketAddress.class));
+        PeerAppToApp peer4 = new PeerAppToApp("peer4", rnadomInet);
         assertTrue(peerlist.peerExistsInList(originalIpList.get(0)));
         assertFalse(peerlist.peerExistsInList(peer4));
+    }
+
+    @After
+    public void resetMocks(){
+        validateMockitoUsage();
     }
 }

@@ -28,6 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
 
@@ -126,5 +127,9 @@ public class TrustChainBlockTest {
         assertFalse(block.equals(block2));
     }
 
+    @After
+    public void resetMocks(){
+        validateMockitoUsage();
+    }
 
 }

@@ -64,8 +64,9 @@ public class PeerAppToAppTest extends TestCase {
     @Test
     public void testHasReceivedData(){
         PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        ByteBuffer buf = ByteBuffer.allocate(100);
         assertFalse(peer1.hasReceivedData());
-        peer1.received(any(ByteBuffer.class));
+        peer1.received(buf);
         assertTrue(peer1.hasReceivedData());
     }
 
