@@ -76,5 +76,8 @@
     <string name="connectionInfoText">Here we provide an explanation of each symbol and their corresponding color.</string>
     <string name="symbolExplanationText">Explanation</string>
 
+    <!--- info chain explorer -->
+    <string name="color_info">Color is based on the hash of the public key.</string>
+
 
 </resources>
