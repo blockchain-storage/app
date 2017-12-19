@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -47,7 +48,7 @@ public class PeerListTest {
     @Test
     public void removeDuplicatesTest(){
         peerlist.removeDuplicates();
-        ArrayList<PeerAppToApp> newIPPeerList = peerlist.getPeerList();
+        ArrayList<PeerAppToApp> newIPPeerList = peerlist.getList();
         boolean failed = false;
 
         for (PeerAppToApp peer: newIPPeerList) {
@@ -67,5 +68,15 @@ public class PeerListTest {
         PeerAppToApp peer4 = new PeerAppToApp("peer4", any(InetSocketAddress.class));
         assertTrue(peerlist.peerExistsInList(originalIpList.get(0)));
         assertFalse(peerlist.peerExistsInList(peer4));
+    }
+
+    @Test
+    public void testCertainMethods() {
+        peerlist = new PeerList();
+        PeerAppToApp peer = new PeerAppToApp("peer", any(InetSocketAddress.class));
+        peerlist.add(peer);
+        assertEquals(1, peerlist.size());
+        peerlist.remove(peer);
+        assertEquals(0, peerlist.size());
     }
 }
