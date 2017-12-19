@@ -1,5 +1,7 @@
 package nl.tudelft.cs4160.trustchain_android.appToAppTest;
 
+import android.util.Log;
+
 import junit.framework.TestCase;
 
 import org.junit.Before;
@@ -88,6 +90,7 @@ public class PeerAppToAppTest extends TestCase {
         assertEquals("PEER", peer1.getPeerId());
         peer1.setAddress(new InetSocketAddress("host", 11));
         assertEquals(new InetSocketAddress("host", 11), peer1.getAddress());
+        assertNull(peer1.getExternalAddress());
     }
 
     @Test
@@ -97,6 +100,7 @@ public class PeerAppToAppTest extends TestCase {
         long lastSendTime = peer1.getLastSendTime();
         peer1.sentData();
         assertNotSame(lastSendTime, peer1.getLastSendTime());
+        assertTrue(peer1.isAlive());
     }
 
     @Test
@@ -106,5 +110,11 @@ public class PeerAppToAppTest extends TestCase {
         long lastReceivedTime = peer1.getLastReceiveTime();
         peer1.received(buf);
         assertNotSame(lastReceivedTime, peer1.getLastReceiveTime());
+    }
+
+    @Test
+    public void testHashCode() {
+        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        assertEquals(132867431, peer1.hashCode());
     }
 }

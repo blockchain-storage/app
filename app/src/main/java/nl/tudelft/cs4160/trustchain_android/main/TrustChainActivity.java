@@ -20,23 +20,24 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
-import java.net.Inet4Address;
-import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.security.KeyPair;
+import java.security.PublicKey;
 import java.util.Collections;
 import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyAndAddressPairStorage;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.SharedPreferencesStorage;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
+import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerAdapter;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
 import nl.tudelft.cs4160.trustchain_android.connection.network.NetworkCommunication;
@@ -72,6 +73,11 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
     private Communication communication;
 
     /**
+     * Key pair of user
+     */
+    public static KeyPair kp;
+
+    /**
      * Listener for the connection button.
      * On click a block is created and send to a peerAppToApp.
      * When we encounter an unknown peerAppToApp, send a crawl request to that peerAppToApp in order to get its
@@ -94,11 +100,38 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
             byte[] transactionData = TRANSACTION_DATA.getBytes("UTF-8");
             communication.signBlock(transactionData, peer);
         } else {
-                peer = new Peer(null, editTextDestinationIP.getText().toString(),
-                        Integer.parseInt(editTextDestinationPort.getText().toString()));
-                communication.connectToPeer(peer);
+            peer = new Peer(null, editTextDestinationIP.getText().toString(),
+                    Integer.parseInt(editTextDestinationPort.getText().toString()));
+            communication.connectToPeer(peer);
         }
     }
+
+    /**
+     * Load all blocks which contain the peer's public key.
+     * The peer's public key is either in the communication if Trustchain blocks have been exchanged,
+     * or will else likely be in the PubkeyAndAddress storage.
+     * @param view
+     */
+    public void onClickViewChain(View view) {
+        byte[] publicKey = null;
+
+        // Try to instantiate public key.
+        if (peer != null && peer.getIpAddress() != null) {
+            publicKey = communication.getPublicKey(peer.getIpAddress());
+        } else {
+            String pubkeyStr = PubKeyAndAddressPairStorage.getPubKeyByAddress(context, peerAppToApp.getAddress().getAddress().toString());
+            if(pubkeyStr != null) {
+                publicKey = ChainExplorerAdapter.hexStringToByteArray(pubkeyStr);
+            }
+        }
+
+        if (publicKey != null) {
+            Intent intent = new Intent(context, ChainExplorerActivity.class);
+            intent.putExtra("publicKey", publicKey);
+            startActivity(intent);
+        }
+    }
+
     private boolean isConnected() {
         if (peer != null) {
             if (communication.getPublicKey(peer.getIpAddress()) != null) {
@@ -112,6 +145,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
         }
         return false;
     }
+
     private void enableMessage() {
         runOnUiThread(new Runnable() {
             @Override

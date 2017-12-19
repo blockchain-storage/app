@@ -58,9 +58,4 @@ public class PeerList {
         }
         return false;
     }
-
-    public ArrayList<PeerAppToApp> getPeerList(){
-        return list;
-    }
-
 }

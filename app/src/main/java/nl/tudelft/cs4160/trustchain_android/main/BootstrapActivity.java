@@ -15,6 +15,7 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.BootstrapIPStorage;
 
 public class BootstrapActivity extends AppCompatActivity {
     private EditText bootstrapView;
@@ -34,6 +35,7 @@ public class BootstrapActivity extends AppCompatActivity {
                 throw new Exception("Bootstrap IP is not a valid IP4 or IP6 address.");
             }
             Intent returnIntent = new Intent();
+            BootstrapIPStorage.setIP(this, bootstrapView.getText().toString());
             returnIntent.putExtra("ConnectableAddress",bootstrapView.getText().toString());
             setResult(OverviewConnectionsActivity.RESULT_OK,returnIntent);
             finish();
