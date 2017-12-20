@@ -18,8 +18,8 @@ public class IntroductionResponse extends Message {
     private List<PeerAppToApp> pex;
 
     public IntroductionResponse(String peerId, InetSocketAddress internalSource, InetSocketAddress destination, PeerAppToApp invitee,
-                                long connectionType, List<PeerAppToApp> pex, String networkOperator) {
-        super(INTRODUCTION_RESPONSE, peerId, destination);
+                                long connectionType, List<PeerAppToApp> pex, String networkOperator, String pubKey) {
+        super(INTRODUCTION_RESPONSE, peerId, destination, pubKey);
         this.pex = pex;
         put(CONNECTION_TYPE, connectionType);
         put(INTERNAL_SOURCE, createAddressMap(internalSource));
@@ -47,7 +47,8 @@ public class IntroductionResponse extends Message {
         for (Map m : pexMaps) {
             pex.add(Message.createMapPeer(m));
         }
-        return new IntroductionResponse(peerId, internalSource, destination, invitee, connectionType, pex, networkOperator);
+        String pubKey = (String) map.get(PUB_KEY);
+        return new IntroductionResponse(peerId, internalSource, destination, invitee, connectionType, pex, networkOperator, pubKey);
     }
 
     public String getNetworkOperator() {

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TableLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.15">
+
+        <TextView
+            android:id="@+id/colorSymbol"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:text="@string/circle_symbol"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccent"
+            android:textSize="20sp" />
+
+    </TableLayout>
+
+    <TableLayout
+        android:id="@+id/symbolExplanation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.85">
+
+        <TextView
+            android:id="@+id/meaningText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="@string/symbolMeaningText"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+.
+        <TextView
+            android:id="@+id/symbolMeaning"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="@string/symbolExplanationText"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+    </TableLayout>
+
+</LinearLayout>

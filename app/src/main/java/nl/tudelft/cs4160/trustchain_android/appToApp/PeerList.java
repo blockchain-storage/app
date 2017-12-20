@@ -1,7 +1,7 @@
 package nl.tudelft.cs4160.trustchain_android.appToApp;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by timbu on 02/12/2017.
@@ -49,7 +49,6 @@ public class PeerList {
         return list.size();
     }
 
-
     public boolean peerExistsInList(PeerAppToApp peer) {
         if (peer.getPeerId() == null) return false;
         for (PeerAppToApp p : this.list) {
@@ -59,6 +58,4 @@ public class PeerList {
         }
         return false;
     }
-
-
 }
