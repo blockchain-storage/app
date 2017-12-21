@@ -1,5 +1,4 @@
 package nl.tudelft.cs4160.trustchain_android.main;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
