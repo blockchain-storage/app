@@ -1,8 +1,14 @@
 package nl.tudelft.cs4160.trustchain_android.chainExplorer;
 
+import android.app.ActivityManager;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,14 +17,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.security.KeyPair;
+import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
+import nl.tudelft.cs4160.trustchain_android.main.ChainExplorerInfoActivity;
+import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
 import static android.view.Gravity.CENTER;
+import static nl.tudelft.cs4160.trustchain_android.Peer.bytesToHex;
 
 
 public class ChainExplorerActivity extends AppCompatActivity {
@@ -37,12 +49,45 @@ public class ChainExplorerActivity extends AppCompatActivity {
         init();
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.chainexplorer_menu, menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.info:
+                Intent chainExplorerInfoActivity = new Intent(this, ChainExplorerInfoActivity.class);
+                startActivity(chainExplorerInfoActivity);
+                return true;
+            default:
+                return true;
+        }
+    }
+
+
     private void init() {
         dbHelper = new TrustChainDBHelper(this);
         KeyPair kp = Key.loadKeys(getApplicationContext());
+        byte[] publicKey;
+        if (getIntent().hasExtra("publicKey")) {
+            publicKey = getIntent().getByteArrayExtra("publicKey");
+        } else {
+            publicKey = kp.getPublic().getEncoded();
+
+        }
         try {
-            adapter = new ChainExplorerAdapter(this, dbHelper.getAllBlocks(), kp.getPublic().getEncoded());
-            blocksList.setAdapter(adapter);
+            List<MessageProto.TrustChainBlock> blocks = dbHelper.getBlocks(publicKey);
+            if(blocks.size() > 0) {
+                this.setTitle(bytesToHex(blocks.get(0).getPublicKey().toByteArray()));
+                adapter = new ChainExplorerAdapter(this, blocks, kp.getPublic().getEncoded());
+                blocksList.setAdapter(adapter);
+            }else{
+                // ToDo display empty chain
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -54,13 +99,21 @@ public class ChainExplorerActivity extends AppCompatActivity {
                 ImageView expandArrow = (ImageView) view.findViewById(R.id.expand_arrow);
 
                 // Expand the item when it is clicked
-                if(expandedItem.getVisibility() == View.GONE) {
+                if (expandedItem.getVisibility() == View.GONE) {
                     expandedItem.setVisibility(View.VISIBLE);
                     Log.v(TAG, "Item height: " + expandedItem.getHeight());
-                    expandArrow.setImageDrawable(getDrawable(R.drawable.ic_expand_less_black_24dp));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        expandArrow.setImageDrawable(getDrawable(R.drawable.ic_expand_less_black_24dp));
+                    } else {
+                        expandArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_less_black_24dp));
+                    }
                 } else {
                     expandedItem.setVisibility(View.GONE);
-                    expandArrow.setImageDrawable(getDrawable(R.drawable.ic_expand_more_black_24dp));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        expandArrow.setImageDrawable(getDrawable(R.drawable.ic_expand_more_black_24dp));
+                    } else {
+                        expandArrow.setImageDrawable(getResources().getDrawable(R.drawable.ic_expand_more_black_24dp));
+                    }
                 }
             }
         });

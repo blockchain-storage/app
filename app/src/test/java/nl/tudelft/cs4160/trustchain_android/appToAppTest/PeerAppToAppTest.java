@@ -1,6 +1,6 @@
-package nl.tudelft.cs4160.trustchain_android;
+package nl.tudelft.cs4160.trustchain_android.appToAppTest;
 
-import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import junit.framework.TestCase;
 
@@ -14,14 +14,9 @@ import java.util.concurrent.TimeUnit;
 
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 
-/**
- * Instrumentation test, which will execute on an Android device.
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-@RunWith(AndroidJUnit4.class)
 public class PeerAppToAppTest extends TestCase {
     String id1;
     String id2;
@@ -71,8 +66,9 @@ public class PeerAppToAppTest extends TestCase {
     @Test
     public void testHasReceivedData(){
         PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        ByteBuffer buf = ByteBuffer.allocate(100);
         assertFalse(peer1.hasReceivedData());
-        peer1.received(mock(ByteBuffer.class));
+        peer1.received(buf);
         assertTrue(peer1.hasReceivedData());
     }
 
@@ -81,7 +77,44 @@ public class PeerAppToAppTest extends TestCase {
         PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
         peer1.setConnectionType(1);
         assertEquals("Peer{" + "address=" + address + ", peerId='" + "firstPEER" + '\'' +
-                       ", hasReceivedData=" + false + ", connectionType=" + 1 + '}'
-                        ,peer1.toString());
+                        ", hasReceivedData=" + false + ", connectionType=" + 1 + '}'
+                ,peer1.toString());
+    }
+
+    @Test
+    public void testChangeParameters() {
+        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        peer1.setConnectionType(1);
+        assertEquals(1, peer1.getConnectionType());
+        peer1.setPeerId("PEER");
+        assertEquals("PEER", peer1.getPeerId());
+        peer1.setAddress(new InetSocketAddress("host", 11));
+        assertEquals(new InetSocketAddress("host", 11), peer1.getAddress());
+        assertNull(peer1.getExternalAddress());
+    }
+
+    @Test
+    public void testSendData(){
+        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        assertTrue(peer1.isAlive());
+        long lastSendTime = peer1.getLastSendTime();
+        peer1.sentData();
+        assertNotSame(lastSendTime, peer1.getLastSendTime());
+        assertTrue(peer1.isAlive());
+    }
+
+    @Test
+    public void testReceiveData(){
+        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        ByteBuffer buf = ByteBuffer.allocate(100);
+        long lastReceivedTime = peer1.getLastReceiveTime();
+        peer1.received(buf);
+        assertNotSame(lastReceivedTime, peer1.getLastReceiveTime());
+    }
+
+    @Test
+    public void testHashCode() {
+        PeerAppToApp peer1 = new PeerAppToApp("firstPEER", address);
+        assertEquals(132867431, peer1.hashCode());
     }
 }
