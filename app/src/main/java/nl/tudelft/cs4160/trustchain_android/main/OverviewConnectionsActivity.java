@@ -229,9 +229,19 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         outgoingPeerConnectionListView.setAdapter(outgoingPeerAdapter);
     }
 
+
+    /**
+     * This method is the callback when submitting the ip address.
+     * The method is called when leaving the BootstrapActivity.
+     * The filled in ip address is passed on to this method.
+     * When the callback of the bootstrap activity is successful
+     * set this ip address as ConnectableAddress in the preferences.
+     * @param requestCode
+     * @param resultCode
+     * @param data the data passed on by the previous activity, in this case the ip address
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (requestCode == 1) {
             if( resultCode == Activity.RESULT_OK ){
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -276,16 +286,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         }
         ((TextView) findViewById(R.id.connection_type))
                 .setText(cm.getActiveNetworkInfo().getTypeName() + " " + cm.getActiveNetworkInfo().getSubtypeName());
-    }
-
-
-    /**
-     * Generate a new hash to be used as peerAppToApp id.
-     *
-     * @return the generated hash.
-     */
-    private String generateHash() {
-        return UUID.randomUUID().toString().substring(0, 8);
     }
 
     /**

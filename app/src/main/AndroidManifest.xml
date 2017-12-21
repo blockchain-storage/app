@@ -41,9 +41,8 @@
         <activity
             android:name=".main.UserConfigurationActivity"
             android:label="@string/title_activity_user"
-            android:theme="@style/AppTheme.NoActionBar">
-
-            <!-- android:screenOrientation="portrait"> -->
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
