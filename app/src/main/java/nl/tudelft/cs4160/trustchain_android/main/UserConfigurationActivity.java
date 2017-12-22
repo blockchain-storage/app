@@ -67,6 +67,10 @@ public class UserConfigurationActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Hide the keyboard when the focus is not on the input field.
+     * @param view the view that contains the input field.
+     */
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
