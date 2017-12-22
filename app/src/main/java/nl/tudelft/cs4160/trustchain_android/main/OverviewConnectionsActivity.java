@@ -192,15 +192,8 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         mWanVote = (TextView) findViewById(R.id.wanvote);
 
         dbHelper = new TrustChainDBHelper(this);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         hashId = UserNameStorage.getUserName(this);
         ((TextView) findViewById(R.id.peer_id)).setText(hashId);
-    }
-
-
-    public void onClickInfo(View view) {
-        Intent intent = new Intent(this, ConnectionExplanationActivity.class);
-        startActivity(intent);
     }
 
     private void initExitButton() {
