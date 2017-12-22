@@ -127,6 +127,11 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Define what should be executed when one of the item in the menu is clicked.
+     * @param item the item in the menu.
+     * @return true if everything was executed.
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.chain_menu:
