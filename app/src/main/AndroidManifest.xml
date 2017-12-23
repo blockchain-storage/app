@@ -19,6 +19,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".main.TrustChainActivity"
+            android:configChanges="orientation|screenLayout|screenSize"
             android:windowSoftInputMode="stateUnchanged" />
         <activity
             android:name=".KeyActivity"
