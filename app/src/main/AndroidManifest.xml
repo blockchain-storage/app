@@ -58,13 +58,13 @@
 
         <activity android:name=".qr.ScanQRActivity" />
         <activity android:name=".qr.ExportWalletQRActivity" />
+        <activity android:name=".funds.FundsActivity" />
         <activity
             android:name=".main.ChainExplorerInfoActivity"
             android:label="@string/title_activity_info_chain_explorer" />
         <activity
             android:name=".main.BootstrapActivity"
             android:windowSoftInputMode="adjustResize" />
-
     </application>
 
 </manifest>
