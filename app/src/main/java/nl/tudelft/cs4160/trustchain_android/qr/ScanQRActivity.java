@@ -16,6 +16,7 @@ import android.util.Log;
 
 import com.google.zxing.Result;
 
+import org.json.JSONObject;
 import org.libsodium.jni.Sodium;
 
 import java.util.Arrays;
@@ -24,6 +25,9 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
+import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
+import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
+
 
 public class ScanQRActivity extends AppCompatActivity {
     private Vibrator vibrator;
@@ -100,16 +104,36 @@ public class ScanQRActivity extends AppCompatActivity {
     }
 
     private void processResult(Result result) {
-        byte[] decoded = Base64.decode(result.getText(), Base64.DEFAULT);
-        int pkLength = Sodium.crypto_box_secretkeybytes();
-        int seedLength = Sodium.crypto_box_seedbytes();
+        try {
+            JSONObject json = new JSONObject(result.getText());
+            BootstrapBlock bootstrap = new BootstrapBlock(json);
 
-        int expectedLength = pkLength + seedLength;
-        if (decoded.length != expectedLength) {
-            Log.i(TAG, "QR data " + result.getText() + " doesn't match expected key length of " + expectedLength);
+            KeyPair pair = bootstrap.getKeyPair();
+            Key.saveKeyPair(ScanQRActivity.this, pair);
+
+
+            for( MessageProto.TrustChainBlock block : bootstrap.blocks ) {
+                // TODO insert into db
+                // TrustChainDBHelper.insertInDB( block);
+            }
+
+            String message = "Successfully imported wallet\n New reputation : Up="
+                    + bootstrap.total_up + " Down=" + bootstrap.total_down;
+            new AlertDialog.Builder(this)
+                    .setTitle("Success")
+                    .setMessage(message)
+                    .setNeutralButton(android.R.string.ok, null)
+                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            ScanQRActivity.this.finish();
+                        }
+                    }).show();
+        } catch (Exception e) {
+            Log.i(TAG, e.toString());
             new AlertDialog.Builder(this)
                     .setTitle("Error")
-                    .setMessage("The scanned QR code doesn't seem to be a wallet key.")
+                    .setMessage("Something whent wrong processing the QR data")
                     .setNeutralButton(android.R.string.ok, null)
                     .setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
@@ -118,24 +142,9 @@ public class ScanQRActivity extends AppCompatActivity {
                         }
                     }).show();
             return;
+
         }
 
-        byte[] pk = Arrays.copyOfRange(decoded, 0, pkLength); // first group is pk
-        byte[] seed = Arrays.copyOfRange(decoded, pkLength, pkLength + seedLength); // second group is seed
-
-        KeyPair pair = new KeyPair(pk, seed);
-        Key.saveKeyPair(ScanQRActivity.this, pair);
-
-        new AlertDialog.Builder(this)
-                .setTitle("Success")
-                .setMessage("Successfully imported wallet.")
-                .setNeutralButton(android.R.string.ok, null)
-                .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        ScanQRActivity.this.finish();
-                    }
-                }).show();
     }
 
     private boolean hasCameraPermission() {
@@ -149,3 +158,4 @@ public class ScanQRActivity extends AppCompatActivity {
         scannerView.stopCamera();
     }
 }
+
