@@ -14,11 +14,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.security.KeyPair;
-
 import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
 import nl.tudelft.cs4160.trustchain_android.connection.bluetooth.BluetoothCommunication;
@@ -59,12 +58,12 @@ public class BluetoothActivity extends AppCompatActivity implements Communicatio
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
 
-        listPairedDevices = findViewById(R.id.bluetooth_list);
+        listPairedDevices = (ListView) findViewById(R.id.bluetooth_list);
         init();
     }
 
     public void init() {
-        textViewLog = findViewById(R.id.bluetooth_log);
+        textViewLog = (TextView) findViewById(R.id.bluetooth_log);
         textViewLog.setMovementMethod(new ScrollingMovementMethod());
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
