@@ -34,6 +34,7 @@
     <string name="qr_scan_button">Scan QR</string>
     <string name="camera_permissions_required">Camera permissions required</string>
     <string name="camera_permisions_required_long">To scan QR codes, the application needs permission to access the camera.</string>
+    <string name="current_funds">Current Funds</string>
 
     <!-- Menu -->
     <string name="menu_item_1">My Chain</string>
@@ -65,4 +66,6 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="import_wallet">Import Wallet</string>
     <string name="export_wallet">Export Wallet</string>
+    <string name="funds">Funds</string>
+    <string name="transactions">Transactions</string>
 </resources>

@@ -7,6 +7,11 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/funds"
+        android:title="@string/funds"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/import_wallet"
         android:title="@string/import_wallet"
         app:showAsAction="never" />

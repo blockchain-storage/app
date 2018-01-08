@@ -51,6 +51,7 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".qr.ScanQRActivity" />
         <activity android:name=".qr.ExportWalletQRActivity" />
+        <activity android:name=".funds.FundsActivity" />
     </application>
 
 </manifest>
