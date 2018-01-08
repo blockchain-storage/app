@@ -11,15 +11,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 
 import com.google.zxing.Result;
 
 import org.json.JSONObject;
-import org.libsodium.jni.Sodium;
-
-import java.util.Arrays;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import nl.tudelft.cs4160.trustchain_android.R;
@@ -111,10 +107,9 @@ public class ScanQRActivity extends AppCompatActivity {
             KeyPair pair = bootstrap.getKeyPair();
             Key.saveKeyPair(ScanQRActivity.this, pair);
 
-
-            for( MessageProto.TrustChainBlock block : bootstrap.blocks ) {
-                // TODO insert into db
-                // TrustChainDBHelper.insertInDB( block);
+            TrustChainDBHelper helper = new TrustChainDBHelper(this);
+            for (MessageProto.TrustChainBlock block : bootstrap.blocks) {
+                helper.insertInDB(block);
             }
 
             String message = "Successfully imported wallet\n New reputation : Up="
