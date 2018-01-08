@@ -5,18 +5,18 @@ import android.util.Log;
 import com.google.protobuf.ByteString;
 
 import java.io.UnsupportedEncodingException;
-import java.security.KeyPair;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import nl.tudelft.cs4160.trustchain_android.Peer;
+import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.block.ValidationResult;
 import nl.tudelft.cs4160.trustchain_android.connection.network.NetworkCommunication;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
-import nl.tudelft.cs4160.trustchain_android.main.MainActivity;
+import nl.tudelft.cs4160.trustchain_android.main.TrustChainActivity;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
 import static nl.tudelft.cs4160.trustchain_android.Peer.bytesToHex;
@@ -155,7 +155,7 @@ public abstract class Communication {
                 getMyPublicKey(),
                 linkedBlock,peer.getPublicKey());
 
-        block = sign(block, keyPair.getPrivate());
+        block = sign(block, keyPair.getPrivateKey());
 
         ValidationResult validation;
         try {
@@ -192,7 +192,7 @@ public abstract class Communication {
         MessageProto.TrustChainBlock block =
                 createBlock(transaction,dbHelper,
                         getMyPublicKey(),null,peer.getPublicKey());
-        block = sign(block, keyPair.getPrivate());
+        block = sign(block, keyPair.getPrivateKey());
 
         ValidationResult validation;
         try {
@@ -393,7 +393,7 @@ public abstract class Communication {
             peer.setPublicKey(getPublicKey(identifier));
             sendLatestBlocksToPeer(peer);
             try {
-                signBlock(MainActivity.TRANSACTION.getBytes("UTF-8"), peer);
+                signBlock(TrustChainActivity.TRANSACTION.getBytes("UTF-8"), peer);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -404,7 +404,7 @@ public abstract class Communication {
     }
 
     public byte[] getMyPublicKey() {
-        return keyPair.getPublic().getEncoded();
+        return keyPair.getPublicKey().toBytes();
     }
 
 
