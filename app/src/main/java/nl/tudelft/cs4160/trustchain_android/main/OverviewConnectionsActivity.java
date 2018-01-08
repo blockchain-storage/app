@@ -58,6 +58,7 @@ import nl.tudelft.cs4160.trustchain_android.bencode.BencodeReadException;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
+import nl.tudelft.cs4160.trustchain_android.funds.FundsActivity;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 import nl.tudelft.cs4160.trustchain_android.qr.ExportWalletQRActivity;
 import nl.tudelft.cs4160.trustchain_android.qr.ScanQRActivity;
@@ -152,6 +153,9 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             case R.id.find_peer:
                 Intent bootstrapActivity = new Intent(this, BootstrapActivity.class);
                 startActivityForResult(bootstrapActivity, 1);
+            case R.id.funds:
+                startActivity(new Intent(this, FundsActivity.class));
+                return true;
             default:
                 return true;
         }

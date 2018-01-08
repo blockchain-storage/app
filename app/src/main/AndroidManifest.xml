@@ -64,7 +64,7 @@
         <activity
             android:name=".main.BootstrapActivity"
             android:windowSoftInputMode="adjustResize" />
-
+        <activity android:name=".funds.FundsActivity" />
     </application>
 
 </manifest>
