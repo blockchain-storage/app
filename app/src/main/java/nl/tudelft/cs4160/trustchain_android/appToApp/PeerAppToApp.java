@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
+
 /**
  * The peer object. The peer is identified by its unique peer id and keeps track of the last send and receive time.
  * <p/>
@@ -59,7 +60,6 @@ public class PeerAppToApp implements Serializable {
         this.connectionType = connectionType;
     }
 
-
     public String getPeerId() {
         return peerId;
     }
@@ -87,7 +87,6 @@ public class PeerAppToApp implements Serializable {
     public void setAddress(InetSocketAddress address) {
         this.address = address;
     }
-
 
     /**
      * Method called when data is sent to this peer.
@@ -141,10 +140,6 @@ public class PeerAppToApp implements Serializable {
         if (address != null ? !address.equals(peer.address) : peer.address != null) return false;
         return peerId != null ? peerId.equals(peer.peerId) : peer.peerId == null;
 
-    }
-
-    public boolean isHasSentData() {
-        return hasSentData;
     }
 
     @Override

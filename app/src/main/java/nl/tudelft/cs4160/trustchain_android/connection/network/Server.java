@@ -87,7 +87,6 @@ class Server {
             OutputStream outputStream;
             String msgReply = "message #" + cnt + " received";
             responseLog = "";
-
             try {
                 outputStream = hostThreadSocket.getOutputStream();
                 PrintStream printStream = new PrintStream(outputStream);

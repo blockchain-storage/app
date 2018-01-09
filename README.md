@@ -1,4 +1,4 @@
-TrustChain Android [![Build Status](https://travis-ci.org/ClintonCao/CS4160-trustchain-android.svg?branch=master)](https://travis-ci.org/ClintonCao/CS4160-trustchain-android)
+TrustChain Android [![Build Status](https://travis-ci.org/ClintonCao/CS4160-trustchain-android.svg?branch=master)](https://travis-ci.org/ClintonCao/CS4160-trustchain-android) [![codecov](https://codecov.io/gh/ClintonCao/CS4160-trustchain-android/branch/master/graph/badge.svg)](https://codecov.io/gh/ClintonCao/CS4160-trustchain-android)
 ==================
 
 TrustChain Android is a native Android app implementing the TU Delft style blockchain, called TrustChain. This app provides an accessible way to understand and to use TrustChain. The app is build as part of a Blockchain Engineering course of the TU Delft. It is meant as a basic building block to experiment with blockchain technology. This documentation should get you started in the workings of the app, however for thorough understanding, reading other documentation and looking at the source code is a necessity.

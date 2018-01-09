@@ -48,10 +48,8 @@ class ClientTask extends AsyncTask<Void, Void, Void> {
                 // check whether we're sending a half block or a message
                 if(message.getCrawlRequest().getPublicKey().size() == 0) {
                     Log.i(TAG, "Sent half block to peer with ip " + destinationIP + ":" + destinationPort);
-                    listener.updateLog("\n\nClient: " + "Sent half block to peer with ip " + destinationIP + ":" + destinationPort);
                 } else {
                     Log.i(TAG, "Sent crawl request to peer with ip " + destinationIP + ":" + destinationPort);
-                    listener.updateLog("\n\nClient: " + "Sent crawl request to peer with ip " + destinationIP + ":" + destinationPort);
                 }
 
             } catch (UnknownHostException e) {
@@ -84,7 +82,6 @@ class ClientTask extends AsyncTask<Void, Void, Void> {
      */
     @Override
     protected void onPostExecute(Void result) {
-        listener.updateLog("\n  Send message ");
         super.onPostExecute(result);
     }
 

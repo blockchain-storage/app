@@ -51,12 +51,17 @@ public class PeerListAdapter extends ArrayAdapter<PeerAppToApp> {
 
         PeerAppToApp peer = getItem(position);
 
-        holder.mPeerId.setText(peer.getPeerId() == null ? "" : peer.getPeerId().substring(0, 4));
+        holder.mPeerId.setText(peer.getPeerId() == null ? "" : peer.getPeerId());
         if (peer.getNetworkOperator() != null) {
             if (peer.getConnectionType() == ConnectivityManager.TYPE_MOBILE) {
                 holder.mCarrier.setText(peer.getNetworkOperator());
             } else {
-                holder.mCarrier.setText(connectionTypeString(peer.getConnectionType()));
+
+                if(peer.getExternalAddress().getHostAddress().toString().equals(OverviewConnectionsActivity.CONNECTABLE_ADDRESS)){
+                    holder.mCarrier.setText("Server");
+                }else {
+                    holder.mCarrier.setText(connectionTypeString(peer.getConnectionType()));
+                }
             }
         } else {
             holder.mCarrier.setText("");

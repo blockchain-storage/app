@@ -2,22 +2,34 @@ package nl.tudelft.cs4160.trustchain_android;
 
 import android.bluetooth.BluetoothDevice;
 
+import java.util.Arrays;
+
+/**
+ * Created by wkmeijer on 20-10-17.
+ */
+
 public class Peer {
     private byte[] publicKey;
     private String ipAddress;
     private int port;
     private BluetoothDevice device;
+    private String name;
 
+    public Peer(byte[] pubKey, String ip, int port, String name) {
+        this.publicKey = pubKey;
+        this.ipAddress = ip;
+        this.port = port;
+        this.name = name;
+    }
     public Peer(byte[] pubKey, String ip, int port) {
         this.publicKey = pubKey;
         this.ipAddress = ip;
         this.port = port;
-
+        this.name = ip;
     }
 
     public Peer(BluetoothDevice device) {
         this.device = device;
-
     }
 
     public byte[] getPublicKey() {
@@ -66,4 +78,24 @@ public class Peer {
         return new String(hexChars);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Peer peer = (Peer) o;
+
+        if (port != peer.port) return false;
+        if (!Arrays.equals(publicKey, peer.publicKey)) return false;
+        if (!ipAddress.equals(peer.ipAddress)) return false;
+        return device != null ? device.equals(peer.device) : peer.device == null;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

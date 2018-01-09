@@ -21,6 +21,7 @@ import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
+import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 import nl.tudelft.cs4160.trustchain_android.connection.bluetooth.BluetoothCommunication;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 
@@ -144,5 +145,16 @@ public class BluetoothActivity extends AppCompatActivity implements Communicatio
     @Override
     public void updateLog(String msg) {
         addToLog(msg);
+    }
+
+    @Override
+    public void requestPermission(MessageProto.TrustChainBlock block, Peer peer) {
+        // TODO: This needs to be implemented, but Bluetooth currently does not work.
+    }
+
+    @Override
+    public void connectionSuccessful(byte[] publicKey) {
+
+        // TODO: This needs to be implemented, but Bluetooth currently does not work.
     }
 }

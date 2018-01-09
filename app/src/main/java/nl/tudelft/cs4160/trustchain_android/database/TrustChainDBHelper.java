@@ -6,10 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.protobuf.ByteString;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
@@ -21,21 +24,21 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
 
     private final String SQL_CREATE_ENTRIES =
             "CREATE TABLE IF NOT EXISTS " + TrustChainDBContract.BlockEntry.TABLE_NAME + " (" +
-            TrustChainDBContract.BlockEntry.COLUMN_NAME_TX + " TEXT NOT NULL," +
-            TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY + " TEXT NOT NULL," +
-            TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + " INTEGER NOT NULL," +
-            TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_PUBLIC_KEY + " TEXT NOT NULL," +
-            TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_SEQUENCE_NUMBER + " INTEGER NOT NULL," +
-            TrustChainDBContract.BlockEntry.COLUMN_NAME_PREVIOUS_HASH + " TEXT NOT NULL," +
-            TrustChainDBContract.BlockEntry.COLUMN_NAME_SIGNATURE + " TEXT NOT NULL," +
-            TrustChainDBContract.BlockEntry.COLUMN_NAME_INSERT_TIME + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL," +
-            TrustChainDBContract.BlockEntry.COLUMN_NAME_BLOCK_HASH + " TEXT NOT NULL," +
-            "PRIMARY KEY (" + TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY + "," +
-            TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + ")" +
-            ");" +
+                    TrustChainDBContract.BlockEntry.COLUMN_NAME_TX + " TEXT NOT NULL," +
+                    TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY + " TEXT NOT NULL," +
+                    TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + " INTEGER NOT NULL," +
+                    TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_PUBLIC_KEY + " TEXT NOT NULL," +
+                    TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_SEQUENCE_NUMBER + " INTEGER NOT NULL," +
+                    TrustChainDBContract.BlockEntry.COLUMN_NAME_PREVIOUS_HASH + " TEXT NOT NULL," +
+                    TrustChainDBContract.BlockEntry.COLUMN_NAME_SIGNATURE + " TEXT NOT NULL," +
+                    TrustChainDBContract.BlockEntry.COLUMN_NAME_INSERT_TIME + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL," +
+                    TrustChainDBContract.BlockEntry.COLUMN_NAME_BLOCK_HASH + " TEXT NOT NULL," +
+                    "PRIMARY KEY (" + TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY + "," +
+                    TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + ")" +
+                    ");" +
 
-            "CREATE TABLE option(key TEXT PRIMARY KEY, value BLOB);" +
-            "INSERT INTO option(key, value) VALUES('database_version','" + DATABASE_VERSION + "');";
+                    "CREATE TABLE option(key TEXT PRIMARY KEY, value BLOB);" +
+                    "INSERT INTO option(key, value) VALUES('database_version','" + DATABASE_VERSION + "');";
 
     public TrustChainDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -44,6 +47,10 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_ENTRIES);
+
+        System.out.println("----------------------------");
+        System.out.println(SQL_CREATE_ENTRIES);
+        System.out.println("----------------------------");
     }
 
     /**
@@ -63,9 +70,10 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
 
     /**
      * Insert a block into the database
+     *
      * @param block - The protoblock that needs to be added to the database
      * @return A long depicting the primary key value of the newly inserted row of the database.
-     *          returns -1 as an error indicator.
+     * returns -1 as an error indicator.
      */
     public long insertInDB(MessageProto.TrustChainBlock block) {
         SQLiteDatabase db = getWritableDatabase();
@@ -84,7 +92,8 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
 
     /**
      * Retrieves the block associated with the given public key and sequence number from the database
-     * @param pubkey - Public key of which the latest block should be found
+     *
+     * @param pubkey    - Public key of which the latest block should be found
      * @param seqNumber - Int value of the sequence number of the block to be retrieved
      * @return The latest block in the database or null if something went wrong
      */
@@ -92,7 +101,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase dbReadable = getReadableDatabase();
         String whereClause = TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY + " = ? AND " +
                 TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + " = ?";
-        String[] whereArgs = new String[] { Base64.encodeToString(pubkey, Base64.DEFAULT),
+        String[] whereArgs = new String[]{Base64.encodeToString(pubkey, Base64.DEFAULT),
                 Integer.toString(seqNumber)};
 
         Cursor cursor = dbReadable.query(
@@ -108,7 +117,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         List<MessageProto.TrustChainBlock> res = buildBlocksList(cursor);
         cursor.close();
 
-        if(res.size() == 1) {
+        if (res.size() == 1) {
             return res.get(0);
         }
         return null;
@@ -116,6 +125,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
 
     /**
      * Retrieves the block linked with the given block
+     *
      * @param block - The block for which to get the linked block
      * @return The linked block
      */
@@ -125,7 +135,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
                 TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + " = ? OR " +
                 TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_PUBLIC_KEY + " = ? AND " +
                 TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_SEQUENCE_NUMBER + " = ?";
-        String[] whereArgs = new String[] { Base64.encodeToString(block.getLinkPublicKey().toByteArray(), Base64.DEFAULT),
+        String[] whereArgs = new String[]{Base64.encodeToString(block.getLinkPublicKey().toByteArray(), Base64.DEFAULT),
                 Integer.toString(block.getLinkSequenceNumber()),
                 Base64.encodeToString(block.getPublicKey().toByteArray(), Base64.DEFAULT),
                 Integer.toString(block.getSequenceNumber())};
@@ -143,7 +153,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         List<MessageProto.TrustChainBlock> res = buildBlocksList(cursor);
         cursor.close();
 
-        if(res.size() == 1) {
+        if (res.size() == 1) {
             return res.get(0);
         }
 
@@ -154,15 +164,16 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
      * Returns the block with the highest sequence number smaller than the given sequence number and
      * the same public key: the previous block in the chain. Sequence number is allowed to be another
      * value than seqNumber - 1.
-     * @param pubkey - Public key of the block of which to find the previous block in the chain
+     *
+     * @param pubkey    - Public key of the block of which to find the previous block in the chain
      * @param seqNumber - Sequence number of block of which to find the previous block in the chain
      * @return The previous TrustChainBlock in the chain
      */
-    public MessageProto.TrustChainBlock getBlockBefore(byte[] pubkey, int seqNumber){
+    public MessageProto.TrustChainBlock getBlockBefore(byte[] pubkey, int seqNumber) {
         SQLiteDatabase dbReadable = getReadableDatabase();
         String whereClause = TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY + " = ? AND " +
                 TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + " < ?";
-        String[] whereArgs = new String[] {Base64.encodeToString(pubkey, Base64.DEFAULT),
+        String[] whereArgs = new String[]{Base64.encodeToString(pubkey, Base64.DEFAULT),
                 Integer.toString(seqNumber)};
         String orderBy = TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + " DESC";
 
@@ -179,7 +190,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         List<MessageProto.TrustChainBlock> res = buildBlocksList(cursor);
         cursor.close();
 
-        if(res.size() >= 1) {
+        if (res.size() >= 1) {
             return res.get(0);
         }
         return null;
@@ -189,15 +200,16 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
      * Returns the block with the lowest sequence number greater than the given sequence number and
      * the same public key: The next block in the chain. Sequence number is allowed to be another
      * value than seqNumber + 1.
-     * @param pubkey - Public key of the block of which to find the previous block in the chain
+     *
+     * @param pubkey    - Public key of the block of which to find the previous block in the chain
      * @param seqNumber - Sequence number of block of which to find the previous block in the chain
      * @return The next TrustChainBlock in the chain
      */
-    public MessageProto.TrustChainBlock getBlockAfter(byte[] pubkey, int seqNumber){
+    public MessageProto.TrustChainBlock getBlockAfter(byte[] pubkey, int seqNumber) {
         SQLiteDatabase dbReadable = getReadableDatabase();
         String whereClause = TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY + " = ? AND " +
                 TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + " > ?";
-        String[] whereArgs = new String[] { Base64.encodeToString(pubkey, Base64.DEFAULT),
+        String[] whereArgs = new String[]{Base64.encodeToString(pubkey, Base64.DEFAULT),
                 Integer.toString(seqNumber)};
         String orderBy = TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + " ASC";
 
@@ -214,7 +226,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         List<MessageProto.TrustChainBlock> res = buildBlocksList(cursor);
         cursor.close();
 
-        if(res.size() >= 1) {
+        if (res.size() >= 1) {
             return res.get(0);
         }
         return null;
@@ -222,25 +234,27 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
 
     /**
      * Returns the latest block in the database associated with the given public key.
+     *
      * @param pubkey - public key for which to search for blocks
      * @return the latest block in the database associated with the given public key
      */
     public MessageProto.TrustChainBlock getLatestBlock(byte[] pubkey) {
-        return getBlock(pubkey,getMaxSeqNum(pubkey));
+        return getBlock(pubkey, getMaxSeqNum(pubkey));
     }
 
     /**
      * Get the maximum sequence number in the database associated with the given public key
+     *
      * @param pubkey - public key for which to search for blocks
      * @return the maximum sequence number found
      */
     public int getMaxSeqNum(byte[] pubkey) {
         SQLiteDatabase dbReadable = getReadableDatabase();
         int res = -1;
-        String[] projection = new String[] {"max(" +
+        String[] projection = new String[]{"max(" +
                 TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + ")"};
         String whereClause = TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY + " = ?";
-        String[] whereArgs = new String[] {Base64.encodeToString(pubkey, Base64.DEFAULT)};
+        String[] whereArgs = new String[]{Base64.encodeToString(pubkey, Base64.DEFAULT)};
 
         Cursor cursor = dbReadable.query(
                 TrustChainDBContract.BlockEntry.TABLE_NAME,
@@ -251,7 +265,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
                 null,
                 null
         );
-        if(cursor.getCount() == 1) {
+        if (cursor.getCount() == 1) {
             cursor.moveToFirst();
             res = cursor.getInt(cursor.getColumnIndex(
                     "max(" + TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + ")"));
@@ -262,6 +276,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
 
     /**
      * Retrieves all the blocks inserted in the database.
+     *
      * @return a List of all blocks
      */
     public List<MessageProto.TrustChainBlock> getAllBlocks() {
@@ -285,19 +300,31 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         return res;
     }
 
+    public List<MessageProto.TrustChainBlock> getBlocks(byte[] publicKey) {
+        List<MessageProto.TrustChainBlock> allBlocks = getAllBlocks();
+        List<MessageProto.TrustChainBlock> res = new ArrayList<>();
+        for (MessageProto.TrustChainBlock block : allBlocks) {
+            if (Arrays.equals(publicKey, block.getPublicKey().toByteArray())) {
+                res.add(block);
+            }
+        }
+        return res;
+    }
+
     /**
      * Searches the database for the blocks from the given sequence number to some limit and returns
      * a list of these blocks.
      * When no limit is given the default limit of 100 is used.
      * Limit may not be higher than 100 to prevent sending huge amounts of blocks, potentially
      * slowing down the network.
+     *
      * @param pubKey - public key of the chain to from which blocks need to be fetched
      * @param seqNum - sequence number of block, the blocks inserted after this block should be returned
-     * @param limit - the limit of the amount of blocks to return
+     * @param limit  - the limit of the amount of blocks to return
      * @return list of blocks
      */
     public List<MessageProto.TrustChainBlock> crawl(byte[] pubKey, int seqNum, int limit) throws Exception {
-        if(limit > 100) {
+        if (limit > 100) {
             throw new Exception("Limit is too high, don't fetch too much.");
         }
         SQLiteDatabase dbReadable = getReadableDatabase();
@@ -305,7 +332,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         String whereClause = TrustChainDBContract.BlockEntry.COLUMN_NAME_INSERT_TIME + " >= ?" +
                 " AND (" + TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY + " = ?" +
                 " OR " + TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_PUBLIC_KEY + " = ?)";
-        String[] whereArgs = new String[] {Long.toString(getMaxInsertTime(pubKey,seqNum)),
+        String[] whereArgs = new String[]{Long.toString(getMaxInsertTime(pubKey, seqNum)),
                 Base64.encodeToString(pubKey, Base64.DEFAULT),
                 Base64.encodeToString(pubKey, Base64.DEFAULT)};
         String sortOrder =
@@ -333,7 +360,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
     public List<MessageProto.TrustChainBlock> crawl(byte[] pubKey, int seqNum) {
         List<MessageProto.TrustChainBlock> blockList = new ArrayList<>();
         try {
-            blockList = crawl(pubKey,seqNum,100);
+            blockList = crawl(pubKey, seqNum, 100);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -343,6 +370,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
     /**
      * Get the maximum insert time of a block in the database given a public key and a maximum
      * sequence number.
+     *
      * @param pubKey - the public key for which to find associated blocks
      * @param seqNum - the maximum sequence number of the blocks
      * @return long - a maximum insert time
@@ -351,11 +379,11 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase dbReadable = getReadableDatabase();
 
         long res = 0;
-        String[] projection = new String[] {"max(" +
+        String[] projection = new String[]{"max(" +
                 TrustChainDBContract.BlockEntry.COLUMN_NAME_INSERT_TIME + ")"};
         String whereClause = TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY + " = ?" +
                 " AND " + TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER + " <= ?";
-        String[] whereArgs = new String[] { Base64.encodeToString(pubKey, Base64.DEFAULT),
+        String[] whereArgs = new String[]{Base64.encodeToString(pubKey, Base64.DEFAULT),
                 Integer.toString(seqNum)};
 
         Cursor cursor = dbReadable.query(
@@ -367,7 +395,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
                 null,                                           // Declares which row groups to include
                 null                                       // How the rows should be ordered
         );
-        if(cursor.getCount() == 1) {
+        if (cursor.getCount() == 1) {
             cursor.moveToFirst();
             res = cursor.getInt(cursor.getColumnIndex(
                     "max(" + TrustChainDBContract.BlockEntry.COLUMN_NAME_INSERT_TIME + ")"));
@@ -378,6 +406,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
 
     /**
      * Builds an List of Blocks from a Cursor retrieved by a database request.
+     *
      * @param cursor - The cursor holding the database results
      * @return List of TrustChainBlocks
      */
@@ -385,14 +414,14 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         List<MessageProto.TrustChainBlock> res = new ArrayList<>();
         MessageProto.TrustChainBlock.Builder builder = MessageProto.TrustChainBlock.newBuilder();
 
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             builder.setTransaction(ByteString.copyFromUtf8(cursor.getString(
                     cursor.getColumnIndex(TrustChainDBContract.BlockEntry.COLUMN_NAME_TX))))
-                    .setPublicKey(ByteString.copyFrom( Base64.decode(cursor.getString(
+                    .setPublicKey(ByteString.copyFrom(Base64.decode(cursor.getString(
                             cursor.getColumnIndex(TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY)), Base64.DEFAULT)))
                     .setSequenceNumber(cursor.getInt(
                             cursor.getColumnIndex(TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER)))
-                    .setLinkPublicKey(ByteString.copyFrom( Base64.decode(cursor.getString(
+                    .setLinkPublicKey(ByteString.copyFrom(Base64.decode(cursor.getString(
                             cursor.getColumnIndex(TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_PUBLIC_KEY)), Base64.DEFAULT)))
                     .setLinkSequenceNumber(cursor.getInt(
                             cursor.getColumnIndex(TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_SEQUENCE_NUMBER)))
