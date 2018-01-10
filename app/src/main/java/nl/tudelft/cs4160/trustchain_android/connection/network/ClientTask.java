@@ -40,8 +40,8 @@ class ClientTask extends AsyncTask<Void, Void, Void> {
         while(loop) {
             Socket socket = null;
             try {
-                Log.i(TAG, "Opening socket to " + destinationIP + ":" + NetworkCommunication.DEFAULT_PORT);
-                socket = new Socket(destinationIP, NetworkCommunication.DEFAULT_PORT);
+                Log.i(TAG, "Opening socket to " + destinationIP + ":" + destinationPort);
+                socket = new Socket(destinationIP, destinationPort);
                 message.writeTo(socket.getOutputStream());
                 socket.shutdownOutput();
 

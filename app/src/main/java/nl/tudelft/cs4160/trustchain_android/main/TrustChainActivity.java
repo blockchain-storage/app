@@ -22,10 +22,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.libsodium.jni.NaCl;
+
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.security.KeyPair;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,6 +34,7 @@ import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyAndAddressPairStorage;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerAdapter;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
@@ -43,8 +45,10 @@ import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
 public class TrustChainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener, CommunicationListener {
-
-
+    static {
+        NaCl.sodium();
+    }
+    public final static String TRANSACTION = "Hello world!";
     public static String TRANSACTION_DATA = "Hello world!";
     private final static String TAG = TrustChainActivity.class.toString();
     private Context context;
@@ -298,12 +302,12 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
         //just to be sure run it on the ui thread
         //this is not necessary when this function is called from a AsyncTask
         runOnUiThread(new Runnable() {
-                  @Override
-                  public void run() {
-                      TextView statusText = findViewById(R.id.status);
-                      statusText.append(msg);
-                  }
-              });
+            @Override
+            public void run() {
+                TextView statusText = findViewById(R.id.status);
+                statusText.append(msg);
+            }
+        });
     }
 
     @Override

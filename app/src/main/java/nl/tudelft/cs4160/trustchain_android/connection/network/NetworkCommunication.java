@@ -1,8 +1,7 @@
 package nl.tudelft.cs4160.trustchain_android.connection.network;
 
-import java.security.KeyPair;
-
 import nl.tudelft.cs4160.trustchain_android.Peer;
+import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
