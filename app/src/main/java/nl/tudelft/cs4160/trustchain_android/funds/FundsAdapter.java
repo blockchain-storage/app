@@ -16,6 +16,8 @@ import org.json.JSONObject;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
+import static nl.tudelft.cs4160.trustchain_android.Util.Util.readableSize;
+
 public class FundsAdapter extends ArrayAdapter<MessageProto.TrustChainBlock> {
     public FundsAdapter(@NonNull Context context) {
         super(context, R.layout.item_transaction);
@@ -34,14 +36,14 @@ public class FundsAdapter extends ArrayAdapter<MessageProto.TrustChainBlock> {
             System.out.println("Found " + transactionString);
             JSONObject object = new JSONObject(transactionString); // TODO refactor to some kind of factory
 
-            double up = object.getDouble("up");
+            long up = object.getLong("up");
 
             TextView upAmount = view.findViewById(R.id.funds_item_up_amount);
-            upAmount.setText(Double.toString(up));
+            upAmount.setText(readableSize(up));
 
-            double down = object.getDouble("down");
+            long down = object.getLong("down");
             TextView downAmount = view.findViewById(R.id.funds_item_down_amount);
-            downAmount.setText(Double.toString(down));
+            downAmount.setText(readableSize(down));
 
             return view;
         } catch (JSONException e) {

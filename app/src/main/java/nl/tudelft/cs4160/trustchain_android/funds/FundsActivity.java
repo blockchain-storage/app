@@ -36,70 +36,67 @@ public class FundsActivity extends AppCompatActivity {
         List<MessageProto.TrustChainBlock> blocks = helper.getAllBlocks();
         adapter.addAll(blocks);
         transactionListView.setAdapter(adapter);
+        int total_up = 0;
+        int total_down = 1100; // make people feel bad for only downloading the app :P
 
         try {
             MessageProto.TrustChainBlock firstBlock = blocks.get(0);
             String transactionString = firstBlock.getTransaction().toStringUtf8();
             Log.i("FundsActivity", transactionString);
             JSONObject object = new JSONObject(transactionString); // TODO refactor to some kind of factory
-            int total_up = object.getInt("total_up");
-            int total_down = object.getInt("total_down");
-
-            int max = Math.max(total_down,total_up);
-
-            float total_up_fraction = (float)total_up / max * 100;
-            float total_down_fraction = (float) total_down /max * 100 ;
-
-            ProgressBar upload_bar = (ProgressBar) findViewById(R.id.upload_bar);
-            ObjectAnimator animation = ObjectAnimator.ofInt (upload_bar, "progress", 0, (int)total_up_fraction); // see this max value coming back here, we animale towards that value
-            animation.setDuration (1000); //in milliseconds
-            animation.setInterpolator (new DecelerateInterpolator());
-            animation.start ();
-
-            ProgressBar download_bar = (ProgressBar) findViewById(R.id.download_bar);
-            ObjectAnimator download_bar_animation = ObjectAnimator.ofInt (download_bar, "progress", 0, (int)total_down_fraction); // see this max value coming back here, we animale towards that value
-            download_bar_animation.setDuration (1000); //in milliseconds
-            download_bar_animation.setInterpolator (new DecelerateInterpolator());
-            download_bar_animation.start ();
-
-            TextView upAmount = findViewById(R.id.up_and_down_label);
-            upAmount.setText("Up: "+readableSize((long)total_up)
-                            +"\nDown: "+readableSize((long)total_down));
-
-            RatingBar reputation_rating = findViewById(R.id.reputation_rating);
-
-            /*
-                [0..4]
-                0 stars = up/down < 1
-                1 star = up/down == 1
-                2 stars = up/down == 3
-                3 stars = up/down == 5
-                4 stars = up/down == 10
-             */
-            float rating = (float)total_up/total_down;
-            float stars = 0;
-            if (rating > 10 ) {
-                stars = 4;
-            } else if ( rating > 5) {
-                stars = 3 + ( rating - 5 ) / 5;
-            } else if (rating > 3 ) {
-                stars = 2 + (rating - 3) / 2;
-            } else if ( rating > 1 ) {
-                stars = 1 + (rating - 1 ) / 2;
-            } else {
-                stars = rating ;
-            }
-            reputation_rating.setRating(stars);
-
-    /*
-            double down = object.getDouble("down");
-            TextView downAmount = findViewById(R.id.current_funds_down_amount);
-            downAmount.setText(Double.toString(down));
-            */
+            total_up = object.getInt("total_up");
+            total_down = object.getInt("total_down");
         } catch (Exception e) {
-            Log.e("FundsActivity", "Could not read current funds", e);
+
         }
+        int max = Math.max(total_down,total_up);
+
+        float total_up_fraction = (float)total_up / max * 100;
+        float total_down_fraction = (float) total_down /max * 100 ;
+
+        ProgressBar upload_bar = (ProgressBar) findViewById(R.id.upload_bar);
+        ObjectAnimator animation = ObjectAnimator.ofInt (upload_bar, "progress", 0, (int)total_up_fraction); // see this max value coming back here, we animale towards that value
+        animation.setDuration (1000); //in milliseconds
+        animation.setInterpolator (new DecelerateInterpolator());
+        animation.start ();
+
+        ProgressBar download_bar = (ProgressBar) findViewById(R.id.download_bar);
+        ObjectAnimator download_bar_animation = ObjectAnimator.ofInt (download_bar, "progress", 0, (int)total_down_fraction); // see this max value coming back here, we animale towards that value
+        download_bar_animation.setDuration (1000); //in milliseconds
+        download_bar_animation.setInterpolator (new DecelerateInterpolator());
+        download_bar_animation.start ();
+
+        TextView upAmount = findViewById(R.id.up_and_down_label);
+        upAmount.setText("Up: "+readableSize((long)total_up)
+                        +"\nDown: "+readableSize((long)total_down));
+
+        RatingBar reputation_rating = findViewById(R.id.reputation_rating);
+
+        /*
+            Random scale used for rating people's willingness to upload
+            [0..4]
+            0 stars = up/down < 1
+            1 star = up/down == 1
+            2 stars = up/down == 3
+            3 stars = up/down == 5
+            4 stars = up/down == 10
+         */
+        float rating = (float)total_up/total_down;
+        float stars = 0;
+        if (rating > 10 ) {
+            stars = 4;
+        } else if ( rating > 5) {
+            stars = 3 + ( rating - 5 ) / 5;
+        } else if (rating > 3 ) {
+            stars = 2 + (rating - 3) / 2;
+        } else if ( rating > 1 ) {
+            stars = 1 + (rating - 1 ) / 2;
+        } else {
+            stars = rating ;
+        }
+        reputation_rating.setRating(stars);
     }
-
-
 }
+
+
+
