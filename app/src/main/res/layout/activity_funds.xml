@@ -6,60 +6,104 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/current_funds"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textStyle="bold" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/reputation_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Reputation"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold" />
+
+        <RatingBar
+            android:id="@+id/reputation_rating"
+            style="@android:style/Widget.DeviceDefault.Light.RatingBar.Indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentLeft="false"
+            android:layout_below="@+id/reputation_label"
+            android:layout_centerInParent="true"
+            android:numStars="4"
+            android:rating="3"
+            android:stepSize=".5" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:id="@+id/upload_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_alignParentBottom="false"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/circular" />
+
+        <ProgressBar
+            android:id="@+id/download_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_alignParentBottom="false"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/circular"
+            android:progressTint="@color/colorReceived"
+            android:secondaryProgressTint="@color/colorSent" />
+
+        <TextView
+            android:id="@+id/up_and_down_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="TextView" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal" android:baselineAligned="false">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Up:"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/current_funds_up_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                tools:text="500" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Down:"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/current_funds_down_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                tools:text="500" />
-        </LinearLayout>
     </LinearLayout>
 
     <TextView
