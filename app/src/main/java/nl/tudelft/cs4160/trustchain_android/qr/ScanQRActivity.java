@@ -18,6 +18,7 @@ import android.util.Log;
 import com.google.zxing.Result;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import org.libsodium.jni.Sodium;
 
@@ -116,7 +117,7 @@ public class ScanQRActivity extends AppCompatActivity {
                         .setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialogInterface) {
-                                ScanQRActivity.this.finish();
+                                ProcessPhoenix.triggerRebirth(ScanQRActivity.this);
                             }
                         }).show();
             } catch (QRWalletImportException exception) {

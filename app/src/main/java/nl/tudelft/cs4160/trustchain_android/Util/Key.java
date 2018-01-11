@@ -43,7 +43,7 @@ public class Key {
 
     public static void saveKeyPair(Context context, KeyPair kp) {
         Key.saveKey(context, Key.DEFAULT_PUB_KEY_FILE, kp.getPublicKey().toBytes());
-        Key.saveKey(context, Key.DEFAULT_PRIV_KEY_FILE, kp.getPublicKey().toBytes());
+        Key.saveKey(context, Key.DEFAULT_PRIV_KEY_FILE, kp.getPrivateKey().toBytes());
         Key.saveKey(context, Key.DEFAULT_SEED_KEY_FILE, kp.getSeed());
     }
 
