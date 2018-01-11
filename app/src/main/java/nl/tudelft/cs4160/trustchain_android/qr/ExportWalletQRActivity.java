@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -110,7 +111,9 @@ public class ExportWalletQRActivity extends AppCompatActivity {
             System.out.println("Encoding " + transferBlock.toString() + " as QR code!");
             String keyString = Base64.encodeToString(transferBlock.toString().getBytes(), Base64.DEFAULT);
             MultiFormatWriter writer = new MultiFormatWriter();
-            int size = 500;
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            int size = metrics.widthPixels;
             BitMatrix matrix = writer.encode(keyString, BarcodeFormat.QR_CODE, size, size);
             final Bitmap image = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
 
