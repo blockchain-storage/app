@@ -21,6 +21,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
+import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
@@ -108,22 +109,38 @@ public class ScanQRActivity extends AppCompatActivity {
             Key.saveKeyPair(ScanQRActivity.this, pair);
 
             TrustChainDBHelper helper = new TrustChainDBHelper(this);
-            for (MessageProto.TrustChainBlock block : bootstrap.blocks) {
-                helper.insertInDB(block);
+            try {
+                for (MessageProto.TrustChainBlock block : bootstrap.blocks) {
+                    helper.insertInDB(block);
+                }
+                String message = "Successfully imported wallet\n New reputation : Up="
+                        + bootstrap.total_up + " Down=" + bootstrap.total_down;
+                new AlertDialog.Builder(this)
+                        .setTitle("Success")
+                        .setMessage(message)
+                        .setNeutralButton(android.R.string.ok, null)
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                ScanQRActivity.this.finish();
+                            }
+                        }).show();
+                
+            } catch (Exception e) {
+                String message = "Could not import. Some blocks might already exist in the chain!";
+                new AlertDialog.Builder(this)
+                        .setTitle("Failure")
+                        .setMessage(message)
+                        .setNeutralButton(android.R.string.ok, null)
+                        .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
+                                ScanQRActivity.this.finish();
+                            }
+                        }).show();
             }
 
-            String message = "Successfully imported wallet\n New reputation : Up="
-                    + bootstrap.total_up + " Down=" + bootstrap.total_down;
-            new AlertDialog.Builder(this)
-                    .setTitle("Success")
-                    .setMessage(message)
-                    .setNeutralButton(android.R.string.ok, null)
-                    .setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            ScanQRActivity.this.finish();
-                        }
-                    }).show();
+
         } catch (Exception e) {
             Log.i(TAG, e.toString());
             new AlertDialog.Builder(this)
