@@ -316,7 +316,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendIntroductionRequest(PeerAppToApp peer) throws IOException {
-        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublic().getEncoded());
+        String publicKey = bytesToHex(Key.loadPublicKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE).getEncoded());
 
         IntroductionRequest request = new IntroductionRequest(hashId, peer.getAddress(), connectionType, networkOperator, publicKey);
         sendMessage(request, peer);
@@ -330,7 +330,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPunctureRequest(PeerAppToApp peer, PeerAppToApp puncturePeer) throws IOException {
-        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublic().getEncoded());
+        String publicKey = bytesToHex(Key.loadPublicKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE).getEncoded());
 
         PunctureRequest request = new PunctureRequest(hashId, peer.getAddress(), internalSourceAddress, puncturePeer, publicKey);
         sendMessage(request, peer);
@@ -343,7 +343,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPuncture(PeerAppToApp peer) throws IOException {
-        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublic().getEncoded());
+        String publicKey = bytesToHex(Key.loadPublicKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE).getEncoded());
 
         Puncture puncture = new Puncture(hashId, peer.getAddress(), internalSourceAddress, publicKey);
         sendMessage(puncture, peer);
@@ -363,7 +363,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 pexPeers.add(p);
         }
 
-        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublic().getEncoded());
+        String publicKey = bytesToHex(Key.loadPublicKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE).getEncoded());
 
         IntroductionResponse response = new IntroductionResponse(hashId, internalSourceAddress, peer
                 .getAddress(), invitee, connectionType, pexPeers, networkOperator, publicKey);
@@ -378,7 +378,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private synchronized void sendMessage(Message message, PeerAppToApp peer) throws IOException {
-        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublic().getEncoded());
+        String publicKey = bytesToHex(Key.loadPublicKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE).getEncoded());
         message.putPubKey(publicKey);
 
         Log.d("App-To-App Log", "Sending " + message);

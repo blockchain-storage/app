@@ -157,7 +157,6 @@ public class Key {
         if(key == null) {
             return null;
         }
-        Log.i(TAG, "PUBLIC FROM FILE: " + key);
         return loadPublicKey(key);
     }
 
