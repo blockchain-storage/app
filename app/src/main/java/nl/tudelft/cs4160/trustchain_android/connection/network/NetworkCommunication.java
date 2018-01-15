@@ -1,5 +1,7 @@
 package nl.tudelft.cs4160.trustchain_android.connection.network;
 
+import android.util.Log;
+
 import java.security.KeyPair;
 
 import nl.tudelft.cs4160.trustchain_android.Peer;
@@ -14,9 +16,11 @@ import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
  */
 public class NetworkCommunication extends Communication {
 
+    private final static String TAG = NetworkCommunication.class.getName();
+
     public static final int DEFAULT_PORT = 8080;
 
-    private Server server;
+    private static Server server;
 
     public NetworkCommunication(TrustChainDBHelper dbHelper, KeyPair kp, CommunicationListener listener) {
         super(dbHelper, kp, listener);
@@ -33,13 +37,19 @@ public class NetworkCommunication extends Communication {
 
     @Override
     public void start() {
-        server= new Server(this, getListener());
-        server.start();
+        if(server == null) {
+            Log.d(TAG, "Creating new server");
+            server = new Server(this, getListener());
+            server.start();
+        } else {
+            server.setListener(getListener());
+        }
     }
 
     @Override
     public void stop() {
-        //TODO: make it stop listening
+        server.stop();
+        server = null;
     }
 
 
