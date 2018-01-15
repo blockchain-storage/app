@@ -16,9 +16,9 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.zxing.Result;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
-import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import org.libsodium.jni.Sodium;
 
@@ -29,12 +29,15 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
+import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
+import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 import nl.tudelft.cs4160.trustchain_android.qr.exception.InvalidDualKeyException;
 import nl.tudelft.cs4160.trustchain_android.qr.exception.QRWalletImportException;
 import nl.tudelft.cs4160.trustchain_android.qr.exception.QRWalletParseException;
-import nl.tudelft.cs4160.trustchain_android.qr.models.CoinTransfer;
+import nl.tudelft.cs4160.trustchain_android.qr.exception.QRWalletValidationException;
 import nl.tudelft.cs4160.trustchain_android.qr.models.QRBlock;
+import nl.tudelft.cs4160.trustchain_android.qr.models.QRTransaction;
 import nl.tudelft.cs4160.trustchain_android.qr.models.QRWallet;
 
 
@@ -105,8 +108,7 @@ public class ScanQRActivity extends AppCompatActivity {
             vibrator.vibrate(100);
             try {
                 QRWallet wallet = processResult(result);
-                QRBlock lastBlock = wallet.blocks.get(wallet.blocks.size()-1);
-                CoinTransfer transaction = lastBlock.transaction;
+                QRTransaction transaction = wallet.transaction;
 
                 String message = "Successfully imported wallet\n New reputation : Up="
                         + transaction.totalUp + " Down=" + transaction.totalDown;
@@ -156,18 +158,24 @@ public class ScanQRActivity extends AppCompatActivity {
         }
 
         byte[] keyBytes = Base64.decode(wallet.privateKeyBase64, Base64.DEFAULT);
-        KeyPair keyPair = readKeyPair(keyBytes);
-        Key.saveKeyPair(ScanQRActivity.this, keyPair);
+        KeyPair linkKeyPair = readKeyPair(keyBytes);
+
+        KeyPair ownKeyPair = Key.loadKeys(this);
 
         TrustChainDBHelper helper = new TrustChainDBHelper(this);
-        for (QRBlock block : wallet.blocks) {
-            // TODO: fix genesis block, clear database?
-            helper.insertInDB(trustChainBlockFactory.createBlock(block));
+        QRBlock qrBlock = wallet.block;
+        MessageProto.TrustChainBlock block = trustChainBlockFactory.createBlock(qrBlock, wallet.transaction, helper.getLatestBlock(ownKeyPair.getPublicKey().toBytes()), linkKeyPair.getPublicKey(), ownKeyPair.getPrivateKey());
+
+        try {
+            TrustChainBlock.validate(block, helper);
+        } catch (Exception e) {
+            throw new QRWalletValidationException(e);
         }
+
         return wallet;
     }
 
-    private KeyPair readKeyPair(byte[] dualKey) throws InvalidDualKeyException{
+    private KeyPair readKeyPair(byte[] dualKey) throws InvalidDualKeyException {
         int pkLength = Sodium.crypto_box_secretkeybytes();
         int seedLength = Sodium.crypto_box_seedbytes();
 
