@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 
 import com.google.zxing.Result;
@@ -20,10 +19,7 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
-import org.libsodium.jni.Sodium;
-
 import java.io.IOException;
-import java.util.Arrays;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import nl.tudelft.cs4160.trustchain_android.R;
@@ -32,11 +28,9 @@ import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
-import nl.tudelft.cs4160.trustchain_android.qr.exception.InvalidDualKeyException;
 import nl.tudelft.cs4160.trustchain_android.qr.exception.QRWalletImportException;
 import nl.tudelft.cs4160.trustchain_android.qr.exception.QRWalletParseException;
 import nl.tudelft.cs4160.trustchain_android.qr.exception.QRWalletValidationException;
-import nl.tudelft.cs4160.trustchain_android.qr.models.QRBlock;
 import nl.tudelft.cs4160.trustchain_android.qr.models.QRTransaction;
 import nl.tudelft.cs4160.trustchain_android.qr.models.QRWallet;
 
@@ -157,14 +151,9 @@ public class ScanQRActivity extends AppCompatActivity {
             throw new QRWalletParseException("Null wallet");
         }
 
-        byte[] keyBytes = Base64.decode(wallet.privateKeyBase64, Base64.DEFAULT);
-        KeyPair linkKeyPair = readKeyPair(keyBytes);
-
         KeyPair ownKeyPair = Key.loadKeys(this);
-
         TrustChainDBHelper helper = new TrustChainDBHelper(this);
-        QRBlock qrBlock = wallet.block;
-        MessageProto.TrustChainBlock block = trustChainBlockFactory.createBlock(qrBlock, wallet.transaction, helper.getLatestBlock(ownKeyPair.getPublicKey().toBytes()), linkKeyPair.getPublicKey(), ownKeyPair);
+        MessageProto.TrustChainBlock block = trustChainBlockFactory.createBlock(wallet, helper, ownKeyPair);
 
         try {
             TrustChainBlock.validate(block, helper);
@@ -173,28 +162,6 @@ public class ScanQRActivity extends AppCompatActivity {
         }
 
         return wallet;
-    }
-
-    private KeyPair readKeyPair(byte[] message) throws InvalidDualKeyException {
-        String check = "LibNaCLSK:";
-        byte[] expectedCheckByteArray = check.getBytes();
-        byte[] checkByteArray = Arrays.copyOfRange(message, 0, expectedCheckByteArray.length);
-
-        if (!(Arrays.equals(expectedCheckByteArray, checkByteArray))) {
-            throw new InvalidDualKeyException("Private key does not match expected format");
-        }
-
-        int pkLength = Sodium.crypto_box_secretkeybytes();
-        int seedLength = Sodium.crypto_box_seedbytes();
-
-        int expectedLength = expectedCheckByteArray.length + pkLength + seedLength;
-        if (message.length != expectedLength) {
-            throw new InvalidDualKeyException("Expected key length " + expectedLength + " but got " + message.length);
-        }
-
-        byte[] pk = Arrays.copyOfRange(message, expectedCheckByteArray.length, expectedCheckByteArray.length + pkLength); // first group is pk
-        byte[] seed = Arrays.copyOfRange(message, expectedCheckByteArray.length + pkLength, expectedCheckByteArray.length + pkLength + seedLength); // second group is seed
-        return new KeyPair(pk, seed);
     }
 
     private boolean hasCameraPermission() {
