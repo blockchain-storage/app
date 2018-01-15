@@ -175,17 +175,25 @@ public class ScanQRActivity extends AppCompatActivity {
         return wallet;
     }
 
-    private KeyPair readKeyPair(byte[] dualKey) throws InvalidDualKeyException {
+    private KeyPair readKeyPair(byte[] message) throws InvalidDualKeyException {
+        String check = "LibNaCLSK:";
+        byte[] expectedCheckByteArray = check.getBytes();
+        byte[] checkByteArray = Arrays.copyOfRange(message, 0, expectedCheckByteArray.length);
+
+        if (!(Arrays.equals(expectedCheckByteArray, checkByteArray))) {
+            throw new InvalidDualKeyException("Private key does not match expected format");
+        }
+
         int pkLength = Sodium.crypto_box_secretkeybytes();
         int seedLength = Sodium.crypto_box_seedbytes();
 
-        int expectedLength = pkLength + seedLength;
-        if (dualKey.length != expectedLength) {
-            throw new InvalidDualKeyException("Expected key length " + expectedLength + " but got " + dualKey.length);
+        int expectedLength = expectedCheckByteArray.length + pkLength + seedLength;
+        if (message.length != expectedLength) {
+            throw new InvalidDualKeyException("Expected key length " + expectedLength + " but got " + message.length);
         }
 
-        byte[] pk = Arrays.copyOfRange(dualKey, 0, pkLength); // first group is pk
-        byte[] seed = Arrays.copyOfRange(dualKey, pkLength, pkLength + seedLength); // second group is seed
+        byte[] pk = Arrays.copyOfRange(message, expectedCheckByteArray.length, expectedCheckByteArray.length + pkLength); // first group is pk
+        byte[] seed = Arrays.copyOfRange(message, expectedCheckByteArray.length + pkLength, expectedCheckByteArray.length + pkLength + seedLength); // second group is seed
         return new KeyPair(pk, seed);
     }
 
