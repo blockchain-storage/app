@@ -94,7 +94,7 @@ public abstract class Communication {
         // send the crawl request
         MessageProto.Message message = newBuilder().setCrawlRequest(crawlRequest).build();
 
-        listener.updateLog("Sent crawl request to " + peer.getName() + "\n");
+        listener.updateLog("Sending crawl request to " + peer.getName() + "\n");
         sendMessage(peer, message);
     }
 
@@ -107,7 +107,7 @@ public abstract class Communication {
     public void sendHalfBlock(Peer peer, MessageProto.TrustChainBlock block) {
         MessageProto.Message message = newBuilder().setHalfBlock(block).build();
 
-        listener.updateLog("Sent half block to  " + peer.getName() + "\n");
+        listener.updateLog("Sending half block to  " + peer.getName() + "\n");
         sendMessage(peer, message);
     }
 
