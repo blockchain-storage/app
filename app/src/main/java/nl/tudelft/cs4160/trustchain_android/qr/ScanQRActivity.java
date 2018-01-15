@@ -164,7 +164,7 @@ public class ScanQRActivity extends AppCompatActivity {
 
         TrustChainDBHelper helper = new TrustChainDBHelper(this);
         QRBlock qrBlock = wallet.block;
-        MessageProto.TrustChainBlock block = trustChainBlockFactory.createBlock(qrBlock, wallet.transaction, helper.getLatestBlock(ownKeyPair.getPublicKey().toBytes()), linkKeyPair.getPublicKey(), ownKeyPair.getPrivateKey());
+        MessageProto.TrustChainBlock block = trustChainBlockFactory.createBlock(qrBlock, wallet.transaction, helper.getLatestBlock(ownKeyPair.getPublicKey().toBytes()), linkKeyPair.getPublicKey(), ownKeyPair);
 
         try {
             TrustChainBlock.validate(block, helper);
