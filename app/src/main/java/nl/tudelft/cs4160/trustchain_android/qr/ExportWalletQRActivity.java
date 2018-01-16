@@ -24,6 +24,8 @@ import com.squareup.moshi.Moshi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
@@ -122,7 +124,8 @@ public class ExportWalletQRActivity extends AppCompatActivity {
 
             // Put everything in a wallet
             QRWallet wallet = new QRWallet();
-            wallet.privateKeyBase64 = keyPairOfC.getPrivateKey().toString();
+
+            wallet.privateKeyBase64 = Base64.encodeToString(keyPairOfC.getBinaryExportKey(),Base64.DEFAULT);
             wallet.block = block;
             wallet.transaction = transaction;
 
@@ -130,12 +133,11 @@ public class ExportWalletQRActivity extends AppCompatActivity {
 
             // Step 4: Display QR code with data
             System.out.println("Encoding " + jsonEncoded + " as QR code!");
-            String keyString = Base64.encodeToString(jsonEncoded.getBytes(), Base64.DEFAULT);
             MultiFormatWriter writer = new MultiFormatWriter();
             DisplayMetrics metrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(metrics);
             int size = metrics.widthPixels;
-            BitMatrix matrix = writer.encode(keyString, BarcodeFormat.QR_CODE, size, size);
+            BitMatrix matrix = writer.encode(jsonEncoded, BarcodeFormat.QR_CODE, size, size);
             final Bitmap image = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
 
             for (int i = 0; i < size; i++) {//width
@@ -150,7 +152,7 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                 }
             });
 
-        } catch (WriterException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Could not export QR code:", e);
             runOnUiThread(new Runnable() {
                 @Override
