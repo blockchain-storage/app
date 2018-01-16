@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -71,14 +72,14 @@ public class ExportWalletQRActivity extends AppCompatActivity {
 
             // Partly duplicated code from Communication.java
             QRTransaction transaction = new QRTransaction();
-            try{
+            try {
                 MessageProto.TrustChainBlock lastBlock = dbHelper.getAllBlocks().get(0); //(keyPairOfA.getPublicKey().toBytes());
                 JSONObject object = new JSONObject(lastBlock.getTransaction().toStringUtf8());
-                transaction.up =  object.getInt("up");
-                transaction.down =  object.getInt("down");
-                transaction.totalUp =  object.getInt("totalUp");
-                transaction.totalDown =  object.getInt("totalDown");
-            }catch(Exception e){
+                transaction.up = object.getInt("up");
+                transaction.down = object.getInt("down");
+                transaction.totalUp = object.getInt("totalUp");
+                transaction.totalDown = object.getInt("totalDown");
+            } catch (Exception e) {
                 Log.e(TAG, "Could not export QR code, chain data might be corrupted: ", e);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -87,7 +88,7 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                     }
                 });
             }
-            
+
             // TODO: This should be the dbHelper of the chain of A, not a temporary placeholder.
             // TODO: Append this block to the local chain.
             MessageProto.TrustChainBlock blockAtoC =
@@ -131,7 +132,9 @@ public class ExportWalletQRActivity extends AppCompatActivity {
             System.out.println("Encoding " + jsonEncoded + " as QR code!");
             String keyString = Base64.encodeToString(jsonEncoded.getBytes(), Base64.DEFAULT);
             MultiFormatWriter writer = new MultiFormatWriter();
-            int size = 500;
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            int size = metrics.widthPixels;
             BitMatrix matrix = writer.encode(keyString, BarcodeFormat.QR_CODE, size, size);
             final Bitmap image = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
 
