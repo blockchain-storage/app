@@ -60,7 +60,6 @@ import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.funds.FundsActivity;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
-import nl.tudelft.cs4160.trustchain_android.qr.ExportWalletQRActivity;
 import nl.tudelft.cs4160.trustchain_android.qr.ScanQRActivity;
 
 import static nl.tudelft.cs4160.trustchain_android.Peer.bytesToHex;
@@ -142,9 +141,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 return true;
             case R.id.import_wallet:
                 startActivity(new Intent(OverviewConnectionsActivity.this, ScanQRActivity.class));
-                return true;
-            case R.id.export_wallet:
-                startActivity(new Intent(OverviewConnectionsActivity.this, ExportWalletQRActivity.class));
                 return true;
             case R.id.funds:
                 startActivity(new Intent(this, FundsActivity.class));
