@@ -45,8 +45,6 @@ dependencies {
 
     compile 'com.github.joshjdevl.libsodiumjni:libsodium-jni-aar:1.0.7'
 
-    compile 'com.jakewharton:process-phoenix:2.0.0'
-
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.7.22'
     androidTestCompile 'org.mockito:mockito-android:2.7.22'

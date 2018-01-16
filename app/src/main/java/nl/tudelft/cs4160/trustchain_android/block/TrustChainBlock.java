@@ -1,7 +1,6 @@
 package nl.tudelft.cs4160.trustchain_android.block;
 
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Base64;
 
 import com.google.protobuf.ByteString;
 
@@ -214,9 +213,7 @@ public class TrustChainBlock {
             errors.add("Link sequence number not empty and is prior to genesis");
         }
 
-        //TODO: resolve stupid conversions byte[] => Base64 => byte[]
-        String key = Base64.encodeToString(block.getPublicKey().toByteArray(), Base64.DEFAULT);
-        PublicKey publicKey = Key.loadPublicKey(key);
+        PublicKey publicKey = Key.getPublicKeyFromBytes(block.getPublicKey().toByteArray());
         if(publicKey == null) {
             result.setInvalid();
             errors.add("Public key is not valid");
