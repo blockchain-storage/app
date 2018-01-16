@@ -142,9 +142,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             case R.id.import_wallet:
                 startActivity(new Intent(OverviewConnectionsActivity.this, ScanQRActivity.class));
                 return true;
-            case R.id.export_wallet:
-                startActivity(new Intent(OverviewConnectionsActivity.this, ExportWalletQRActivity.class));
-                return true;
             case R.id.connection_explanation_menu:
                 Intent ConnectionExplanationActivity = new Intent(this, ConnectionExplanationActivity.class);
                 startActivity(ConnectionExplanationActivity);
