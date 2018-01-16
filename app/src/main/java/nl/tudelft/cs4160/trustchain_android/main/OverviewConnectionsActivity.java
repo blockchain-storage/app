@@ -61,6 +61,7 @@ import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.funds.FundsActivity;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 import nl.tudelft.cs4160.trustchain_android.qr.ScanQRActivity;
+import nl.tudelft.cs4160.trustchain_android.qr.ExportWalletQRActivity;
 
 import static nl.tudelft.cs4160.trustchain_android.Peer.bytesToHex;
 import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.GENESIS_SEQ;
@@ -141,6 +142,9 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 return true;
             case R.id.import_wallet:
                 startActivity(new Intent(OverviewConnectionsActivity.this, ScanQRActivity.class));
+                return true;
+            case R.id.export_wallet:
+                startActivity(new Intent(OverviewConnectionsActivity.this, ExportWalletQRActivity.class));
                 return true;
             case R.id.funds:
                 startActivity(new Intent(this, FundsActivity.class));
@@ -610,7 +614,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(InetAddress inetAddress) {
                 super.onPostExecute(inetAddress);
-                if(inetAddress != null) {
+                if (inetAddress != null) {
                     internalSourceAddress = new InetSocketAddress(inetAddress, DEFAULT_PORT);
                     Log.d("App-To-App Log", "Local ip: " + inetAddress);
                     TextView localIp = (TextView) findViewById(R.id.local_ip_address_view);
