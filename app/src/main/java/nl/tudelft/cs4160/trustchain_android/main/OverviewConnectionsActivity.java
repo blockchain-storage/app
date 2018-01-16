@@ -365,9 +365,14 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
 
         String publicKey = bytesToHex(Key.loadPublicKey(getApplicationContext(), Key.DEFAULT_PUB_KEY_FILE).getEncoded());
 
-        IntroductionResponse response = new IntroductionResponse(hashId, internalSourceAddress, peer
-                .getAddress(), invitee, connectionType, pexPeers, networkOperator, publicKey);
-        sendMessage(response, peer);
+        // check if connection information is loaded
+        if(internalSourceAddress != null) {
+            IntroductionResponse response = new IntroductionResponse(hashId, internalSourceAddress, peer
+                    .getAddress(), invitee, connectionType, pexPeers, networkOperator, publicKey);
+            sendMessage(response, peer);
+        } else {
+            Log.i("OverViewConnections", "Network information not yet loaded, ignoring introduction request.");
+        }
     }
 
     /**
