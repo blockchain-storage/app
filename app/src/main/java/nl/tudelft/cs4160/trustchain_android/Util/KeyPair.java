@@ -23,6 +23,9 @@ import org.libsodium.jni.encoders.Encoder;
 import org.libsodium.jni.keys.PrivateKey;
 import org.libsodium.jni.keys.PublicKey;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 import static org.libsodium.jni.SodiumConstants.PUBLICKEY_BYTES;
 import static org.libsodium.jni.SodiumConstants.SECRETKEY_BYTES;
 import static org.libsodium.jni.NaCl.sodium;
@@ -61,5 +64,14 @@ public class KeyPair {
     }
     public byte[] getSeed() {
         return seed;
+    }
+
+    public byte[] getBinaryExportKey() throws IOException{
+        ByteArrayOutputStream export = new ByteArrayOutputStream( );
+        export.write("LibNaCLSK:".getBytes());
+        export.write(this.getPrivateKey().toBytes());
+        export.write(this.getSeed());
+
+        return export.toByteArray();
     }
 }
