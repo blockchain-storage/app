@@ -338,7 +338,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      */
     private void sendPunctureRequest(PeerAppToApp peer, PeerAppToApp puncturePeer) throws IOException {
         String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKey().toBytes());
-
         PunctureRequest request = new PunctureRequest(hashId, peer.getAddress(), internalSourceAddress, puncturePeer, publicKey);
         sendMessage(request, peer);
     }
@@ -369,7 +368,6 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             if (p.hasReceivedData() && p.getPeerId() != null && p.isAlive())
                 pexPeers.add(p);
         }
-
         String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKey().toBytes());
 
         IntroductionResponse response = new IntroductionResponse(hashId, internalSourceAddress, peer

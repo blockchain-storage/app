@@ -91,7 +91,9 @@ public class Key {
      */
     public static PublicKey loadPublicKey(Context context, String file) {
         String key = Util.readFile(context, file);
-        Log.i(TAG, "PUBLIC FROM FILE: " + key);
+        if(key == null) {
+            return null;
+        }
         return loadPublicKey(key);
     }
 

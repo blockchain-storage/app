@@ -2,8 +2,6 @@ package nl.tudelft.cs4160.trustchain_android.connection.network;
 
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,29 +17,39 @@ import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 class Server {
     ServerSocket serverSocket;
 
-    String messageLog = "";
-    String responseLog = "";
-
     private Communication communication;
     private CommunicationListener listener;
+
+    private SocketServerThread socketServerThread;
 
     public Server(Communication communication, CommunicationListener listener) {
         this.communication = communication;
         this.listener = listener;
     }
 
+    public void setListener(CommunicationListener listener) {
+        this.listener = listener;
+        this.listener.updateLog("Server is waiting for messages...");
+    }
+
     /**
      * Starts the socketServer thread which will listen for incoming messages.
      */
     public void start() {
-        Thread socketServerThread = new Thread(new SocketServerThread());
-        socketServerThread.start();
+        socketServerThread = new SocketServerThread();
+        Thread thread = new Thread(socketServerThread );
+        thread.start();
 
+    }
+
+    public void stop() {
+        socketServerThread.stop();
     }
 
     private class SocketServerThread implements Runnable {
         static final int SocketServerPORT = 8080;
-        int count = 0;
+
+        private boolean running = true;
 
         /**
          * Starts the serverSocket, in the while loop it starts listening for messages.
@@ -54,8 +62,7 @@ class Server {
 
                 listener.updateLog("Server is waiting for messages...");
 
-                while (true) {
-                    messageLog = "";
+                while (running) {
                     Socket socket = serverSocket.accept();
 
                     // We have received a message, this could be either a crawl request or a halfblock
@@ -68,39 +75,15 @@ class Server {
                 e.printStackTrace();
             }
         }
-    }
 
-    private class SocketServerReplyThread extends Thread {
-        private Socket hostThreadSocket;
-        int cnt;
-
-        SocketServerReplyThread(Socket socket, int c) {
-            hostThreadSocket = socket;
-            cnt = c;
-        }
-
-        /**
-         * Replies to the client that sent a message to the server.
-         */
-        @Override
-        public void run() {
-            OutputStream outputStream;
-            String msgReply = "message #" + cnt + " received";
-            responseLog = "";
+        private void stop() {
+            running = false;
             try {
-                outputStream = hostThreadSocket.getOutputStream();
-                PrintStream printStream = new PrintStream(outputStream);
-                printStream.print(msgReply);
-                printStream.close();
-
-                responseLog += "replied: " + msgReply + "\n";
+                serverSocket.close();
+                serverSocket = null;
             } catch (IOException e) {
                 e.printStackTrace();
-                responseLog += "Something wrong! " + e.toString() + "\n";
-            } finally {
-                listener.updateLog("\n  Server: " + responseLog);
             }
         }
-
     }
 }

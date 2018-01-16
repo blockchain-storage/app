@@ -94,7 +94,7 @@ public abstract class Communication {
         // send the crawl request
         MessageProto.Message message = newBuilder().setCrawlRequest(crawlRequest).build();
 
-        listener.updateLog("Sent crawl request to " + peer.getName() + "\n");
+        listener.updateLog("Sending crawl request to " + peer.getName() + "\n");
         sendMessage(peer, message);
     }
 
@@ -107,7 +107,7 @@ public abstract class Communication {
     public void sendHalfBlock(Peer peer, MessageProto.TrustChainBlock block) {
         MessageProto.Message message = newBuilder().setHalfBlock(block).build();
 
-        listener.updateLog("Sent half block to  " + peer.getName() + "\n");
+        listener.updateLog("Sending half block to  " + peer.getName() + "\n");
         sendMessage(peer, message);
     }
 
@@ -303,7 +303,7 @@ public abstract class Communication {
 
             listener.updateLog("\nServer: " + messageLog);
             peer.setPublicKey(block.getPublicKey().toByteArray());
-            listener.connectionSuccessful(peer.getPublicKey());
+            listener.connectionSuccessful(peer);
 
             //make sure the correct port is set
             peer.setPort(NetworkCommunication.DEFAULT_PORT);
@@ -402,7 +402,7 @@ public abstract class Communication {
         if (hasPublicKey(identifier)) {
             listener.updateLog("Sending half block to known peer \n");
             peer.setPublicKey(getPublicKey(identifier));
-            listener.connectionSuccessful(peer.getPublicKey());
+            listener.connectionSuccessful(peer);
             sendLatestBlocksToPeer(peer);
           //  try {
            //     signBlock(TrustChainActivity.TRANSACTION_DATA.getBytes("UTF-8"), peer);

@@ -36,45 +36,50 @@ class ClientTask extends AsyncTask<Void, Void, Void> {
      */
     @Override
     protected Void doInBackground(Void... arg0) {
-        boolean loop = true;
-        while(loop) {
-            Socket socket = null;
+        for(int i=0; i <10; i++) {
+            if(sendMessage()) {
+                return null;
+            }
+            //sending message failed, sleep a sec and retry
             try {
-                Log.i(TAG, "Opening socket to " + destinationIP + ":" + destinationPort);
-                socket = new Socket(destinationIP, destinationPort);
-                message.writeTo(socket.getOutputStream());
-                socket.shutdownOutput();
-
-                // check whether we're sending a half block or a message
-                if(message.getCrawlRequest().getPublicKey().size() == 0) {
-                    Log.i(TAG, "Sent half block to peer with ip " + destinationIP + ":" + destinationPort);
-                } else {
-                    Log.i(TAG, "Sent crawl request to peer with ip " + destinationIP + ":" + destinationPort);
-                }
-
-            } catch (UnknownHostException e) {
+                listener.updateLog("\nCould not connect, retrying in 1s");
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
                 e.printStackTrace();
-                listener.updateLog("\n  Client: Cannot resolve host");
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (socket != null) {
-                    try {
-                        loop = false;
-                        socket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            }
+        }
+        listener.updateLog("\nCould not send message, please check if both parties are online");
+        return null;
+    }
+
+    private boolean sendMessage() {
+        Socket socket = null;
+        try {
+            Log.i(TAG, "Opening socket to " + destinationIP + ":" + NetworkCommunication.DEFAULT_PORT);
+            socket = new Socket(destinationIP, NetworkCommunication.DEFAULT_PORT);
+            message.writeTo(socket.getOutputStream());
+            socket.shutdownOutput();
+
+            // check whether we're sending a half block or a message
+            if(message.getCrawlRequest().getPublicKey().size() == 0) {
+                Log.i(TAG, "Sent half block to peer with ip " + destinationIP + ":" + destinationPort);
+            } else {
+                Log.i(TAG, "Sent crawl request to peer with ip " + destinationIP + ":" + destinationPort);
+            }
+        } catch (Exception e) {
+            Log.i(TAG, "No msg send: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (socket != null) {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-
         }
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return true;
     }
 
     /**

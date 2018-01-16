@@ -152,7 +152,7 @@ public class BluetoothActivity extends AppCompatActivity implements Communicatio
     }
 
     @Override
-    public void connectionSuccessful(byte[] publicKey) {
+    public void connectionSuccessful(Peer peer) {
 
         // TODO: This needs to be implemented, but Bluetooth currently does not work.
     }
