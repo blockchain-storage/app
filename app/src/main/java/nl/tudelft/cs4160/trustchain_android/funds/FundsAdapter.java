@@ -32,6 +32,7 @@ public class FundsAdapter extends ArrayAdapter<MessageProto.TrustChainBlock> {
             else view = convertView;
 
             MessageProto.TrustChainBlock block = this.getItem(position);
+
             String transactionString = block.getTransaction().toStringUtf8();
             System.out.println("Found " + transactionString);
             JSONObject object = new JSONObject(transactionString); // TODO refactor to some kind of factory

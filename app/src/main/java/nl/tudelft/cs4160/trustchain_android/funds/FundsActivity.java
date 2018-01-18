@@ -32,12 +32,24 @@ public class FundsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_funds);
         TrustChainDBHelper helper = new TrustChainDBHelper(this);
+
+        KeyPair ownKeyPair = Key.loadKeys(this);
+        byte[] myPublicKey = ownKeyPair.getPublicKey().toBytes();
+        transactionListView = findViewById(R.id.transaction_listview);
+        FundsAdapter adapter = new FundsAdapter(this);
+
+        List<MessageProto.TrustChainBlock> blocks = helper.getBlocks(myPublicKey);
+        adapter.addAll(blocks);
+        transactionListView.setAdapter(adapter);
+
+
+
         int total_up = 0;
         int total_down = 1100; // make people feel bad for only downloading the app :P
 
         try {
-            KeyPair ownKeyPair = Key.loadKeys(this);
-            MessageProto.TrustChainBlock firstBlock = helper.getLatestBlock(ownKeyPair.getPublicKey().toBytes());
+
+            MessageProto.TrustChainBlock firstBlock = helper.getLatestBlock(myPublicKey);
             String transactionString = firstBlock.getTransaction().toStringUtf8();
             Log.i("FundsActivity", transactionString);
             JSONObject object = new JSONObject(transactionString); // TODO refactor to some kind of factory
