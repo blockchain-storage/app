@@ -20,8 +20,8 @@ import android.widget.ProgressBar;
 import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
-import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.main.ChainExplorerInfoActivity;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
@@ -80,7 +80,7 @@ public class ChainExplorerActivity extends AppCompatActivity {
 
     private void init() {
         dbHelper = new TrustChainDBHelper(this);
-        KeyPair kp = Key.loadKeys(getApplicationContext());
+        DualKey kp = Key.loadKeys(getApplicationContext());
         byte[] publicKey;
         if (getIntent().hasExtra("publicKey")) {
             publicKey = getIntent().getByteArrayExtra("publicKey");

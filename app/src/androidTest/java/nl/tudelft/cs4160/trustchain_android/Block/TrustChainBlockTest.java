@@ -10,8 +10,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.libsodium.jni.NaCl;
 
+import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
-import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.main.OverviewConnectionsActivity;
@@ -35,8 +35,8 @@ public class TrustChainBlockTest extends ActivityUnitTestCase<OverviewConnection
         super(OverviewConnectionsActivity.class);
     }
 
-    private KeyPair keyPair;
-    private KeyPair keyPair2;
+    private DualKey keyPair;
+    private DualKey keyPair2;
     private byte[] transaction = new byte[2];
     private byte[] pubKey = new byte[2];
     private byte[] linkKey = new byte[2];
@@ -129,10 +129,10 @@ public class TrustChainBlockTest extends ActivityUnitTestCase<OverviewConnection
 
     @Test
     public void testVerify() {
-        KeyPair pair = Key.createNewKeyPair();
-        byte[] message = {(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00};
-        byte[] signature = Key.sign(pair.getPrivateKey(), message);
-        assertTrue(Key.verify(pair.getPublicKey(), message, signature));
+        DualKey pair = Key.createNewKeyPair();
+        byte[] message = {(byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01};
+        byte[] signature = Key.sign(pair.getSigningKey(), message);
+        assertTrue(Key.verify(pair.getSignPublicKey(), message, signature));
     }
 
     @After

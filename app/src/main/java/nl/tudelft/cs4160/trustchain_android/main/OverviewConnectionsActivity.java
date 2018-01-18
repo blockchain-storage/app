@@ -43,8 +43,8 @@ import nl.tudelft.cs4160.trustchain_android.SharedPreferences.BootstrapIPStorage
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyAndAddressPairStorage;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.SharedPreferencesStorage;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.UserNameStorage;
+import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
-import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerList;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.WanVote;
@@ -162,7 +162,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
     }
 
     private void initKey(){
-        KeyPair kp = Key.loadKeys(getApplicationContext());
+        DualKey kp = Key.loadKeys(getApplicationContext());
         if (kp == null) {
             kp = Key.createAndSaveKeys(getApplicationContext());
         }
@@ -178,7 +178,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      *
      * @return state - false if the app has been initialized before, true if first time app started
      */
-    public boolean isStartedFirstTime(TrustChainDBHelper dbHelper, KeyPair kp) {
+    public boolean isStartedFirstTime(TrustChainDBHelper dbHelper, DualKey kp) {
         // check if a genesis block is present in database
         MessageProto.TrustChainBlock genesisBlock = dbHelper.getBlock(kp.getPublicKey().toBytes(), GENESIS_SEQ);
         return (genesisBlock == null);

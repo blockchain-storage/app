@@ -22,8 +22,8 @@ import java.io.IOException;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
-import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.Util.Util;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
@@ -159,17 +159,16 @@ public class ScanQRActivity extends AppCompatActivity {
             throw new QRWalletParseException("Null wallet");
         }
 
-        KeyPair ownKeyPair = Key.loadKeys(this);
+        DualKey ownKeyPair = Key.loadKeys(this);
         TrustChainDBHelper helper = new TrustChainDBHelper(this);
         MessageProto.TrustChainBlock block = trustChainBlockFactory.createBlock(wallet, helper, ownKeyPair);
 
         try {
-            TrustChainBlock.validate(block, helper);
+//            TrustChainBlock.validate(block, helper);
             MessageProto.TrustChainBlock halfblock = trustChainBlockFactory.reconstructTemporaryIdentityHalfBlock(wallet);
 
             helper.insertInDB(halfblock);
             helper.insertInDB(block);
-            
         } catch (Exception e) {
             throw new QRWalletValidationException(e);
         }
