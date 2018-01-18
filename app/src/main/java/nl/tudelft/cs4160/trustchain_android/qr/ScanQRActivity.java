@@ -24,6 +24,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
+import nl.tudelft.cs4160.trustchain_android.Util.Util;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
@@ -106,8 +107,12 @@ public class ScanQRActivity extends AppCompatActivity {
                 QRWallet wallet = processResult(result);
                 QRTransaction transaction = wallet.transaction;
 
-                String message = "Successfully imported wallet\n New reputation : Up="
-                        + transaction.totalUp + " Down=" + transaction.totalDown;
+                String message = "Successful transaction"
+                        + "\nUp=" + Util.readableSize(transaction.up)
+                        + "\nTotalUp=" + Util.readableSize(transaction.totalUp)
+                        + "\nDown=" + Util.readableSize(transaction.down)
+                        + "\nTotalDown=" + Util.readableSize(transaction.totalDown) ;
+
                 new AlertDialog.Builder(ScanQRActivity.this)
                         .setTitle("Success")
                         .setMessage(message)

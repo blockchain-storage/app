@@ -31,13 +31,7 @@ public class FundsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_funds);
-
-        transactionListView = findViewById(R.id.transaction_listview);
-        FundsAdapter adapter = new FundsAdapter(this);
         TrustChainDBHelper helper = new TrustChainDBHelper(this);
-        List<MessageProto.TrustChainBlock> blocks = helper.getAllBlocks();
-        adapter.addAll(blocks);
-        transactionListView.setAdapter(adapter);
         int total_up = 0;
         int total_down = 1100; // make people feel bad for only downloading the app :P
 
