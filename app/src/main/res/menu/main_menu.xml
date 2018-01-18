@@ -21,12 +21,12 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/import_wallet"
-        android:title="@string/import_wallet"
+        android:id="@+id/import_tokens"
+        android:title="@string/import_tokens"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/export_wallet"
-        android:title="@string/export_wallet"
+        android:id="@+id/export_tokens"
+        android:title="@string/export_tokens"
         app:showAsAction="never" />
 </menu>

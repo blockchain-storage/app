@@ -84,8 +84,8 @@
     <string name="color_info">Color is based on the hash of the public key.</string>
 
 
-    <string name="import_wallet">Import Wallet</string>
-    <string name="export_wallet">Export Wallet</string>
+    <string name="import_tokens">Import Tokens</string>
+    <string name="export_tokens">Export Tokens</string>
     <string name="funds">Funds</string>
     <string name="transactions">Transactions</string>
 </resources>

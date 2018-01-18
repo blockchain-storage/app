@@ -140,10 +140,10 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
                 Intent chainExplorerActivity = new Intent(this, ChainExplorerActivity.class);
                 startActivity(chainExplorerActivity);
                 return true;
-            case R.id.import_wallet:
+            case R.id.import_tokens:
                 startActivity(new Intent(OverviewConnectionsActivity.this, ScanQRActivity.class));
                 return true;
-            case R.id.export_wallet:
+            case R.id.export_tokens:
                 startActivity(new Intent(OverviewConnectionsActivity.this, ExportWalletQRActivity.class));
                 return true;
             case R.id.funds:
