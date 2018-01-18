@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.util.Collections;
 import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.R;
@@ -38,7 +39,8 @@ public class FundsActivity extends AppCompatActivity {
         transactionListView = findViewById(R.id.transaction_listview);
         FundsAdapter adapter = new FundsAdapter(this);
 
-        List<MessageProto.TrustChainBlock> blocks = helper.getBlocks(myPublicKey);
+        List<MessageProto.TrustChainBlock> blocks =  helper.getBlocks(myPublicKey);
+        Collections.reverse(blocks);
         adapter.addAll(blocks);
         transactionListView.setAdapter(adapter);
 
