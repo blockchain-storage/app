@@ -3,7 +3,7 @@ package nl.tudelft.cs4160.trustchain_android.connection.bluetooth;
 import android.bluetooth.BluetoothAdapter;
 
 import nl.tudelft.cs4160.trustchain_android.Peer;
-import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
+import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.connection.Communication;
 import nl.tudelft.cs4160.trustchain_android.connection.CommunicationListener;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
@@ -19,7 +19,7 @@ public class BluetoothCommunication extends Communication {
 
     private AcceptThread server;
 
-    public BluetoothCommunication(TrustChainDBHelper dbHelper, KeyPair kp, CommunicationListener listener, BluetoothAdapter bluetoothAdapter) {
+    public BluetoothCommunication(TrustChainDBHelper dbHelper, DualKey kp, CommunicationListener listener, BluetoothAdapter bluetoothAdapter) {
         super(dbHelper, kp, listener);
         this.bluetoothAdapter = bluetoothAdapter;
 

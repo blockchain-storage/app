@@ -11,7 +11,7 @@ import org.libsodium.jni.Sodium;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
+import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
 /**
@@ -77,8 +77,8 @@ public class BootstrapBlock {
         return ByteString.copyFrom(Base64.decode( obj.getString(key), Base64.DEFAULT));
     }
 
-    public KeyPair getKeyPair() {
-        return new KeyPair(pk, seed);
+    public DualKey getDualKey() {
+        return new DualKey(pk, seed);
     }
 }
 

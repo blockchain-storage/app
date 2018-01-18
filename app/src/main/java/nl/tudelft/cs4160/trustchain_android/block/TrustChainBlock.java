@@ -7,14 +7,16 @@ import com.google.protobuf.ByteString;
 import org.libsodium.jni.Sodium;
 import org.libsodium.jni.keys.PrivateKey;
 import org.libsodium.jni.keys.PublicKey;
+import org.libsodium.jni.keys.VerifyKey;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
-import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
+import nl.tudelft.cs4160.trustchain_android.Util.SigningKey;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
@@ -34,7 +36,7 @@ public class TrustChainBlock {
      * Creates a TrustChain genesis block using protocol buffers.
      * @return block - A MessageProto.TrustChainBlock
      */
-    public static MessageProto.TrustChainBlock createGenesisBlock(KeyPair kp) {
+    public static MessageProto.TrustChainBlock createGenesisBlock(DualKey kp) {
         MessageProto.TrustChainBlock block = MessageProto.TrustChainBlock.newBuilder()
                 .setTransaction(ByteString.EMPTY)
                 .setPublicKey(ByteString.copyFrom(kp.getPublicKey().toBytes()))
@@ -44,7 +46,7 @@ public class TrustChainBlock {
                 .setPreviousHash(GENESIS_HASH)
                 .setSignature(EMPTY_SIG)
                 .build();
-        block = sign(block, kp.getPrivateKey());
+        block = sign(block, kp.getSigningKey());
         return block;
     }
 
@@ -111,10 +113,10 @@ public class TrustChainBlock {
     /**
      * Signs this block with a given public key.
      */
-    public static MessageProto.TrustChainBlock sign(MessageProto.TrustChainBlock block, PrivateKey privateKey) {
+    public static MessageProto.TrustChainBlock sign(MessageProto.TrustChainBlock block, SigningKey signingKey) {
         //sign the hash
         byte[] hash = TrustChainBlock.hash(block);
-        byte[] signature = Key.sign(privateKey, hash);
+        byte[] signature = Key.sign(signingKey, hash);
 
         //create the block
         return block.toBuilder().setSignature(ByteString.copyFrom(signature)).build();
@@ -213,18 +215,14 @@ public class TrustChainBlock {
             errors.add("Link sequence number not empty and is prior to genesis");
         }
 
-        PublicKey publicKey = Key.getPublicKeyFromBytes(block.getPublicKey().toByteArray());
-        if(publicKey == null) {
+        VerifyKey verifyKey = Key.getVerifyKeyFromBytes(block.getPublicKey().toByteArray());
+
+        // If public key is valid, check validity of signature
+        byte[] hash = hash(block);
+        byte[] signature = block.getSignature().toByteArray();
+        if (!Key.verify(verifyKey, hash, signature)) {
             result.setInvalid();
-            errors.add("Public key is not valid");
-        } else {
-            // If public key is valid, check validity of signature
-            byte[] hash = hash(block);
-            byte[] signature = block.getSignature().toByteArray();
-            if (!Key.verify(publicKey, hash, signature)) {
-                result.setInvalid();
-                errors.add("Invalid signature.");
-            }
+            errors.add("Invalid signature.");
         }
 
         // If a block is linked with a block of the same owner it does not serve any purpose and is invalid.

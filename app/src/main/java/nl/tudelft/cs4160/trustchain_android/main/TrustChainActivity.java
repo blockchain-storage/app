@@ -33,8 +33,8 @@ import java.util.List;
 import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.SharedPreferences.PubKeyAndAddressPairStorage;
+import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
-import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerAdapter;
 import nl.tudelft.cs4160.trustchain_android.chainExplorer.ChainExplorerActivity;
@@ -76,7 +76,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
     /**
      * Key pair of user
      */
-    public static KeyPair kp;
+    public static DualKey kp;
 
     /**
      * Listener for the connection button.
@@ -224,7 +224,7 @@ public class TrustChainActivity extends AppCompatActivity implements CompoundBut
     private void init() {
         dbHelper = new TrustChainDBHelper(thisActivity);
         //load keys
-        KeyPair kp = Key.loadKeys(getApplicationContext());
+        DualKey kp = Key.loadKeys(getApplicationContext());
         communication = new NetworkCommunication(dbHelper, kp, this);
         updateIP();
         updateLocalIPField(getLocalIPAddress());

@@ -16,19 +16,18 @@ import android.widget.ProgressBar;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
-import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 import nl.tudelft.cs4160.trustchain_android.qr.models.QRBlock;
@@ -65,8 +64,8 @@ public class ExportWalletQRActivity extends AppCompatActivity {
             TrustChainDBHelper dbHelper = new TrustChainDBHelper(this);
 
             // Step 1: Create a temporary new identity (we call this C)
-            KeyPair keyPairOfC = Key.createNewKeyPair();
-            KeyPair keyPairOfA = Key.loadKeys(this);
+            DualKey keyPairOfC = Key.createNewKeyPair();
+            DualKey keyPairOfA = Key.loadKeys(this);
 
             // Step 2: Transfer the funds from our current wallet (A) to (C).
             // - * Create Partially Signed Block from A
@@ -101,7 +100,7 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                             null,
                             keyPairOfC.getPublicKey().toBytes()
                     );
-            blockAtoC = sign(blockAtoC, keyPairOfA.getPrivateKey());
+            blockAtoC = sign(blockAtoC, keyPairOfA.getSigningKey());
 
             TrustChainDBHelper dbHelperC = new TrustChainDBHelper(this);
             MessageProto.TrustChainBlock blockCtoA =
@@ -112,7 +111,7 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                             blockAtoC,
                             keyPairOfA.getPublicKey().toBytes()
                     );
-            blockCtoA = sign(blockCtoA, keyPairOfC.getPrivateKey());
+            blockCtoA = sign(blockCtoA, keyPairOfC.getSigningKey());
 
             // Step 3: Construct data to put in QR code, so the receiver can construct
             // Both C -> B and B -> C Blocks
@@ -125,7 +124,7 @@ public class ExportWalletQRActivity extends AppCompatActivity {
             // Put everything in a wallet
             QRWallet wallet = new QRWallet();
 
-            wallet.privateKeyBase64 = Base64.encodeToString(keyPairOfC.getBinaryExportKey(),Base64.DEFAULT);
+            wallet.privateKeyBase64 = Base64.encodeToString(getBinaryExportKey(keyPairOfC),Base64.DEFAULT);
             wallet.block = block;
             wallet.transaction = transaction;
 
@@ -161,6 +160,15 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public byte[] getBinaryExportKey(DualKey pk) throws IOException {
+        ByteArrayOutputStream export = new ByteArrayOutputStream( );
+        export.write("LibNaCLSK:".getBytes());
+        export.write(pk.getPrivateKey().toBytes());
+        export.write(pk.getSigningKey().toBytes());
+
+        return export.toByteArray();
     }
 
     private void displayQRCode(Bitmap bitmap) {
