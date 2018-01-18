@@ -24,6 +24,7 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
+import nl.tudelft.cs4160.trustchain_android.Util.Util;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
@@ -37,6 +38,8 @@ import nl.tudelft.cs4160.trustchain_android.qr.models.QRWallet;
 public class ScanQRActivity extends AppCompatActivity {
     public static final int PERMISSIONS_REQUEST_CAMERA = 0;
     public static final String TAG = "ScanQRActivity";
+
+
 
     private Vibrator vibrator;
     private ZXingScannerView scannerView;
@@ -68,6 +71,7 @@ public class ScanQRActivity extends AppCompatActivity {
                         requestCameraPermission();
                     }
                 };
+
 
                 new AlertDialog.Builder(this).setTitle(R.string.camera_permissions_required)
                         .setMessage(R.string.camera_permisions_required_long)
@@ -103,8 +107,12 @@ public class ScanQRActivity extends AppCompatActivity {
                 QRWallet wallet = processResult(result);
                 QRTransaction transaction = wallet.transaction;
 
-                String message = "Successfully imported wallet\n New reputation : Up="
-                        + transaction.totalUp + " Down=" + transaction.totalDown;
+                String message = "Successful transaction"
+                        + "\nUp=" + Util.readableSize(transaction.up)
+                        + "\nTotalUp=" + Util.readableSize(transaction.totalUp)
+                        + "\nDown=" + Util.readableSize(transaction.down)
+                        + "\nTotalDown=" + Util.readableSize(transaction.totalDown) ;
+
                 new AlertDialog.Builder(ScanQRActivity.this)
                         .setTitle("Success")
                         .setMessage(message)
@@ -115,6 +123,7 @@ public class ScanQRActivity extends AppCompatActivity {
                                 ScanQRActivity.this.finish();
                             }
                         }).show();
+
             } catch (QRWalletImportException exception) {
                 Log.e(TAG, "Could not import QR Wallet", exception);
                 new AlertDialog.Builder(ScanQRActivity.this)
@@ -156,6 +165,11 @@ public class ScanQRActivity extends AppCompatActivity {
 
         try {
             TrustChainBlock.validate(block, helper);
+            MessageProto.TrustChainBlock halfblock = trustChainBlockFactory.reconstructTemporaryIdentityHalfBlock(wallet);
+
+            helper.insertInDB(halfblock);
+            helper.insertInDB(block);
+            
         } catch (Exception e) {
             throw new QRWalletValidationException(e);
         }

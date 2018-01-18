@@ -17,6 +17,8 @@ import org.json.JSONObject;
 import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 import static nl.tudelft.cs4160.trustchain_android.Util.Util.readableSize;
@@ -29,18 +31,13 @@ public class FundsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_funds);
-
-        transactionListView = findViewById(R.id.transaction_listview);
-        FundsAdapter adapter = new FundsAdapter(this);
         TrustChainDBHelper helper = new TrustChainDBHelper(this);
-        List<MessageProto.TrustChainBlock> blocks = helper.getAllBlocks();
-        adapter.addAll(blocks);
-        transactionListView.setAdapter(adapter);
         int total_up = 0;
         int total_down = 1100; // make people feel bad for only downloading the app :P
 
         try {
-            MessageProto.TrustChainBlock firstBlock = blocks.get(0);
+            KeyPair ownKeyPair = Key.loadKeys(this);
+            MessageProto.TrustChainBlock firstBlock = helper.getLatestBlock(ownKeyPair.getPublicKey().toBytes());
             String transactionString = firstBlock.getTransaction().toStringUtf8();
             Log.i("FundsActivity", transactionString);
             JSONObject object = new JSONObject(transactionString); // TODO refactor to some kind of factory
