@@ -45,8 +45,6 @@ public class FundsActivity extends AppCompatActivity {
         adapter.addAll(blocks);
         transactionListView.setAdapter(adapter);
 
-
-
         int total_up = 0;
         int total_down = 1100; // make people feel bad for only downloading the app :P
 

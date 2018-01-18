@@ -27,30 +27,35 @@ public class FundsAdapter extends ArrayAdapter<MessageProto.TrustChainBlock> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         String transactionString;
+
+        View view;
+        if (convertView == null)
+            view = LayoutInflater.from(getContext()).inflate(R.layout.item_transaction, parent, false);
+        else view = convertView;
+
+        MessageProto.TrustChainBlock block = this.getItem(position);
+
+        transactionString = block.getTransaction().toStringUtf8();
+        System.out.println("Found " + transactionString);
+
+        long up = 0;
+        long down = 0;
+
         try {
-            View view;
-            if (convertView == null) view = LayoutInflater.from(getContext()).inflate(R.layout.item_transaction, parent, false);
-            else view = convertView;
-
-            MessageProto.TrustChainBlock block = this.getItem(position);
-
-             transactionString = block.getTransaction().toStringUtf8();
-            System.out.println("Found " + transactionString);
             JSONObject object = new JSONObject(transactionString); // TODO refactor to some kind of factory
-
-            long up = object.getLong("up");
-
-            TextView upAmount = view.findViewById(R.id.funds_item_up_amount);
-            upAmount.setText(readableSize(up));
-
-            long down = object.getLong("down");
-            TextView downAmount = view.findViewById(R.id.funds_item_down_amount);
-            downAmount.setText(readableSize(down));
-
-            return view;
+            up = object.getLong("up");
+            down = object.getLong("down");
         } catch (JSONException e) {
-            Log.e("FundsAdapter", "Could not read block", e);
-            return new TextView(getContext());
+            //Log.e("FundsAdapter", "Skipped incorrect transaction block.", e);
         }
+
+        TextView upAmount = view.findViewById(R.id.funds_item_up_amount);
+        upAmount.setText(readableSize(up));
+
+
+        TextView downAmount = view.findViewById(R.id.funds_item_down_amount);
+        downAmount.setText(readableSize(down));
+
+        return view;
     }
 }
