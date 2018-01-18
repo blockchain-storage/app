@@ -82,11 +82,11 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                 transaction.totalUp = object.getInt("totalUp");
                 transaction.totalDown = object.getInt("totalDown");
             } catch (Exception e) {
-                Log.e(TAG, "Could not export QR code, chain data might be corrupted: ", e);
+                Log.e(TAG, "Could not export QR code, chain data might be corrupted: " + e.getMessage(), e);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        displayError();
+                        displayError("Cannot export QR code, there are no funds in your chain data!");
                     }
                 });
             }
@@ -125,7 +125,7 @@ public class ExportWalletQRActivity extends AppCompatActivity {
             // Put everything in a wallet
             QRWallet wallet = new QRWallet();
 
-            wallet.privateKeyBase64 = Base64.encodeToString(keyPairOfC.getBinaryExportKey(),Base64.DEFAULT);
+            wallet.privateKeyBase64 = Base64.encodeToString(keyPairOfC.getBinaryExportKey(), Base64.DEFAULT);
             wallet.block = block;
             wallet.transaction = transaction;
 
@@ -154,10 +154,11 @@ public class ExportWalletQRActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.e(TAG, "Could not export QR code:", e);
+            final String msg = e.getMessage();
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    displayError();
+                    displayError("Export Failed: " + msg);
                 }
             });
         }
@@ -168,10 +169,10 @@ public class ExportWalletQRActivity extends AppCompatActivity {
         imageView.setImageBitmap(bitmap);
     }
 
-    private void displayError() {
+    private void displayError(String error) {
         new AlertDialog.Builder(this)
                 .setTitle("Error")
-                .setMessage("Could not export QR code.")
+                .setMessage(error)
                 .setNeutralButton(android.R.string.ok, null)
                 .setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
