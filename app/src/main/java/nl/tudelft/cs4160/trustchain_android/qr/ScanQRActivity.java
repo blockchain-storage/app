@@ -38,6 +38,8 @@ public class ScanQRActivity extends AppCompatActivity {
     public static final int PERMISSIONS_REQUEST_CAMERA = 0;
     public static final String TAG = "ScanQRActivity";
 
+
+
     private Vibrator vibrator;
     private ZXingScannerView scannerView;
 
@@ -68,6 +70,7 @@ public class ScanQRActivity extends AppCompatActivity {
                         requestCameraPermission();
                     }
                 };
+
 
                 new AlertDialog.Builder(this).setTitle(R.string.camera_permissions_required)
                         .setMessage(R.string.camera_permisions_required_long)
@@ -115,6 +118,7 @@ public class ScanQRActivity extends AppCompatActivity {
                                 ScanQRActivity.this.finish();
                             }
                         }).show();
+
             } catch (QRWalletImportException exception) {
                 Log.e(TAG, "Could not import QR Wallet", exception);
                 new AlertDialog.Builder(ScanQRActivity.this)
@@ -156,6 +160,11 @@ public class ScanQRActivity extends AppCompatActivity {
 
         try {
             TrustChainBlock.validate(block, helper);
+            MessageProto.TrustChainBlock halfblock = trustChainBlockFactory.reconstructTemporaryIdentityHalfBlock(wallet);
+
+            helper.insertInDB(halfblock);
+            helper.insertInDB(block);
+            
         } catch (Exception e) {
             throw new QRWalletValidationException(e);
         }

@@ -23,6 +23,7 @@ public class TrustChainBlockFactory {
     Moshi moshi = new Moshi.Builder().build();
     JsonAdapter<QRTransaction> walletAdapter = moshi.adapter(QRTransaction.class);
 
+
     public MessageProto.TrustChainBlock createBlock(QRWallet wallet, TrustChainDBHelper helper, KeyPair ownKeyPair) throws QRWalletImportException {
         String transactionString = walletAdapter.toJson(wallet.transaction);
         KeyPair walletKeyPair = getKeyPairFromWallet(wallet);
@@ -35,7 +36,7 @@ public class TrustChainBlockFactory {
         return block;
     }
 
-    private MessageProto.TrustChainBlock reconstructTemporaryIdentityHalfBlock(QRWallet wallet) throws InvalidDualKeyException {
+    public MessageProto.TrustChainBlock reconstructTemporaryIdentityHalfBlock(QRWallet wallet) throws InvalidDualKeyException {
         String transactionString = walletAdapter.toJson(wallet.transaction);
 
         KeyPair walletKeyPair = getKeyPairFromWallet(wallet);
