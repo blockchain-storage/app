@@ -75,12 +75,13 @@ public class ExportWalletQRActivity extends AppCompatActivity {
             // Partly duplicated code from Communication.java
             QRTransaction transaction = new QRTransaction();
             try {
-                MessageProto.TrustChainBlock lastBlock = dbHelper.getAllBlocks().get(0); //(keyPairOfA.getPublicKey().toBytes());
+                MessageProto.TrustChainBlock lastBlock = dbHelper.getLatestBlock(keyPairOfA.getPublicKey().toBytes());
                 JSONObject object = new JSONObject(lastBlock.getTransaction().toStringUtf8());
+                System.out.println(object.toString());
                 transaction.up = object.getInt("up");
                 transaction.down = object.getInt("down");
-                transaction.totalUp = object.getInt("totalUp");
-                transaction.totalDown = object.getInt("totalDown");
+                transaction.totalUp = object.getInt("total_up");
+                transaction.totalDown = object.getInt("total_down");
             } catch (Exception e) {
                 Log.e(TAG, "Could not export QR code, chain data might be corrupted: " + e.getMessage(), e);
                 runOnUiThread(new Runnable() {
