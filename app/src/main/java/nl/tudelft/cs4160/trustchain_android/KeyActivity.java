@@ -9,17 +9,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.security.Security;
-
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 
 public class KeyActivity extends AppCompatActivity {
 
     private final static String TAG = KeyActivity.class.getName();
-
-    static {
-        Security.insertProviderAt(new org.spongycastle.jce.provider.BouncyCastleProvider(), 1);}
 
     private Button buttonNewKey;
     private Button signData;
