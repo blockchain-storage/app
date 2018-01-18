@@ -8,6 +8,7 @@ import com.squareup.moshi.Moshi;
 
 import org.libsodium.jni.Sodium;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
@@ -23,19 +24,39 @@ public class TrustChainBlockFactory {
     Moshi moshi = new Moshi.Builder().build();
     JsonAdapter<QRTransaction> walletAdapter = moshi.adapter(QRTransaction.class);
 
+
     public MessageProto.TrustChainBlock createBlock(QRWallet wallet, TrustChainDBHelper helper, KeyPair ownKeyPair) throws QRWalletImportException {
+        byte[] myPublicKey = ownKeyPair.getPublicKey().toBytes();
+
+        QRTransaction tx;
+        try {
+            ByteString tx_data = helper.getLatestBlock(myPublicKey).getTransaction();
+            String tx_string = tx_data.toStringUtf8();
+            tx = walletAdapter.fromJson( tx_string);
+            // Similar to tribler logic.
+            // We are likely mis-interpreting their logic and/or their logic is wrong
+            // This is part of a POC for one way transfer identities,
+            // Dont take this as a reference point for TX.
+            // At the time of writing there is no TX api.
+            wallet.transaction.totalUp += tx.totalUp;
+            wallet.transaction.totalDown += tx.totalDown;
+        } catch (Exception e) {
+
+        }
+
         String transactionString = walletAdapter.toJson(wallet.transaction);
         KeyPair walletKeyPair = getKeyPairFromWallet(wallet);
 
         MessageProto.TrustChainBlock identityHalfBlock = reconstructTemporaryIdentityHalfBlock(wallet);
 
-        MessageProto.TrustChainBlock block = TrustChainBlock.createBlock(transactionString.getBytes(), helper, ownKeyPair.getPublicKey().toBytes(), identityHalfBlock, walletKeyPair.getPublicKey().toBytes());
+        MessageProto.TrustChainBlock block = TrustChainBlock.createBlock(transactionString.getBytes(), helper, myPublicKey, identityHalfBlock, walletKeyPair.getPublicKey().toBytes());
+
         block = TrustChainBlock.sign(block, ownKeyPair.getPrivateKey());
 
         return block;
     }
 
-    private MessageProto.TrustChainBlock reconstructTemporaryIdentityHalfBlock(QRWallet wallet) throws InvalidDualKeyException {
+    public MessageProto.TrustChainBlock reconstructTemporaryIdentityHalfBlock(QRWallet wallet) throws InvalidDualKeyException {
         String transactionString = walletAdapter.toJson(wallet.transaction);
 
         KeyPair walletKeyPair = getKeyPairFromWallet(wallet);
