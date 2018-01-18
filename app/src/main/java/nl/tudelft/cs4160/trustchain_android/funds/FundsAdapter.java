@@ -26,6 +26,7 @@ public class FundsAdapter extends ArrayAdapter<MessageProto.TrustChainBlock> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        String transactionString;
         try {
             View view;
             if (convertView == null) view = LayoutInflater.from(getContext()).inflate(R.layout.item_transaction, parent, false);
@@ -33,7 +34,7 @@ public class FundsAdapter extends ArrayAdapter<MessageProto.TrustChainBlock> {
 
             MessageProto.TrustChainBlock block = this.getItem(position);
 
-            String transactionString = block.getTransaction().toStringUtf8();
+             transactionString = block.getTransaction().toStringUtf8();
             System.out.println("Found " + transactionString);
             JSONObject object = new JSONObject(transactionString); // TODO refactor to some kind of factory
 

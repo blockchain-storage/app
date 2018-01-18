@@ -22,7 +22,7 @@ import nl.tudelft.cs4160.trustchain_android.qr.models.QRWallet;
 
 public class TrustChainBlockFactory {
     Moshi moshi = new Moshi.Builder().build();
-    JsonAdapter<QRTransaction> walletAdapter = moshi.adapter(QRTransaction.class);
+    JsonAdapter<QRTransaction> transactionAdapter = moshi.adapter(QRTransaction.class);
 
 
     public MessageProto.TrustChainBlock createBlock(QRWallet wallet, TrustChainDBHelper helper, KeyPair ownKeyPair) throws QRWalletImportException {
@@ -32,7 +32,7 @@ public class TrustChainBlockFactory {
         try {
             ByteString tx_data = helper.getLatestBlock(myPublicKey).getTransaction();
             String tx_string = tx_data.toStringUtf8();
-            tx = walletAdapter.fromJson( tx_string);
+            tx = transactionAdapter.fromJson( tx_string);
             // Similar to tribler logic.
             // We are likely mis-interpreting their logic and/or their logic is wrong
             // This is part of a POC for one way transfer identities,
@@ -44,7 +44,7 @@ public class TrustChainBlockFactory {
 
         }
 
-        String transactionString = walletAdapter.toJson(wallet.transaction);
+        String transactionString = transactionAdapter.toJson(wallet.transaction);
         KeyPair walletKeyPair = getKeyPairFromWallet(wallet);
 
         MessageProto.TrustChainBlock identityHalfBlock = reconstructTemporaryIdentityHalfBlock(wallet);
@@ -57,7 +57,7 @@ public class TrustChainBlockFactory {
     }
 
     public MessageProto.TrustChainBlock reconstructTemporaryIdentityHalfBlock(QRWallet wallet) throws InvalidDualKeyException {
-        String transactionString = walletAdapter.toJson(wallet.transaction);
+        String transactionString = transactionAdapter.toJson(wallet.transaction);
 
         KeyPair walletKeyPair = getKeyPairFromWallet(wallet);
 

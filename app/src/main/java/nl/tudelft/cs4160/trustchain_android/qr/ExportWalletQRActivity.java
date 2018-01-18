@@ -78,10 +78,13 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                 MessageProto.TrustChainBlock lastBlock = dbHelper.getLatestBlock(keyPairOfA.getPublicKey().toBytes());
                 JSONObject object = new JSONObject(lastBlock.getTransaction().toStringUtf8());
                 System.out.println(object.toString());
-                transaction.up = object.getInt("up");
-                transaction.down = object.getInt("down");
-                transaction.totalUp = object.getInt("total_up");
-                transaction.totalDown = object.getInt("total_down");
+                // Pretend that some transfer identity
+                // uploaded to you by the same amount that you uploaded to others.
+                // Effectilfy transfering reputation.
+                transaction.up = object.getLong("total_up");
+                transaction.down = object.getLong("total_down");
+                transaction.totalUp = object.getLong("total_up") + transaction.down;
+                transaction.totalDown = object.getLong("total_down") + transaction.up;
             } catch (Exception e) {
                 Log.e(TAG, "Could not export QR code, chain data might be corrupted: " + e.getMessage(), e);
                 runOnUiThread(new Runnable() {
@@ -92,11 +95,10 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                 });
             }
 
-            // TODO: This should be the dbHelper of the chain of A, not a temporary placeholder.
-            // TODO: Append this block to the local chain.
+            JsonAdapter<QRTransaction> transactionAdapter = moshi.adapter(QRTransaction.class);
             MessageProto.TrustChainBlock blockAtoC =
                     createBlock(
-                            transaction.toString().getBytes(),
+                            transactionAdapter.toJson(transaction).getBytes(),
                             dbHelper,
                             keyPairOfA.getPublicKey().toBytes(),
                             null,
@@ -104,16 +106,19 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                     );
             blockAtoC = sign(blockAtoC, keyPairOfA.getPrivateKey());
 
-            TrustChainDBHelper dbHelperC = new TrustChainDBHelper(this);
             MessageProto.TrustChainBlock blockCtoA =
                     createBlock(
-                            transaction.toString().getBytes(),
+                            transactionAdapter.toJson(transaction).getBytes(),
                             dbHelper,
                             keyPairOfC.getPublicKey().toBytes(),
                             blockAtoC,
                             keyPairOfA.getPublicKey().toBytes()
                     );
             blockCtoA = sign(blockCtoA, keyPairOfC.getPrivateKey());
+
+            dbHelper.insertInDB(blockAtoC);
+            dbHelper.insertInDB(blockCtoA);
+
 
             // Step 3: Construct data to put in QR code, so the receiver can construct
             // Both C -> B and B -> C Blocks
