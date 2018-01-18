@@ -1,24 +1,16 @@
 package nl.tudelft.cs4160.trustchain_android.Block;
 
 
-import android.content.Context;
-import android.util.Log;
-
-import com.google.protobuf.CodedOutputStream;
+import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.libsodium.jni.NaCl;
 
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-
-import nl.tudelft.cs4160.trustchain_android.Peer;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
@@ -28,13 +20,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.mock;
 
 /**
  * Created by Boning on 12/17/2017.
  */
+@RunWith(AndroidJUnit4.class)
 public class TrustChainBlockTest {
     private KeyPair keyPair;
     private KeyPair keyPair2;
@@ -46,10 +39,11 @@ public class TrustChainBlockTest {
 
     @Before
     public void initialization() {
+        NaCl.sodium();
         keyPair = Key.createNewKeyPair();
         keyPair2 = Key.createNewKeyPair();
         dbHelper = mock(TrustChainDBHelper.class);
-        when(dbHelper.getMaxSeqNum(keyPair.getPublic().getEncoded())).thenReturn(0);
+        when(dbHelper.getMaxSeqNum(keyPair.getPublicKey().toBytes())).thenReturn(0);
         transaction[0] = 12;
         transaction[1] = 42;
         pubKey[0] = 2;
@@ -62,7 +56,7 @@ public class TrustChainBlockTest {
     @Test
     public void publicKeyGenesisBlockTest() {
         MessageProto.TrustChainBlock block = TrustChainBlock.createGenesisBlock(keyPair);
-        assertEquals(bytesToHex(keyPair.getPublic().getEncoded()), bytesToHex(block.getPublicKey().toByteArray()));
+        assertEquals(bytesToHex(keyPair.getPublicKey().toBytes()), bytesToHex(block.getPublicKey().toByteArray()));
     }
 
     @Test
@@ -80,7 +74,7 @@ public class TrustChainBlockTest {
     @Test
     public void linkPublicKeyBlockTest() {
         MessageProto.TrustChainBlock block = TrustChainBlock.createBlock(transaction, dbHelper, pubKey, genesisBlock, linkKey);
-        assertEquals(bytesToHex(keyPair.getPublic().getEncoded()), bytesToHex(block.getLinkPublicKey().toByteArray()));
+        assertEquals(bytesToHex(keyPair.getPublicKey().toBytes()), bytesToHex(block.getLinkPublicKey().toByteArray()));
     }
 
     @Test
@@ -128,7 +122,7 @@ public class TrustChainBlockTest {
     }
 
     @After
-    public void resetMocks(){
+    public void resetMocks() {
         validateMockitoUsage();
     }
 
