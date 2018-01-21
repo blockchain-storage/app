@@ -99,9 +99,9 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                     createBlock(
                             transactionAdapter.toJson(transaction).getBytes(),
                             dbHelper,
-                            keyPairOfA.getPublicKey().toBytes(),
+                            keyPairOfA.getPublicKeyPair().toBytes(),
                             null,
-                            keyPairOfC.getPublicKey().toBytes()
+                            keyPairOfC.getPublicKeyPair().toBytes()
                     );
             blockAtoC = sign(blockAtoC, keyPairOfA.getSigningKey());
 
@@ -109,9 +109,9 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                     createBlock(
                             transactionAdapter.toJson(transaction).getBytes(),
                             dbHelper,
-                            keyPairOfC.getPublicKey().toBytes(),
+                            keyPairOfC.getPublicKeyPair().toBytes(),
                             blockAtoC,
-                            keyPairOfA.getPublicKey().toBytes()
+                            keyPairOfA.getPublicKeyPair().toBytes()
                     );
             blockCtoA = sign(blockCtoA, keyPairOfC.getSigningKey());
 

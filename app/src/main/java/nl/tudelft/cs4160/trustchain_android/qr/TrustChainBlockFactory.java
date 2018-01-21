@@ -8,7 +8,6 @@ import com.squareup.moshi.Moshi;
 
 import org.libsodium.jni.Sodium;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
@@ -25,7 +24,7 @@ public class TrustChainBlockFactory {
     JsonAdapter<QRTransaction> transactionAdapter = moshi.adapter(QRTransaction.class);
 
     public MessageProto.TrustChainBlock createBlock(QRWallet wallet, TrustChainDBHelper helper, DualKey ownKeyPair) throws QRWalletImportException {
-        byte[] myPublicKey = ownKeyPair.getPublicKey().toBytes();
+        byte[] myPublicKey = ownKeyPair.getPublicKeyPair().toBytes();
 
         QRTransaction tx;
         try {
@@ -48,7 +47,7 @@ public class TrustChainBlockFactory {
 
         MessageProto.TrustChainBlock identityHalfBlock = reconstructTemporaryIdentityHalfBlock(wallet);
 
-        MessageProto.TrustChainBlock block = TrustChainBlock.createBlock(transactionString.getBytes(), helper, myPublicKey, identityHalfBlock, walletKeyPair.getPublicKey().toBytes());
+        MessageProto.TrustChainBlock block = TrustChainBlock.createBlock(transactionString.getBytes(), helper, myPublicKey, identityHalfBlock, walletKeyPair.getPublicKeyPair().toBytes());
 
         block = TrustChainBlock.sign(block, ownKeyPair.getSigningKey());
 

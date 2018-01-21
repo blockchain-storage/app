@@ -418,7 +418,7 @@ public abstract class Communication {
     }
 
     public byte[] getMyPublicKey() {
-        return keyPair.getPublicKey().toBytes();
+        return keyPair.getPublicKeyPair().toBytes();
     }
 
     protected Map<String, byte[]> getPeers() {
