@@ -85,16 +85,16 @@ public class ChainExplorerActivity extends AppCompatActivity {
         if (getIntent().hasExtra("publicKey")) {
             publicKey = getIntent().getByteArrayExtra("publicKey");
         } else {
-            publicKey = kp.getPublicKey().toBytes();
+            publicKey = kp.getPublicKeyPair().toBytes();
 
         }
         try {
-            adapter = new ChainExplorerAdapter(this, dbHelper.getAllBlocks(), kp.getPublicKey().toBytes());
+            adapter = new ChainExplorerAdapter(this, dbHelper.getAllBlocks(), kp.getPublicKeyPair().toBytes());
             blocksList.setAdapter(adapter);
             List<MessageProto.TrustChainBlock> blocks = dbHelper.getBlocks(publicKey);
             if(blocks.size() > 0) {
                 this.setTitle(bytesToHex(blocks.get(0).getPublicKey().toByteArray()));
-                adapter = new ChainExplorerAdapter(this, blocks, kp.getPublicKey().toBytes());
+                adapter = new ChainExplorerAdapter(this, blocks, kp.getPublicKeyPair().toBytes());
                 blocksList.setAdapter(adapter);
             }else{
                 // ToDo display empty chain

@@ -51,7 +51,7 @@ public class TrustChainBlockTest extends ActivityUnitTestCase<OverviewConnection
         keyPair = Key.createNewKeyPair();
         keyPair2 = Key.createNewKeyPair();
         dbHelper = mock(TrustChainDBHelper.class);
-        when(dbHelper.getMaxSeqNum(keyPair.getPublicKey().toBytes())).thenReturn(2);
+        when(dbHelper.getMaxSeqNum(keyPair.getPublicKeyPair().toBytes())).thenReturn(2);
         transaction[0] = 12;
         transaction[1] = 42;
         pubKey = keyPair.getPublicKeyPair().toBytes();
@@ -63,7 +63,7 @@ public class TrustChainBlockTest extends ActivityUnitTestCase<OverviewConnection
     @Test
     public void testPublicKeyGenesisBlockTest() {
         MessageProto.TrustChainBlock block = TrustChainBlock.createGenesisBlock(keyPair);
-        assertEquals(bytesToHex(keyPair.getPublicKey().toBytes()), bytesToHex(block.getPublicKey().toByteArray()));
+        assertEquals(bytesToHex(keyPair.getPublicKeyPair().toBytes()), bytesToHex(block.getPublicKey().toByteArray()));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class TrustChainBlockTest extends ActivityUnitTestCase<OverviewConnection
     @Test
     public void testLinkPublicKeyBlockTest() {
         MessageProto.TrustChainBlock block = TrustChainBlock.createBlock(transaction, dbHelper, pubKey, genesisBlock, linkKey);
-        assertEquals(bytesToHex(keyPair.getPublicKey().toBytes()), bytesToHex(block.getLinkPublicKey().toByteArray()));
+        assertEquals(bytesToHex(keyPair.getPublicKeyPair().toBytes()), bytesToHex(block.getLinkPublicKey().toByteArray()));
     }
 
     @Test

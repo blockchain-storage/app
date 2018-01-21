@@ -61,10 +61,10 @@ public class TrustChainBlockFactory {
 
         MessageProto.TrustChainBlock block = MessageProto.TrustChainBlock.newBuilder().
                 setTransaction(ByteString.copyFromUtf8(transactionString))
-                .setPublicKey(ByteString.copyFrom(walletKeyPair.getPublicKey().toBytes()))
+                .setPublicKey(ByteString.copyFrom(walletKeyPair.getPublicKeyPair().toBytes()))
                 .setSequenceNumber(wallet.block.sequenceNumber)
                 .setPreviousHash(ByteString.copyFrom(Base64.decode(wallet.block.blockHashBase64, Base64.DEFAULT)))
-                .setLinkPublicKey(ByteString.copyFrom(walletKeyPair.getPublicKey().toBytes()))
+                .setLinkPublicKey(ByteString.copyFrom(walletKeyPair.getPublicKeyPair().toBytes()))
                 .build();
         MessageProto.TrustChainBlock signedBlock = TrustChainBlock.sign(block, walletKeyPair.getSigningKey());
         return signedBlock;

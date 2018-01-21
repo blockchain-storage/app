@@ -74,7 +74,7 @@ public class ExportWalletQRActivity extends AppCompatActivity {
             // Partly duplicated code from Communication.java
             QRTransaction transaction = new QRTransaction();
             try {
-                MessageProto.TrustChainBlock lastBlock = dbHelper.getLatestBlock(keyPairOfA.getPublicKey().toBytes());
+                MessageProto.TrustChainBlock lastBlock = dbHelper.getLatestBlock(keyPairOfA.getPublicKeyPair().toBytes());
                 JSONObject object = new JSONObject(lastBlock.getTransaction().toStringUtf8());
                 System.out.println(object.toString());
                 // Pretend that some transfer identity
