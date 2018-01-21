@@ -9,19 +9,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.libsodium.jni.NaCl;
+import org.libsodium.jni.encoders.Hex;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
+import nl.tudelft.cs4160.trustchain_android.block.ValidationResult;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.main.OverviewConnectionsActivity;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
 import static nl.tudelft.cs4160.trustchain_android.Peer.bytesToHex;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.when;
@@ -38,7 +40,7 @@ public class TrustChainBlockTest extends ActivityUnitTestCase<OverviewConnection
     private DualKey keyPair;
     private DualKey keyPair2;
     private byte[] transaction = new byte[2];
-    private byte[] pubKey = new byte[2];
+    private byte[] pubKey;
     private byte[] linkKey = new byte[2];
     private MessageProto.TrustChainBlock genesisBlock;
     private TrustChainDBHelper dbHelper;
@@ -49,11 +51,10 @@ public class TrustChainBlockTest extends ActivityUnitTestCase<OverviewConnection
         keyPair = Key.createNewKeyPair();
         keyPair2 = Key.createNewKeyPair();
         dbHelper = mock(TrustChainDBHelper.class);
-        when(dbHelper.getMaxSeqNum(keyPair.getPublicKey().toBytes())).thenReturn(0);
+        when(dbHelper.getMaxSeqNum(keyPair.getPublicKey().toBytes())).thenReturn(2);
         transaction[0] = 12;
         transaction[1] = 42;
-        pubKey[0] = 2;
-        pubKey[1] = 4;
+        pubKey = keyPair.getPublicKeyPair().toBytes();
         linkKey[0] = 14;
         linkKey[1] = 72;
         genesisBlock = TrustChainBlock.createGenesisBlock(keyPair);
@@ -133,6 +134,17 @@ public class TrustChainBlockTest extends ActivityUnitTestCase<OverviewConnection
         byte[] message = {(byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01};
         byte[] signature = Key.sign(pair.getSigningKey(), message);
         assertTrue(Key.verify(pair.getSignPublicKey(), message, signature));
+    }
+
+    @Test
+    public void testVerifyBlock() throws Throwable {
+        when(dbHelper.getLatestBlock(pubKey)).thenReturn(genesisBlock);
+        System.out.println("Signing with " + Hex.HEX.encode(pubKey));
+        MessageProto.TrustChainBlock block = TrustChainBlock.createBlock(transaction, dbHelper, pubKey, genesisBlock, linkKey);
+        System.out.println("From block: " + Hex.HEX.encode(block.getPublicKey().toByteArray()));
+        ValidationResult result = TrustChainBlock.validate(block, dbHelper);
+        List<String> errors = result.getErrors();
+        assertEquals("Errors not empty.",new ArrayList(), errors);
     }
 
     @After
