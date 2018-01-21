@@ -45,7 +45,7 @@ public class DualKey {
     }
 
     public PublicKeyPair getPublicKeyPair() {
-        return new PublicKeyPair(getPublicKey(), getSignPublicKey());
+        return new PublicKeyPair(getPublicKey(), getVerifyKey());
     }
 
     public PrivateKey getPrivateKey() {
@@ -56,7 +56,7 @@ public class DualKey {
         return new PublicKey(publicKey);
     }
 
-    public VerifyKey getSignPublicKey() {
+    public VerifyKey getVerifyKey() {
         return new VerifyKey(signPublicKey);
     }
 

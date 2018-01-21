@@ -101,7 +101,8 @@ public class TrustChainBlock {
      * @return the sha256 hash of the byte array of the block
      */
     public static byte[] hash(MessageProto.TrustChainBlock block) {
-        byte[] blockBytes = block.toByteArray();
+        MessageProto.TrustChainBlock rawBlock = block.toBuilder().setSignature(EMPTY_SIG).build();
+        byte[] blockBytes = rawBlock.toByteArray();
         byte[] hashOut = new byte[Sodium.crypto_hash_sha256_bytes()];
         Sodium.crypto_hash_sha256(hashOut, blockBytes, blockBytes.length);
         return blockBytes;

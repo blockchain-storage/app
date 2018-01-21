@@ -133,7 +133,7 @@ public class TrustChainBlockTest extends ActivityUnitTestCase<OverviewConnection
         DualKey pair = Key.createNewKeyPair();
         byte[] message = {(byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01, (byte) 0x01};
         byte[] signature = Key.sign(pair.getSigningKey(), message);
-        assertTrue(Key.verify(pair.getSignPublicKey(), message, signature));
+        assertTrue(Key.verify(pair.getVerifyKey(), message, signature));
     }
 
     @Test
