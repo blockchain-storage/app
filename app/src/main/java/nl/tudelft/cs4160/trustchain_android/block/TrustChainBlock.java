@@ -5,9 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.google.protobuf.ByteString;
 
 import org.libsodium.jni.Sodium;
-import org.libsodium.jni.keys.PrivateKey;
-import org.libsodium.jni.keys.PublicKey;
-import org.libsodium.jni.keys.VerifyKey;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -16,6 +13,7 @@ import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.Util.PublicKeyPair;
 import nl.tudelft.cs4160.trustchain_android.Util.SigningKey;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
@@ -39,7 +37,7 @@ public class TrustChainBlock {
     public static MessageProto.TrustChainBlock createGenesisBlock(DualKey kp) {
         MessageProto.TrustChainBlock block = MessageProto.TrustChainBlock.newBuilder()
                 .setTransaction(ByteString.EMPTY)
-                .setPublicKey(ByteString.copyFrom(kp.getPublicKey().toBytes()))
+                .setPublicKey(ByteString.copyFrom(kp.getPublicKeyPair().toBytes()))
                 .setSequenceNumber(GENESIS_SEQ)
                 .setLinkPublicKey(EMPTY_PK)
                 .setLinkSequenceNumber(UNKNOWN_SEQ)
@@ -103,7 +101,8 @@ public class TrustChainBlock {
      * @return the sha256 hash of the byte array of the block
      */
     public static byte[] hash(MessageProto.TrustChainBlock block) {
-        byte[] blockBytes = block.toByteArray();
+        MessageProto.TrustChainBlock rawBlock = block.toBuilder().setSignature(EMPTY_SIG).build();
+        byte[] blockBytes = rawBlock.toByteArray();
         byte[] hashOut = new byte[Sodium.crypto_hash_sha256_bytes()];
         Sodium.crypto_hash_sha256(hashOut, blockBytes, blockBytes.length);
         return blockBytes;
@@ -215,12 +214,12 @@ public class TrustChainBlock {
             errors.add("Link sequence number not empty and is prior to genesis");
         }
 
-        VerifyKey verifyKey = Key.getVerifyKeyFromBytes(block.getPublicKey().toByteArray());
+        PublicKeyPair publicKeyPair = Key.getPublicKeyPairFromBytes(block.getPublicKey().toByteArray());
 
         // If public key is valid, check validity of signature
         byte[] hash = hash(block);
         byte[] signature = block.getSignature().toByteArray();
-        if (!Key.verify(verifyKey, hash, signature)) {
+        if (!Key.verify(publicKeyPair.getVerifyKey(), hash, signature)) {
             result.setInvalid();
             errors.add("Invalid signature.");
         }

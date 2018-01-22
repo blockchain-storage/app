@@ -35,7 +35,7 @@ public class FundsActivity extends AppCompatActivity {
         TrustChainDBHelper helper = new TrustChainDBHelper(this);
 
         DualKey ownKeyPair = Key.loadKeys(this);
-        byte[] myPublicKey = ownKeyPair.getPublicKey().toBytes();
+        byte[] myPublicKey = ownKeyPair.getPublicKeyPair().toBytes();
         transactionListView = findViewById(R.id.transaction_listview);
         FundsAdapter adapter = new FundsAdapter(this);
 

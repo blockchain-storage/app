@@ -44,6 +44,10 @@ public class DualKey {
         Sodium.crypto_sign_seed_keypair(signPublicKey, signPrivateKey, signSeed);
     }
 
+    public PublicKeyPair getPublicKeyPair() {
+        return new PublicKeyPair(getPublicKey(), getVerifyKey());
+    }
+
     public PrivateKey getPrivateKey() {
         return new PrivateKey(privateKey);
     }
@@ -52,7 +56,7 @@ public class DualKey {
         return new PublicKey(publicKey);
     }
 
-    public VerifyKey getSignPublicKey() {
+    public VerifyKey getVerifyKey() {
         return new VerifyKey(signPublicKey);
     }
 

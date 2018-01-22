@@ -7,7 +7,6 @@ import android.util.Log;
 import org.libsodium.jni.NaCl;
 import org.libsodium.jni.Sodium;
 import org.libsodium.jni.keys.PrivateKey;
-import org.libsodium.jni.keys.PublicKey;
 import org.libsodium.jni.keys.VerifyKey;
 
 /**
@@ -80,12 +79,8 @@ public class Key {
         return Sodium.crypto_sign_ed25519_verify_detached(signature, message, message.length, verifyKey.toBytes()) == 0;
     }
 
-    public static PublicKey getPublicKeyFromBytes(byte[] rawKey) {
-        return new PublicKey(rawKey);
-    }
-
-    public static VerifyKey getVerifyKeyFromBytes(byte[] rawKey) {
-        return new VerifyKey(rawKey);
+    public static PublicKeyPair getPublicKeyPairFromBytes(byte[] rawKeypair) {
+        return new PublicKeyPair(rawKeypair);
     }
 
     /**

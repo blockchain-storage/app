@@ -45,7 +45,7 @@ public class KeyActivity extends AppCompatActivity {
                 DualKey kp = Key.loadKeys(getApplicationContext());
                 byte[] sig = Base64.decode(signedData.getText().toString(), Base64.DEFAULT);
                 byte[] data = new byte[] {0x30, 0x30, 0x30, 0x30,0x30, 0x30, 0x30, 0x30};
-                if(Key.verify(kp.getSignPublicKey(), data, sig)) {
+                if(Key.verify(kp.getVerifyKey(), data, sig)) {
                     Toast.makeText(getApplicationContext(), R.string.valid_signature, Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), R.string.invalid_signature, Toast.LENGTH_SHORT).show();

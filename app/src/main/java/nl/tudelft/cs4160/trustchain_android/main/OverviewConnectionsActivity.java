@@ -180,7 +180,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      */
     public boolean isStartedFirstTime(TrustChainDBHelper dbHelper, DualKey kp) {
         // check if a genesis block is present in database
-        MessageProto.TrustChainBlock genesisBlock = dbHelper.getBlock(kp.getPublicKey().toBytes(), GENESIS_SEQ);
+        MessageProto.TrustChainBlock genesisBlock = dbHelper.getBlock(kp.getPublicKeyPair().toBytes(), GENESIS_SEQ);
         return (genesisBlock == null);
     }
 
@@ -327,7 +327,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendIntroductionRequest(PeerAppToApp peer) throws IOException {
-        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKey().toBytes());
+        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKeyPair().toBytes());
 
         IntroductionRequest request = new IntroductionRequest(hashId, peer.getAddress(), connectionType, networkOperator, publicKey);
         sendMessage(request, peer);
@@ -341,7 +341,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPunctureRequest(PeerAppToApp peer, PeerAppToApp puncturePeer) throws IOException {
-        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKey().toBytes());
+        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKeyPair().toBytes());
         PunctureRequest request = new PunctureRequest(hashId, peer.getAddress(), internalSourceAddress, puncturePeer, publicKey);
         sendMessage(request, peer);
     }
@@ -353,7 +353,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private void sendPuncture(PeerAppToApp peer) throws IOException {
-        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKey().toBytes());
+        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKeyPair().toBytes());
 
         Puncture puncture = new Puncture(hashId, peer.getAddress(), internalSourceAddress, publicKey);
         sendMessage(puncture, peer);
@@ -372,7 +372,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
             if (p.hasReceivedData() && p.getPeerId() != null && p.isAlive())
                 pexPeers.add(p);
         }
-        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKey().toBytes());
+        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKeyPair().toBytes());
 
         // check if connection information is loaded
         if(internalSourceAddress != null) {
@@ -392,7 +392,7 @@ public class OverviewConnectionsActivity extends AppCompatActivity {
      * @throws IOException
      */
     private synchronized void sendMessage(Message message, PeerAppToApp peer) throws IOException {
-        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKey().toBytes());
+        String publicKey = bytesToHex(Key.loadKeys(getApplicationContext()).getPublicKeyPair().toBytes());
         message.putPubKey(publicKey);
 
         Log.d("App-To-App Log", "Sending " + message);

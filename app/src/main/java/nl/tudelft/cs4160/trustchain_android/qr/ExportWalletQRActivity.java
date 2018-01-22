@@ -74,7 +74,7 @@ public class ExportWalletQRActivity extends AppCompatActivity {
             // Partly duplicated code from Communication.java
             QRTransaction transaction = new QRTransaction();
             try {
-                MessageProto.TrustChainBlock lastBlock = dbHelper.getLatestBlock(keyPairOfA.getPublicKey().toBytes());
+                MessageProto.TrustChainBlock lastBlock = dbHelper.getLatestBlock(keyPairOfA.getPublicKeyPair().toBytes());
                 JSONObject object = new JSONObject(lastBlock.getTransaction().toStringUtf8());
                 System.out.println(object.toString());
                 // Pretend that some transfer identity
@@ -99,9 +99,9 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                     createBlock(
                             transactionAdapter.toJson(transaction).getBytes(),
                             dbHelper,
-                            keyPairOfA.getPublicKey().toBytes(),
+                            keyPairOfA.getPublicKeyPair().toBytes(),
                             null,
-                            keyPairOfC.getPublicKey().toBytes()
+                            keyPairOfC.getPublicKeyPair().toBytes()
                     );
             blockAtoC = sign(blockAtoC, keyPairOfA.getSigningKey());
 
@@ -109,9 +109,9 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                     createBlock(
                             transactionAdapter.toJson(transaction).getBytes(),
                             dbHelper,
-                            keyPairOfC.getPublicKey().toBytes(),
+                            keyPairOfC.getPublicKeyPair().toBytes(),
                             blockAtoC,
-                            keyPairOfA.getPublicKey().toBytes()
+                            keyPairOfA.getPublicKeyPair().toBytes()
                     );
             blockCtoA = sign(blockCtoA, keyPairOfC.getSigningKey());
 
