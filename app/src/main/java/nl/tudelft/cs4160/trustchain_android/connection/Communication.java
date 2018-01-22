@@ -349,7 +349,16 @@ public abstract class Communication {
             }
             return;
         } else {
-            dbHelper.insertInDB(block);
+            System.out.println(block.toString());
+            System.out.println("CHAIN");
+            for (MessageProto.TrustChainBlock t: dbHelper.getBlocks(block.getPublicKey().toByteArray())) {
+                System.out.println(t.toString());
+            }
+            MessageProto.TrustChainBlock dbBlock = dbHelper.getBlock(block.getPublicKey().toByteArray(), block.getSequenceNumber());
+            if (dbBlock == null || !dbBlock.toString().equals(block.toString())) {
+                System.out.println("Block inserted");
+                dbHelper.insertInDB(block);
+            }
         }
 
         byte[] pk = getMyPublicKey();
