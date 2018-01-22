@@ -10,7 +10,7 @@ import org.libsodium.jni.Sodium;
 
 import java.util.Arrays;
 
-import nl.tudelft.cs4160.trustchain_android.Util.KeyPair;
+import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
@@ -21,43 +21,62 @@ import nl.tudelft.cs4160.trustchain_android.qr.models.QRWallet;
 
 public class TrustChainBlockFactory {
     Moshi moshi = new Moshi.Builder().build();
-    JsonAdapter<QRTransaction> walletAdapter = moshi.adapter(QRTransaction.class);
+    JsonAdapter<QRTransaction> transactionAdapter = moshi.adapter(QRTransaction.class);
 
-    public MessageProto.TrustChainBlock createBlock(QRWallet wallet, TrustChainDBHelper helper, KeyPair ownKeyPair) throws QRWalletImportException {
-        String transactionString = walletAdapter.toJson(wallet.transaction);
-        KeyPair walletKeyPair = getKeyPairFromWallet(wallet);
+    public MessageProto.TrustChainBlock createBlock(QRWallet wallet, TrustChainDBHelper helper, DualKey ownKeyPair) throws QRWalletImportException {
+        byte[] myPublicKey = ownKeyPair.getPublicKeyPair().toBytes();
+
+        QRTransaction tx;
+        try {
+            ByteString tx_data = helper.getLatestBlock(myPublicKey).getTransaction();
+            String tx_string = tx_data.toStringUtf8();
+            tx = transactionAdapter.fromJson( tx_string);
+            // Similar to tribler logic.
+            // We are likely mis-interpreting their logic and/or their logic is wrong
+            // This is part of a POC for one way transfer identities,
+            // Dont take this as a reference point for TX.
+            // At the time of writing there is no TX api.
+            wallet.transaction.totalUp += tx.totalUp;
+            wallet.transaction.totalDown += tx.totalDown;
+        } catch (Exception e) {
+
+        }
+
+        String transactionString = transactionAdapter.toJson(wallet.transaction);
+        DualKey walletKeyPair = getKeyPairFromWallet(wallet);
 
         MessageProto.TrustChainBlock identityHalfBlock = reconstructTemporaryIdentityHalfBlock(wallet);
 
-        MessageProto.TrustChainBlock block = TrustChainBlock.createBlock(transactionString.getBytes(), helper, ownKeyPair.getPublicKey().toBytes(), identityHalfBlock, walletKeyPair.getPublicKey().toBytes());
-        block = TrustChainBlock.sign(block, ownKeyPair.getPrivateKey());
+        MessageProto.TrustChainBlock block = TrustChainBlock.createBlock(transactionString.getBytes(), helper, myPublicKey, identityHalfBlock, walletKeyPair.getPublicKeyPair().toBytes());
+
+        block = TrustChainBlock.sign(block, ownKeyPair.getSigningKey());
 
         return block;
     }
 
-    private MessageProto.TrustChainBlock reconstructTemporaryIdentityHalfBlock(QRWallet wallet) throws InvalidDualKeyException {
-        String transactionString = walletAdapter.toJson(wallet.transaction);
+    public MessageProto.TrustChainBlock reconstructTemporaryIdentityHalfBlock(QRWallet wallet) throws InvalidDualKeyException {
+        String transactionString = transactionAdapter.toJson(wallet.transaction);
 
-        KeyPair walletKeyPair = getKeyPairFromWallet(wallet);
+        DualKey walletKeyPair = getKeyPairFromWallet(wallet);
 
         MessageProto.TrustChainBlock block = MessageProto.TrustChainBlock.newBuilder().
                 setTransaction(ByteString.copyFromUtf8(transactionString))
-                .setPublicKey(ByteString.copyFrom(walletKeyPair.getPublicKey().toBytes()))
+                .setPublicKey(ByteString.copyFrom(walletKeyPair.getPublicKeyPair().toBytes()))
                 .setSequenceNumber(wallet.block.sequenceNumber)
                 .setPreviousHash(ByteString.copyFrom(Base64.decode(wallet.block.blockHashBase64, Base64.DEFAULT)))
-                .setLinkPublicKey(ByteString.copyFrom(walletKeyPair.getPublicKey().toBytes()))
+                .setLinkPublicKey(ByteString.copyFrom(walletKeyPair.getPublicKeyPair().toBytes()))
                 .build();
-        MessageProto.TrustChainBlock signedBlock = TrustChainBlock.sign(block, walletKeyPair.getPrivateKey());
+        MessageProto.TrustChainBlock signedBlock = TrustChainBlock.sign(block, walletKeyPair.getSigningKey());
         return signedBlock;
     }
 
 
-    private KeyPair getKeyPairFromWallet(QRWallet wallet) throws InvalidDualKeyException {
+    private DualKey getKeyPairFromWallet(QRWallet wallet) throws InvalidDualKeyException {
         byte[] keyBytes = Base64.decode(wallet.privateKeyBase64, Base64.DEFAULT);
         return readKeyPair(keyBytes);
     }
 
-    private KeyPair readKeyPair(byte[] message) throws InvalidDualKeyException {
+    private DualKey readKeyPair(byte[] message) throws InvalidDualKeyException {
         String check = "LibNaCLSK:";
         byte[] expectedCheckByteArray = check.getBytes();
         byte[] checkByteArray = Arrays.copyOfRange(message, 0, expectedCheckByteArray.length);
@@ -66,8 +85,8 @@ public class TrustChainBlockFactory {
             throw new InvalidDualKeyException("Private key does not match expected format");
         }
 
-        int pkLength = Sodium.crypto_box_secretkeybytes();
-        int seedLength = Sodium.crypto_box_seedbytes();
+        int pkLength = Sodium.crypto_box_curve25519xsalsa20poly1305_secretkeybytes();
+        int seedLength = Sodium.crypto_sign_ed25519_seedbytes();
 
         int expectedLength = expectedCheckByteArray.length + pkLength + seedLength;
         if (message.length != expectedLength) {
@@ -75,7 +94,7 @@ public class TrustChainBlockFactory {
         }
 
         byte[] pk = Arrays.copyOfRange(message, expectedCheckByteArray.length, expectedCheckByteArray.length + pkLength); // first group is pk
-        byte[] seed = Arrays.copyOfRange(message, expectedCheckByteArray.length + pkLength, expectedCheckByteArray.length + pkLength + seedLength); // second group is seed
-        return new KeyPair(pk, seed);
+        byte[] signSeed = Arrays.copyOfRange(message, expectedCheckByteArray.length + pkLength, expectedCheckByteArray.length + pkLength + seedLength); // second group is seed
+        return new DualKey(pk, signSeed);
     }
 }

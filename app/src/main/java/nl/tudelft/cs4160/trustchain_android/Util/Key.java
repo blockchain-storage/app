@@ -7,7 +7,7 @@ import android.util.Log;
 import org.libsodium.jni.NaCl;
 import org.libsodium.jni.Sodium;
 import org.libsodium.jni.keys.PrivateKey;
-import org.libsodium.jni.keys.PublicKey;
+import org.libsodium.jni.keys.VerifyKey;
 
 /**
  * Manages key operations.
@@ -20,31 +20,29 @@ public class Key {
 
     private final static String TAG = "KEY";
 
-    public final static String DEFAULT_PUB_KEY_FILE = "pub.key";
-    public final static String DEFAULT_PRIV_KEY_FILE = "priv.key";
-    public final static String DEFAULT_SEED_KEY_FILE = "seed.key";
+    public final static String DEFAULT_PRIVATE_KEY_FILE = "private.key";
+    public final static String DEFAULT_SIGN_KEY_FILE = "sign.key";
 
 
-    public static KeyPair ensureKeysExist(Context context) {
+    public static DualKey ensureKeysExist(Context context) {
         try {
-            KeyPair keyPair = loadKeys(context);
-            return keyPair;
+            DualKey dualKey = loadKeys(context);
+            return dualKey;
         } catch (Exception e) {
             Log.e(TAG, "Keys could not be found", e);
             return createAndSaveKeys(context);
         }
     }
 
-    public static KeyPair createAndSaveKeys(Context context) {
-        KeyPair kp = Key.createNewKeyPair();
+    public static DualKey createAndSaveKeys(Context context) {
+        DualKey kp = Key.createNewKeyPair();
         saveKeyPair(context, kp);
         return kp;
     }
 
-    public static void saveKeyPair(Context context, KeyPair kp) {
-        Key.saveKey(context, Key.DEFAULT_PUB_KEY_FILE, kp.getPublicKey().toBytes());
-        Key.saveKey(context, Key.DEFAULT_PRIV_KEY_FILE, kp.getPrivateKey().toBytes());
-        Key.saveKey(context, Key.DEFAULT_SEED_KEY_FILE, kp.getSeed());
+    public static void saveKeyPair(Context context, DualKey kp) {
+        Key.saveKey(context, Key.DEFAULT_PRIVATE_KEY_FILE, kp.getPrivateKey().toBytes());
+        Key.saveKey(context, Key.DEFAULT_SIGN_KEY_FILE, kp.getSigningKey().toBytes());
     }
 
     /**
@@ -52,67 +50,37 @@ public class Key {
      *
      * @return KeyPair.
      */
-    public static KeyPair createNewKeyPair() {
-        return new KeyPair();
+    public static DualKey createNewKeyPair() {
+        return new DualKey();
     }
 
     /**
-     * Sign a message using the given private key.
+     * Sign a message using the given signing key.
      *
-     * @param privateKey The private key
+     * @param signingKey The signing key
      * @param data       The message
      * @return The signature
      */
-    public static byte[] sign(PrivateKey privateKey, byte[] data) {
-        byte[] out = new byte[Sodium.crypto_sign_ed25519_bytes()];
-        Sodium.crypto_sign_detached(out, new int[] { out.length }, data, data.length, privateKey.toBytes());
-        return out;
+    public static byte[] sign(SigningKey signingKey, byte[] data) {
+        byte[] signature = new byte[Sodium.crypto_sign_bytes()];
+        Sodium.crypto_sign_ed25519_detached(signature, new int[] { signature.length }, data, data.length, signingKey.toBytes());
+        return signature;
     }
 
     /**
      * Verify a signature
      *
-     * @param publicKey The public key of the signer.
-     * @param msg       The message that was signed.
-     * @param rawSig    The signature.
+     * @param verifyKey  The verify key of the signer.
+     * @param message    The message that was signed.
+     * @param signature  The signature.
      * @return True if this a correct signature, false if not.
      */
-    public static boolean verify(PublicKey publicKey, byte[] msg, byte[] rawSig) {
-        int result = Sodium.crypto_sign_ed25519_verify_detached(rawSig, msg, msg.length, publicKey.toBytes());
-        return result == 0;
+    public static boolean verify(VerifyKey verifyKey, byte[] message, byte[] signature) {
+        return Sodium.crypto_sign_ed25519_verify_detached(signature, message, message.length, verifyKey.toBytes()) == 0;
     }
 
-    /**
-     * Load a public key from the given file.
-     *
-     * @param context The context (needed so we can read the file)
-     * @param file    The file to read.
-     * @return The public key.
-     */
-    public static PublicKey loadPublicKey(Context context, String file) {
-        String key = Util.readFile(context, file);
-        if(key == null) {
-            return null;
-        }
-        return loadPublicKey(key);
-    }
-
-
-    /**
-     * Load a raw base64 encoded key.
-     *
-     * @param key The base64 encoded key.
-     * @return Public key
-     */
-    public static PublicKey loadPublicKey(String key) {
-        byte[] rawKey = Base64.decode(key, Base64.DEFAULT);
-        PublicKey pubKeySpec1 = getPublicKeyFromBytes(rawKey);
-        if (pubKeySpec1 != null) return pubKeySpec1;
-        return null;
-    }
-
-    public static PublicKey getPublicKeyFromBytes(byte[] rawKey) {
-        return new PublicKey(rawKey);
+    public static PublicKeyPair getPublicKeyPairFromBytes(byte[] rawKeypair) {
+        return new PublicKeyPair(rawKeypair);
     }
 
     /**
@@ -143,15 +111,15 @@ public class Key {
         return new PrivateKey(rawKey);
     }
 
-    public static byte[] loadSeed(Context context, String file) {
+    public static SigningKey loadSigningKey(Context context, String file) {
         String contents = Util.readFile(context, file);
-        Log.i(TAG, "PRIVATE FROM FILE: " + contents);
-        return loadSeed(contents);
+        Log.i(TAG, "SIGNING KEY FROM FILE: " + contents);
+        return loadSigningKey(contents);
     }
 
-    public static byte[] loadSeed(String b64) {
-        byte[] seed = Base64.decode(b64, Base64.DEFAULT);
-        return seed;
+    public static SigningKey loadSigningKey(String b64) {
+        byte[] signingKey = Base64.decode(b64, Base64.DEFAULT);
+        return new SigningKey(signingKey);
     }
 
     /**
@@ -160,11 +128,11 @@ public class Key {
      * @param context The context (needed to read the files)
      * @return A KeyPair with the private and public key.
      */
-    public static KeyPair loadKeys(Context context) {
+    public static DualKey loadKeys(Context context) {
         try {
-            PrivateKey privateKey = Key.loadPrivateKey(context, Key.DEFAULT_PRIV_KEY_FILE);
-            byte[] seed = Key.loadSeed(context, Key.DEFAULT_SEED_KEY_FILE);
-            return new KeyPair(privateKey.toBytes(), seed);
+            PrivateKey privateKey = Key.loadPrivateKey(context, Key.DEFAULT_PRIVATE_KEY_FILE);
+            SigningKey signingKey = Key.loadSigningKey(context, Key.DEFAULT_SIGN_KEY_FILE);
+            return new DualKey(privateKey.toBytes(), signingKey.toBytes());
         } catch (Throwable t) { return null; }
     }
 
