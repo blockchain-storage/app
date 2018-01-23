@@ -29,14 +29,13 @@ import java.util.Arrays;
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
+import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlockHelper;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 import nl.tudelft.cs4160.trustchain_android.qr.models.QRBlock;
 import nl.tudelft.cs4160.trustchain_android.qr.models.QRTransaction;
 import nl.tudelft.cs4160.trustchain_android.qr.models.QRWallet;
 
-import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.createBlock;
-import static nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock.sign;
 
 public class ExportWalletQRActivity extends AppCompatActivity {
     final static String TAG = "ExportWalletQRActivity";
@@ -111,24 +110,24 @@ public class ExportWalletQRActivity extends AppCompatActivity {
 
             JsonAdapter<QRTransaction> transactionAdapter = moshi.adapter(QRTransaction.class);
             MessageProto.TrustChainBlock blockAtoC =
-                    createBlock(
+                    TrustChainBlockHelper.createBlock(
                             transactionAdapter.toJson(transaction).getBytes(),
                             dbHelper,
                             keyPairOfA.getPublicKeyPair().toBytes(),
                             null,
                             keyPairOfC.getPublicKeyPair().toBytes()
                     );
-            blockAtoC = sign(blockAtoC, keyPairOfA.getSigningKey());
+            blockAtoC = TrustChainBlockHelper.sign(blockAtoC, keyPairOfA.getSigningKey());
 
             MessageProto.TrustChainBlock blockCtoA =
-                    createBlock(
+                    TrustChainBlockHelper.createBlock(
                             transactionAdapter.toJson(transaction).getBytes(),
                             dbHelper,
                             keyPairOfC.getPublicKeyPair().toBytes(),
                             blockAtoC,
                             keyPairOfA.getPublicKeyPair().toBytes()
                     );
-            blockCtoA = sign(blockCtoA, keyPairOfC.getSigningKey());
+            blockCtoA = TrustChainBlockHelper.sign(blockCtoA, keyPairOfC.getSigningKey());
 
             dbHelper.insertInDB(blockAtoC);
             dbHelper.insertInDB(blockCtoA);

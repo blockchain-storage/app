@@ -5,9 +5,9 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 
-
 /**
- * The peer object. The peer is identified by its unique peer id and keeps track of the last send and receive time.
+ * The peer object that is used to find other connected peers in the network.
+ * The peer is identified by its unique peer id, which is the chosen username, and keeps track of the last send and receive time.
  * <p/>
  * Created by jaap on 5/19/16.
  */
@@ -15,7 +15,8 @@ public class PeerAppToApp implements Serializable {
     public final static boolean INCOMING = true;
     public final static boolean OUTGOING = false;
 
-    final private static int TIMEOUT = 20000;
+    final private static int TIMEOUT = 15000;
+    final private static int REMOVE_TIMEOUT = 25000;
     private InetSocketAddress address;
     private String peerId;
     private boolean hasReceivedData = false;
@@ -77,7 +78,10 @@ public class PeerAppToApp implements Serializable {
     }
 
     public InetAddress getExternalAddress() {
-        return address.getAddress();
+        if (address != null) {
+            return address.getAddress();
+        }
+        return null;
     }
 
     public InetSocketAddress getAddress() {
@@ -114,10 +118,20 @@ public class PeerAppToApp implements Serializable {
      */
     public boolean isAlive() {
         if (hasSentData) {
-            if (System.currentTimeMillis() - lastSendTime < TIMEOUT) return true;
-            return hasReceivedData && lastReceiveTime > lastSendTime;
+            return System.currentTimeMillis() - lastSendTime < TIMEOUT;
         }
         return true;
+    }
+
+    /**
+     * If a peer has sent data, but the last time it has sent is longer ago than the remove timeout, it can be removed.
+     * @return
+     */
+    boolean canBeRemoved() {
+        if (hasSentData) {
+            return System.currentTimeMillis() - lastSendTime > REMOVE_TIMEOUT;
+        }
+        return false;
     }
 
     @Override
