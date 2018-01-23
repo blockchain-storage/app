@@ -81,10 +81,23 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                 // Pretend that some transfer identity
                 // uploaded to you by the same amount that you uploaded to others.
                 // Effectilfy transfering reputation.
-                transaction.up = object.getLong("total_up");
-                transaction.down = object.getLong("total_down");
-                transaction.totalUp = object.getLong("total_up") + transaction.down;
-                transaction.totalDown = object.getLong("total_down") + transaction.up;
+                long total_up =  object.getLong("total_up");
+                long total_down =  object.getLong("total_down");
+
+                if (total_down >= total_up ){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            displayError("You do not have tokens to transfer");
+                        }
+                    });
+                    return;
+
+                }
+                transaction.up = total_up - total_down ;
+                transaction.down = 0;
+                //transaction.totalUp = object.getLong("total_up") + transaction.down;
+                //transaction.totalDown = object.getLong("total_down") + transaction.up;
             } catch (Exception e) {
                 Log.e(TAG, "Could not export QR code, chain data might be corrupted: " + e.getMessage(), e);
                 runOnUiThread(new Runnable() {
@@ -93,6 +106,7 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                         displayError("Cannot export QR code, there are no funds in your chain data!");
                     }
                 });
+                return;
             }
 
             JsonAdapter<QRTransaction> transactionAdapter = moshi.adapter(QRTransaction.class);
