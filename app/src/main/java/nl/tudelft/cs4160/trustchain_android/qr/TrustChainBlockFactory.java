@@ -11,7 +11,7 @@ import org.libsodium.jni.Sodium;
 import java.util.Arrays;
 
 import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
-import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
+import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlockHelper;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 import nl.tudelft.cs4160.trustchain_android.qr.exception.InvalidDualKeyException;
@@ -47,9 +47,9 @@ public class TrustChainBlockFactory {
 
         MessageProto.TrustChainBlock identityHalfBlock = reconstructTemporaryIdentityHalfBlock(wallet);
 
-        MessageProto.TrustChainBlock block = TrustChainBlock.createBlock(transactionString.getBytes(), helper, myPublicKey, identityHalfBlock, walletKeyPair.getPublicKeyPair().toBytes());
+        MessageProto.TrustChainBlock block = TrustChainBlockHelper.createBlock(transactionString.getBytes(), helper, myPublicKey, identityHalfBlock, walletKeyPair.getPublicKeyPair().toBytes());
 
-        block = TrustChainBlock.sign(block, ownKeyPair.getSigningKey());
+        block = TrustChainBlockHelper.sign(block, ownKeyPair.getSigningKey());
 
         return block;
     }
@@ -66,7 +66,7 @@ public class TrustChainBlockFactory {
                 .setPreviousHash(ByteString.copyFrom(Base64.decode(wallet.block.blockHashBase64, Base64.DEFAULT)))
                 .setLinkPublicKey(ByteString.copyFrom(walletKeyPair.getPublicKeyPair().toBytes()))
                 .build();
-        MessageProto.TrustChainBlock signedBlock = TrustChainBlock.sign(block, walletKeyPair.getSigningKey());
+        MessageProto.TrustChainBlock signedBlock = TrustChainBlockHelper.sign(block, walletKeyPair.getSigningKey());
         return signedBlock;
     }
 
