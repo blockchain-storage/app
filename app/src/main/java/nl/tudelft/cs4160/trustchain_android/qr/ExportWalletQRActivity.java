@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import nl.tudelft.cs4160.trustchain_android.R;
 import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
@@ -172,7 +173,7 @@ public class ExportWalletQRActivity extends AppCompatActivity {
         ByteArrayOutputStream export = new ByteArrayOutputStream( );
         export.write("LibNaCLSK:".getBytes());
         export.write(pk.getPrivateKey().toBytes());
-        export.write(pk.getSigningKey().toBytes());
+        export.write(Arrays.copyOfRange(pk.getSigningKey().toBytes(), 32,64));
 
         return export.toByteArray();
     }
