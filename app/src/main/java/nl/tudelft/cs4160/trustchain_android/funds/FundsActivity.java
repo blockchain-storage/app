@@ -39,7 +39,7 @@ public class FundsActivity extends AppCompatActivity {
         transactionListView = findViewById(R.id.transaction_listview);
         FundsAdapter adapter = new FundsAdapter(this);
 
-        List<MessageProto.TrustChainBlock> blocks =  helper.getBlocks(myPublicKey);
+        List<MessageProto.TrustChainBlock> blocks =  helper.getBlocks(myPublicKey, false);
         Collections.reverse(blocks);
 
         adapter.addAll(blocks);
