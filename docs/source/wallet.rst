@@ -17,6 +17,9 @@ Import/Export of tokens between phones
 The functioning is exactly the same as the import of tokens PC-phone, only that now it is performed between two phones using the Trustchain Android app. In order to go through with it, the sender uses the menu option "Export tokens", which displays in the screen a QR code with all the necessary to export the total amount of tokens. Then, the receiver should make use of the "Import tokens" option to scan it and complete the transaction.
 As it is an offline process, same security concerns as before apply here.
 
+.. figure:: ./images/import-export.png 
+	:width: 600px
+
 QR code
 =======
 
