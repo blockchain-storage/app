@@ -6,28 +6,28 @@ package nl.tudelft.cs4160.trustchain_android.message;
 public final class MessageProto {
   private MessageProto() {}
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
+          com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
+          com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
+            (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface MessageOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:message.Message)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:message.Message)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+     * <code>.message.TrustChainBlock halfBlock = 1;</code>
      */
     boolean hasHalfBlock();
     /**
-     * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+     * <code>.message.TrustChainBlock halfBlock = 1;</code>
      */
     nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock getHalfBlock();
     /**
-     * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+     * <code>.message.TrustChainBlock halfBlock = 1;</code>
      */
     nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockOrBuilder getHalfBlockOrBuilder();
 
@@ -48,10 +48,10 @@ public final class MessageProto {
    * Protobuf type {@code message.Message}
    */
   public  static final class Message extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:message.Message)
-      MessageOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:message.Message)
+          MessageOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use Message.newBuilder() to construct.
     private Message(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -65,13 +65,13 @@ public final class MessageProto {
       return this.unknownFields;
     }
     private Message(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -82,7 +82,7 @@ public final class MessageProto {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -119,40 +119,40 @@ public final class MessageProto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_Message_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_Message_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message.Builder.class);
     }
 
     public static final int HALFBLOCK_FIELD_NUMBER = 1;
     private nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock halfBlock_;
     /**
-     * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+     * <code>.message.TrustChainBlock halfBlock = 1;</code>
      */
     public boolean hasHalfBlock() {
       return halfBlock_ != null;
     }
     /**
-     * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+     * <code>.message.TrustChainBlock halfBlock = 1;</code>
      */
     public nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock getHalfBlock() {
       return halfBlock_ == null ? nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.getDefaultInstance() : halfBlock_;
     }
     /**
-     * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+     * <code>.message.TrustChainBlock halfBlock = 1;</code>
      */
     public nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockOrBuilder getHalfBlockOrBuilder() {
       return getHalfBlock();
@@ -190,7 +190,7 @@ public final class MessageProto {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (halfBlock_ != null) {
         output.writeMessage(1, getHalfBlock());
       }
@@ -207,11 +207,11 @@ public final class MessageProto {
       size = 0;
       if (halfBlock_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getHalfBlock());
+                .computeMessageSize(1, getHalfBlock());
       }
       if (crawlRequest_ != null) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getCrawlRequest());
+                .computeMessageSize(2, getCrawlRequest());
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -221,7 +221,7 @@ public final class MessageProto {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message)) {
         return super.equals(obj);
@@ -232,12 +232,12 @@ public final class MessageProto {
       result = result && (hasHalfBlock() == other.hasHalfBlock());
       if (hasHalfBlock()) {
         result = result && getHalfBlock()
-            .equals(other.getHalfBlock());
+                .equals(other.getHalfBlock());
       }
       result = result && (hasCrawlRequest() == other.hasCrawlRequest());
       if (hasCrawlRequest()) {
         result = result && getCrawlRequest()
-            .equals(other.getCrawlRequest());
+                .equals(other.getCrawlRequest());
       }
       result = result && unknownFields.equals(other.unknownFields);
       return result;
@@ -264,73 +264,73 @@ public final class MessageProto {
     }
 
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -342,12 +342,12 @@ public final class MessageProto {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -355,19 +355,19 @@ public final class MessageProto {
      * Protobuf type {@code message.Message}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:message.Message)
-        nl.tudelft.cs4160.trustchain_android.message.MessageProto.MessageOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:message.Message)
+            nl.tudelft.cs4160.trustchain_android.message.MessageProto.MessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_Message_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_Message_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message.Builder.class);
       }
 
       // Construct using nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message.newBuilder()
@@ -376,7 +376,7 @@ public final class MessageProto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -403,7 +403,7 @@ public final class MessageProto {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_Message_descriptor;
       }
 
@@ -439,26 +439,26 @@ public final class MessageProto {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -488,9 +488,9 @@ public final class MessageProto {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         nl.tudelft.cs4160.trustchain_android.message.MessageProto.Message parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -507,15 +507,15 @@ public final class MessageProto {
 
       private nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock halfBlock_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-          nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockOrBuilder> halfBlockBuilder_;
+              nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockOrBuilder> halfBlockBuilder_;
       /**
-       * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+       * <code>.message.TrustChainBlock halfBlock = 1;</code>
        */
       public boolean hasHalfBlock() {
         return halfBlockBuilder_ != null || halfBlock_ != null;
       }
       /**
-       * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+       * <code>.message.TrustChainBlock halfBlock = 1;</code>
        */
       public nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock getHalfBlock() {
         if (halfBlockBuilder_ == null) {
@@ -525,7 +525,7 @@ public final class MessageProto {
         }
       }
       /**
-       * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+       * <code>.message.TrustChainBlock halfBlock = 1;</code>
        */
       public Builder setHalfBlock(nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock value) {
         if (halfBlockBuilder_ == null) {
@@ -541,10 +541,10 @@ public final class MessageProto {
         return this;
       }
       /**
-       * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+       * <code>.message.TrustChainBlock halfBlock = 1;</code>
        */
       public Builder setHalfBlock(
-          nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder builderForValue) {
+              nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder builderForValue) {
         if (halfBlockBuilder_ == null) {
           halfBlock_ = builderForValue.build();
           onChanged();
@@ -555,13 +555,13 @@ public final class MessageProto {
         return this;
       }
       /**
-       * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+       * <code>.message.TrustChainBlock halfBlock = 1;</code>
        */
       public Builder mergeHalfBlock(nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock value) {
         if (halfBlockBuilder_ == null) {
           if (halfBlock_ != null) {
             halfBlock_ =
-              nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.newBuilder(halfBlock_).mergeFrom(value).buildPartial();
+                    nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.newBuilder(halfBlock_).mergeFrom(value).buildPartial();
           } else {
             halfBlock_ = value;
           }
@@ -573,7 +573,7 @@ public final class MessageProto {
         return this;
       }
       /**
-       * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+       * <code>.message.TrustChainBlock halfBlock = 1;</code>
        */
       public Builder clearHalfBlock() {
         if (halfBlockBuilder_ == null) {
@@ -587,33 +587,33 @@ public final class MessageProto {
         return this;
       }
       /**
-       * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+       * <code>.message.TrustChainBlock halfBlock = 1;</code>
        */
       public nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder getHalfBlockBuilder() {
-        
+
         onChanged();
         return getHalfBlockFieldBuilder().getBuilder();
       }
       /**
-       * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+       * <code>.message.TrustChainBlock halfBlock = 1;</code>
        */
       public nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockOrBuilder getHalfBlockOrBuilder() {
         if (halfBlockBuilder_ != null) {
           return halfBlockBuilder_.getMessageOrBuilder();
         } else {
           return halfBlock_ == null ?
-              nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.getDefaultInstance() : halfBlock_;
+                  nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.getDefaultInstance() : halfBlock_;
         }
       }
       /**
-       * <code>.message.TrustChainBlockHelper halfBlock = 1;</code>
+       * <code>.message.TrustChainBlock halfBlock = 1;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockOrBuilder> 
-          getHalfBlockFieldBuilder() {
+              nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockOrBuilder>
+      getHalfBlockFieldBuilder() {
         if (halfBlockBuilder_ == null) {
           halfBlockBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockOrBuilder>(
+                  nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockOrBuilder>(
                   getHalfBlock(),
                   getParentForChildren(),
                   isClean());
@@ -624,7 +624,7 @@ public final class MessageProto {
 
       private nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest crawlRequest_ = null;
       private com.google.protobuf.SingleFieldBuilderV3<
-          nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequestOrBuilder> crawlRequestBuilder_;
+              nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequestOrBuilder> crawlRequestBuilder_;
       /**
        * <code>.message.CrawlRequest crawlRequest = 2;</code>
        */
@@ -661,7 +661,7 @@ public final class MessageProto {
        * <code>.message.CrawlRequest crawlRequest = 2;</code>
        */
       public Builder setCrawlRequest(
-          nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder builderForValue) {
+              nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder builderForValue) {
         if (crawlRequestBuilder_ == null) {
           crawlRequest_ = builderForValue.build();
           onChanged();
@@ -678,7 +678,7 @@ public final class MessageProto {
         if (crawlRequestBuilder_ == null) {
           if (crawlRequest_ != null) {
             crawlRequest_ =
-              nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.newBuilder(crawlRequest_).mergeFrom(value).buildPartial();
+                    nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.newBuilder(crawlRequest_).mergeFrom(value).buildPartial();
           } else {
             crawlRequest_ = value;
           }
@@ -707,7 +707,7 @@ public final class MessageProto {
        * <code>.message.CrawlRequest crawlRequest = 2;</code>
        */
       public nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder getCrawlRequestBuilder() {
-        
+
         onChanged();
         return getCrawlRequestFieldBuilder().getBuilder();
       }
@@ -719,18 +719,18 @@ public final class MessageProto {
           return crawlRequestBuilder_.getMessageOrBuilder();
         } else {
           return crawlRequest_ == null ?
-              nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.getDefaultInstance() : crawlRequest_;
+                  nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.getDefaultInstance() : crawlRequest_;
         }
       }
       /**
        * <code>.message.CrawlRequest crawlRequest = 2;</code>
        */
       private com.google.protobuf.SingleFieldBuilderV3<
-          nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequestOrBuilder> 
-          getCrawlRequestFieldBuilder() {
+              nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequestOrBuilder>
+      getCrawlRequestFieldBuilder() {
         if (crawlRequestBuilder_ == null) {
           crawlRequestBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequestOrBuilder>(
+                  nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequestOrBuilder>(
                   getCrawlRequest(),
                   getParentForChildren(),
                   isClean());
@@ -739,12 +739,12 @@ public final class MessageProto {
         return crawlRequestBuilder_;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -763,12 +763,12 @@ public final class MessageProto {
     }
 
     private static final com.google.protobuf.Parser<Message>
-        PARSER = new com.google.protobuf.AbstractParser<Message>() {
+            PARSER = new com.google.protobuf.AbstractParser<Message>() {
       public Message parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-          return new Message(input, extensionRegistry);
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Message(input, extensionRegistry);
       }
     };
 
@@ -788,8 +788,8 @@ public final class MessageProto {
   }
 
   public interface TrustChainBlockOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:message.TrustChainBlockHelper)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:message.TrustChainBlock)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>bytes public_key = 1;</code>
@@ -827,14 +827,14 @@ public final class MessageProto {
     com.google.protobuf.ByteString getTransaction();
   }
   /**
-   * Protobuf type {@code message.TrustChainBlockHelper}
+   * Protobuf type {@code message.TrustChainBlock}
    */
   public  static final class TrustChainBlock extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:message.TrustChainBlockHelper)
-      TrustChainBlockOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use TrustChainBlockHelper.newBuilder() to construct.
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:message.TrustChainBlock)
+          TrustChainBlockOrBuilder {
+    private static final long serialVersionUID = 0L;
+    // Use TrustChainBlock.newBuilder() to construct.
     private TrustChainBlock(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
@@ -854,13 +854,13 @@ public final class MessageProto {
       return this.unknownFields;
     }
     private TrustChainBlock(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -871,7 +871,7 @@ public final class MessageProto {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -917,22 +917,22 @@ public final class MessageProto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_TrustChainBlock_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_TrustChainBlock_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder.class);
     }
 
     public static final int PUBLIC_KEY_FIELD_NUMBER = 1;
@@ -1009,7 +1009,7 @@ public final class MessageProto {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (!publicKey_.isEmpty()) {
         output.writeBytes(1, publicKey_);
       }
@@ -1041,31 +1041,31 @@ public final class MessageProto {
       size = 0;
       if (!publicKey_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, publicKey_);
+                .computeBytesSize(1, publicKey_);
       }
       if (sequenceNumber_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, sequenceNumber_);
+                .computeInt32Size(2, sequenceNumber_);
       }
       if (!linkPublicKey_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, linkPublicKey_);
+                .computeBytesSize(3, linkPublicKey_);
       }
       if (linkSequenceNumber_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, linkSequenceNumber_);
+                .computeInt32Size(4, linkSequenceNumber_);
       }
       if (!previousHash_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, previousHash_);
+                .computeBytesSize(5, previousHash_);
       }
       if (!signature_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(6, signature_);
+                .computeBytesSize(6, signature_);
       }
       if (!transaction_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(7, transaction_);
+                .computeBytesSize(7, transaction_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1075,7 +1075,7 @@ public final class MessageProto {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock)) {
         return super.equals(obj);
@@ -1084,19 +1084,19 @@ public final class MessageProto {
 
       boolean result = true;
       result = result && getPublicKey()
-          .equals(other.getPublicKey());
+              .equals(other.getPublicKey());
       result = result && (getSequenceNumber()
-          == other.getSequenceNumber());
+              == other.getSequenceNumber());
       result = result && getLinkPublicKey()
-          .equals(other.getLinkPublicKey());
+              .equals(other.getLinkPublicKey());
       result = result && (getLinkSequenceNumber()
-          == other.getLinkSequenceNumber());
+              == other.getLinkSequenceNumber());
       result = result && getPreviousHash()
-          .equals(other.getPreviousHash());
+              .equals(other.getPreviousHash());
       result = result && getSignature()
-          .equals(other.getSignature());
+              .equals(other.getSignature());
       result = result && getTransaction()
-          .equals(other.getTransaction());
+              .equals(other.getTransaction());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1128,73 +1128,73 @@ public final class MessageProto {
     }
 
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -1206,41 +1206,41 @@ public final class MessageProto {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
     /**
-     * Protobuf type {@code message.TrustChainBlockHelper}
+     * Protobuf type {@code message.TrustChainBlock}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:message.TrustChainBlockHelper)
-        nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:message.TrustChainBlock)
+            nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_TrustChainBlock_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_TrustChainBlock_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.Builder.class);
       }
 
-      // Construct using nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlockHelper.newBuilder()
+      // Construct using nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1269,7 +1269,7 @@ public final class MessageProto {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_TrustChainBlock_descriptor;
       }
 
@@ -1302,26 +1302,26 @@ public final class MessageProto {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1366,9 +1366,9 @@ public final class MessageProto {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -1395,9 +1395,9 @@ public final class MessageProto {
        */
       public Builder setPublicKey(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         publicKey_ = value;
         onChanged();
         return this;
@@ -1406,7 +1406,7 @@ public final class MessageProto {
        * <code>bytes public_key = 1;</code>
        */
       public Builder clearPublicKey() {
-        
+
         publicKey_ = getDefaultInstance().getPublicKey();
         onChanged();
         return this;
@@ -1423,7 +1423,7 @@ public final class MessageProto {
        * <code>int32 sequence_number = 2;</code>
        */
       public Builder setSequenceNumber(int value) {
-        
+
         sequenceNumber_ = value;
         onChanged();
         return this;
@@ -1432,7 +1432,7 @@ public final class MessageProto {
        * <code>int32 sequence_number = 2;</code>
        */
       public Builder clearSequenceNumber() {
-        
+
         sequenceNumber_ = 0;
         onChanged();
         return this;
@@ -1450,9 +1450,9 @@ public final class MessageProto {
        */
       public Builder setLinkPublicKey(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         linkPublicKey_ = value;
         onChanged();
         return this;
@@ -1461,7 +1461,7 @@ public final class MessageProto {
        * <code>bytes link_public_key = 3;</code>
        */
       public Builder clearLinkPublicKey() {
-        
+
         linkPublicKey_ = getDefaultInstance().getLinkPublicKey();
         onChanged();
         return this;
@@ -1478,7 +1478,7 @@ public final class MessageProto {
        * <code>int32 link_sequence_number = 4;</code>
        */
       public Builder setLinkSequenceNumber(int value) {
-        
+
         linkSequenceNumber_ = value;
         onChanged();
         return this;
@@ -1487,7 +1487,7 @@ public final class MessageProto {
        * <code>int32 link_sequence_number = 4;</code>
        */
       public Builder clearLinkSequenceNumber() {
-        
+
         linkSequenceNumber_ = 0;
         onChanged();
         return this;
@@ -1505,9 +1505,9 @@ public final class MessageProto {
        */
       public Builder setPreviousHash(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         previousHash_ = value;
         onChanged();
         return this;
@@ -1516,7 +1516,7 @@ public final class MessageProto {
        * <code>bytes previous_hash = 5;</code>
        */
       public Builder clearPreviousHash() {
-        
+
         previousHash_ = getDefaultInstance().getPreviousHash();
         onChanged();
         return this;
@@ -1534,9 +1534,9 @@ public final class MessageProto {
        */
       public Builder setSignature(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         signature_ = value;
         onChanged();
         return this;
@@ -1545,7 +1545,7 @@ public final class MessageProto {
        * <code>bytes signature = 6;</code>
        */
       public Builder clearSignature() {
-        
+
         signature_ = getDefaultInstance().getSignature();
         onChanged();
         return this;
@@ -1563,9 +1563,9 @@ public final class MessageProto {
        */
       public Builder setTransaction(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         transaction_ = value;
         onChanged();
         return this;
@@ -1574,26 +1574,26 @@ public final class MessageProto {
        * <code>bytes transaction = 7;</code>
        */
       public Builder clearTransaction() {
-        
+
         transaction_ = getDefaultInstance().getTransaction();
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
 
-      // @@protoc_insertion_point(builder_scope:message.TrustChainBlockHelper)
+      // @@protoc_insertion_point(builder_scope:message.TrustChainBlock)
     }
 
-    // @@protoc_insertion_point(class_scope:message.TrustChainBlockHelper)
+    // @@protoc_insertion_point(class_scope:message.TrustChainBlock)
     private static final nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock DEFAULT_INSTANCE;
     static {
       DEFAULT_INSTANCE = new nl.tudelft.cs4160.trustchain_android.message.MessageProto.TrustChainBlock();
@@ -1604,12 +1604,12 @@ public final class MessageProto {
     }
 
     private static final com.google.protobuf.Parser<TrustChainBlock>
-        PARSER = new com.google.protobuf.AbstractParser<TrustChainBlock>() {
+            PARSER = new com.google.protobuf.AbstractParser<TrustChainBlock>() {
       public TrustChainBlock parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-          return new TrustChainBlock(input, extensionRegistry);
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+        return new TrustChainBlock(input, extensionRegistry);
       }
     };
 
@@ -1629,8 +1629,8 @@ public final class MessageProto {
   }
 
   public interface CrawlRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:message.CrawlRequest)
-      com.google.protobuf.MessageOrBuilder {
+          // @@protoc_insertion_point(interface_extends:message.CrawlRequest)
+          com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>bytes public_key = 1;</code>
@@ -1651,10 +1651,10 @@ public final class MessageProto {
    * Protobuf type {@code message.CrawlRequest}
    */
   public  static final class CrawlRequest extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:message.CrawlRequest)
-      CrawlRequestOrBuilder {
-  private static final long serialVersionUID = 0L;
+          com.google.protobuf.GeneratedMessageV3 implements
+          // @@protoc_insertion_point(message_implements:message.CrawlRequest)
+          CrawlRequestOrBuilder {
+    private static final long serialVersionUID = 0L;
     // Use CrawlRequest.newBuilder() to construct.
     private CrawlRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
@@ -1671,13 +1671,13 @@ public final class MessageProto {
       return this.unknownFields;
     }
     private CrawlRequest(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       int mutable_bitField0_ = 0;
       com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+              com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -1688,7 +1688,7 @@ public final class MessageProto {
               break;
             default: {
               if (!parseUnknownFieldProto3(
-                  input, unknownFields, extensionRegistry, tag)) {
+                      input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -1714,22 +1714,22 @@ public final class MessageProto {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
+                e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_CrawlRequest_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_CrawlRequest_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder.class);
+              .ensureFieldAccessorsInitialized(
+                      nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder.class);
     }
 
     public static final int PUBLIC_KEY_FIELD_NUMBER = 1;
@@ -1770,7 +1770,7 @@ public final class MessageProto {
     }
 
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+            throws java.io.IOException {
       if (!publicKey_.isEmpty()) {
         output.writeBytes(1, publicKey_);
       }
@@ -1790,15 +1790,15 @@ public final class MessageProto {
       size = 0;
       if (!publicKey_.isEmpty()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, publicKey_);
+                .computeBytesSize(1, publicKey_);
       }
       if (requestedSequenceNumber_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, requestedSequenceNumber_);
+                .computeInt32Size(2, requestedSequenceNumber_);
       }
       if (limit_ != 0) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, limit_);
+                .computeInt32Size(3, limit_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1808,7 +1808,7 @@ public final class MessageProto {
     @java.lang.Override
     public boolean equals(final java.lang.Object obj) {
       if (obj == this) {
-       return true;
+        return true;
       }
       if (!(obj instanceof nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest)) {
         return super.equals(obj);
@@ -1817,11 +1817,11 @@ public final class MessageProto {
 
       boolean result = true;
       result = result && getPublicKey()
-          .equals(other.getPublicKey());
+              .equals(other.getPublicKey());
       result = result && (getRequestedSequenceNumber()
-          == other.getRequestedSequenceNumber());
+              == other.getRequestedSequenceNumber());
       result = result && (getLimit()
-          == other.getLimit());
+              == other.getLimit());
       result = result && unknownFields.equals(other.unknownFields);
       return result;
     }
@@ -1845,73 +1845,73 @@ public final class MessageProto {
     }
 
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
+              .parseDelimitedWithIOException(PARSER, input);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+              .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
+              .parseWithIOException(PARSER, input);
     }
     public static nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
       return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
+              .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
     public Builder newBuilderForType() { return newBuilder(); }
@@ -1923,12 +1923,12 @@ public final class MessageProto {
     }
     public Builder toBuilder() {
       return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
+              ? new Builder() : new Builder().mergeFrom(this);
     }
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+            com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -1936,19 +1936,19 @@ public final class MessageProto {
      * Protobuf type {@code message.CrawlRequest}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:message.CrawlRequest)
-        nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequestOrBuilder {
+            com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+            // @@protoc_insertion_point(builder_implements:message.CrawlRequest)
+            nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+      getDescriptor() {
         return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_CrawlRequest_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+      internalGetFieldAccessorTable() {
         return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_CrawlRequest_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder.class);
+                .ensureFieldAccessorsInitialized(
+                        nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.class, nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.Builder.class);
       }
 
       // Construct using nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest.newBuilder()
@@ -1957,7 +1957,7 @@ public final class MessageProto {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+              com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1978,7 +1978,7 @@ public final class MessageProto {
       }
 
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return nl.tudelft.cs4160.trustchain_android.message.MessageProto.internal_static_message_CrawlRequest_descriptor;
       }
 
@@ -2007,26 +2007,26 @@ public final class MessageProto {
         return (Builder) super.clone();
       }
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.setField(field, value);
       }
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+              com.google.protobuf.Descriptors.FieldDescriptor field) {
         return (Builder) super.clearField(field);
       }
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+              com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return (Builder) super.clearOneof(oneof);
       }
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              int index, java.lang.Object value) {
         return (Builder) super.setRepeatedField(field, index, value);
       }
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          java.lang.Object value) {
+              com.google.protobuf.Descriptors.FieldDescriptor field,
+              java.lang.Object value) {
         return (Builder) super.addRepeatedField(field, value);
       }
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -2059,9 +2059,9 @@ public final class MessageProto {
       }
 
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
         nl.tudelft.cs4160.trustchain_android.message.MessageProto.CrawlRequest parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -2088,9 +2088,9 @@ public final class MessageProto {
        */
       public Builder setPublicKey(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  
+          throw new NullPointerException();
+        }
+
         publicKey_ = value;
         onChanged();
         return this;
@@ -2099,7 +2099,7 @@ public final class MessageProto {
        * <code>bytes public_key = 1;</code>
        */
       public Builder clearPublicKey() {
-        
+
         publicKey_ = getDefaultInstance().getPublicKey();
         onChanged();
         return this;
@@ -2116,7 +2116,7 @@ public final class MessageProto {
        * <code>int32 requested_sequence_number = 2;</code>
        */
       public Builder setRequestedSequenceNumber(int value) {
-        
+
         requestedSequenceNumber_ = value;
         onChanged();
         return this;
@@ -2125,7 +2125,7 @@ public final class MessageProto {
        * <code>int32 requested_sequence_number = 2;</code>
        */
       public Builder clearRequestedSequenceNumber() {
-        
+
         requestedSequenceNumber_ = 0;
         onChanged();
         return this;
@@ -2142,7 +2142,7 @@ public final class MessageProto {
        * <code>int32 limit = 3;</code>
        */
       public Builder setLimit(int value) {
-        
+
         limit_ = value;
         onChanged();
         return this;
@@ -2151,18 +2151,18 @@ public final class MessageProto {
        * <code>int32 limit = 3;</code>
        */
       public Builder clearLimit() {
-        
+
         limit_ = 0;
         onChanged();
         return this;
       }
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFieldsProto3(unknownFields);
       }
 
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+              final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -2181,12 +2181,12 @@ public final class MessageProto {
     }
 
     private static final com.google.protobuf.Parser<CrawlRequest>
-        PARSER = new com.google.protobuf.AbstractParser<CrawlRequest>() {
+            PARSER = new com.google.protobuf.AbstractParser<CrawlRequest>() {
       public CrawlRequest parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-          return new CrawlRequest(input, extensionRegistry);
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CrawlRequest(input, extensionRegistry);
       }
     };
 
@@ -2206,73 +2206,73 @@ public final class MessageProto {
   }
 
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_message_Message_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_message_Message_fieldAccessorTable;
+          internal_static_message_Message_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_message_Message_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_message_TrustChainBlock_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_message_TrustChainBlock_fieldAccessorTable;
+          internal_static_message_TrustChainBlock_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_message_TrustChainBlock_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_message_CrawlRequest_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_message_CrawlRequest_fieldAccessorTable;
+          internal_static_message_CrawlRequest_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internal_static_message_CrawlRequest_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
+  getDescriptor() {
     return descriptor;
   }
   private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+          descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n2nl/tudelft/cs4160/trustchain_android/M" +
-      "essage.proto\022\007message\"c\n\007Message\022+\n\thalf" +
-      "Block\030\001 \001(\0132\030.message.TrustChainBlockHelper\022+\n" +
-      "\014crawlRequest\030\002 \001(\0132\025.message.CrawlReque" +
-      "st\"\264\001\n\017TrustChainBlock\022\022\n\npublic_key\030\001 \001" +
-      "(\014\022\027\n\017sequence_number\030\002 \001(\005\022\027\n\017link_publ" +
-      "ic_key\030\003 \001(\014\022\034\n\024link_sequence_number\030\004 \001" +
-      "(\005\022\025\n\rprevious_hash\030\005 \001(\014\022\021\n\tsignature\030\006" +
-      " \001(\014\022\023\n\013transaction\030\007 \001(\014\"T\n\014CrawlReques" +
-      "t\022\022\n\npublic_key\030\001 \001(\014\022!\n\031requested_seque",
-      "nce_number\030\002 \001(\005\022\r\n\005limit\030\003 \001(\005B<\n,nl.tu" +
-      "delft.cs4160.trustchain_android.messageB" +
-      "\014MessageProtob\006proto3"
+            "\n2nl/tudelft/cs4160/trustchain_android/M" +
+                    "essage.proto\022\007message\"c\n\007Message\022+\n\thalf" +
+                    "Block\030\001 \001(\0132\030.message.TrustChainBlock\022+\n" +
+                    "\014crawlRequest\030\002 \001(\0132\025.message.CrawlReque" +
+                    "st\"\264\001\n\017TrustChainBlock\022\022\n\npublic_key\030\001 \001" +
+                    "(\014\022\027\n\017sequence_number\030\002 \001(\005\022\027\n\017link_publ" +
+                    "ic_key\030\003 \001(\014\022\034\n\024link_sequence_number\030\004 \001" +
+                    "(\005\022\025\n\rprevious_hash\030\005 \001(\014\022\021\n\tsignature\030\006" +
+                    " \001(\014\022\023\n\013transaction\030\007 \001(\014\"T\n\014CrawlReques" +
+                    "t\022\022\n\npublic_key\030\001 \001(\014\022!\n\031requested_seque",
+            "nce_number\030\002 \001(\005\022\r\n\005limit\030\003 \001(\005B<\n,nl.tu" +
+                    "delft.cs4160.trustchain_android.messageB" +
+                    "\014MessageProtob\006proto3"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
+            new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+              public com.google.protobuf.ExtensionRegistry assignDescriptors(
+                      com.google.protobuf.Descriptors.FileDescriptor root) {
+                descriptor = root;
+                return null;
+              }
+            };
     com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+            .internalBuildGeneratedFileFrom(descriptorData,
+                    new com.google.protobuf.Descriptors.FileDescriptor[] {
+                    }, assigner);
     internal_static_message_Message_descriptor =
-      getDescriptor().getMessageTypes().get(0);
+            getDescriptor().getMessageTypes().get(0);
     internal_static_message_Message_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_message_Message_descriptor,
-        new java.lang.String[] { "HalfBlock", "CrawlRequest", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_message_Message_descriptor,
+            new java.lang.String[] { "HalfBlock", "CrawlRequest", });
     internal_static_message_TrustChainBlock_descriptor =
-      getDescriptor().getMessageTypes().get(1);
+            getDescriptor().getMessageTypes().get(1);
     internal_static_message_TrustChainBlock_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_message_TrustChainBlock_descriptor,
-        new java.lang.String[] { "PublicKey", "SequenceNumber", "LinkPublicKey", "LinkSequenceNumber", "PreviousHash", "Signature", "Transaction", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_message_TrustChainBlock_descriptor,
+            new java.lang.String[] { "PublicKey", "SequenceNumber", "LinkPublicKey", "LinkSequenceNumber", "PreviousHash", "Signature", "Transaction", });
     internal_static_message_CrawlRequest_descriptor =
-      getDescriptor().getMessageTypes().get(2);
+            getDescriptor().getMessageTypes().get(2);
     internal_static_message_CrawlRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_message_CrawlRequest_descriptor,
-        new java.lang.String[] { "PublicKey", "RequestedSequenceNumber", "Limit", });
+            com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+            internal_static_message_CrawlRequest_descriptor,
+            new java.lang.String[] { "PublicKey", "RequestedSequenceNumber", "Limit", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
