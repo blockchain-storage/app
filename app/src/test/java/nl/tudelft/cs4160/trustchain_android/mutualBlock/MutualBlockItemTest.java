@@ -2,7 +2,6 @@ package nl.tudelft.cs4160.trustchain_android.mutualBlock;
 
 import junit.framework.TestCase;
 
-
 import org.junit.Test;
 
 import nl.tudelft.cs4160.trustchain_android.main.MutualBlockItem;
