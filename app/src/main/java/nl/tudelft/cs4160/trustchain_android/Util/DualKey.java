@@ -2,6 +2,7 @@ package nl.tudelft.cs4160.trustchain_android.Util;
 
 import org.libsodium.jni.Sodium;
 import org.libsodium.jni.crypto.Point;
+import org.libsodium.jni.crypto.Random;
 import org.libsodium.jni.keys.PrivateKey;
 import org.libsodium.jni.keys.PublicKey;
 import org.libsodium.jni.keys.VerifyKey;
@@ -23,7 +24,7 @@ public class DualKey {
         privateKey = new byte[Sodium.crypto_box_curve25519xsalsa20poly1305_secretkeybytes()];
         Sodium.crypto_box_curve25519xsalsa20poly1305_keypair(publicKey, privateKey);
 
-        signSeed = zeros(Sodium.crypto_sign_ed25519_seedbytes());
+        signSeed = new Random().randomBytes(Sodium.crypto_sign_ed25519_seedbytes());
         signPublicKey = new byte[Sodium.crypto_sign_ed25519_publickeybytes()];
         signPrivateKey = new byte[Sodium.crypto_sign_ed25519_secretkeybytes()];
         Sodium.crypto_sign_ed25519_seed_keypair(signPublicKey, signPrivateKey, signSeed);
