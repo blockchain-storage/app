@@ -187,7 +187,7 @@ public class ExportWalletQRActivity extends AppCompatActivity {
         ByteArrayOutputStream export = new ByteArrayOutputStream( );
         export.write("LibNaCLSK:".getBytes());
         export.write(pk.getPrivateKey().toBytes());
-        export.write(Arrays.copyOfRange(pk.getSigningKey().toBytes(), 32,64));
+        export.write(pk.getSignSeed());
 
         return export.toByteArray();
     }

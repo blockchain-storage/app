@@ -60,6 +60,10 @@ public class DualKey {
         return new VerifyKey(signPublicKey);
     }
 
+    public byte[] getSignSeed() {
+        return signSeed;
+    }
+
     public SigningKey getSigningKey() {
         return new SigningKey(signPrivateKey);
     }
