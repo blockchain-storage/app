@@ -6,14 +6,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.protobuf.ByteString;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlockHelper;
+import nl.tudelft.cs4160.trustchain_android.block.TrustChainBlock;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
 public class TrustChainDBHelper extends SQLiteOpenHelper {
@@ -74,7 +76,6 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
      * returns -1 as an error indicator.
      */
     public long insertInDB(MessageProto.TrustChainBlock block) {
-        MessageProto.TrustChainBlock b = block;
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_TX, block.getTransaction().toStringUtf8());
@@ -84,32 +85,9 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_SEQUENCE_NUMBER, block.getLinkSequenceNumber());
         values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_PREVIOUS_HASH, Base64.encodeToString(block.getPreviousHash().toByteArray(), Base64.DEFAULT));
         values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_SIGNATURE, Base64.encodeToString(block.getSignature().toByteArray(), Base64.DEFAULT));
-        values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_BLOCK_HASH, Base64.encodeToString(TrustChainBlockHelper.hash(block), Base64.DEFAULT));
+        values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_BLOCK_HASH, Base64.encodeToString(TrustChainBlock.hash(block), Base64.DEFAULT));
 
         return db.insertOrThrow(TrustChainDBContract.BlockEntry.TABLE_NAME, null, values);
-    }
-
-    /**
-     * Alter the half block in the DB to an complete block
-     *
-     * @param block - The protoblock that needs to be added to the database
-     * @return A long depicting the primary key value of the newly inserted row of the database.
-     * returns -1 as an error indicator.
-     */
-    public long replaceInDB(MessageProto.TrustChainBlock block) {
-        MessageProto.TrustChainBlock b = block;
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_TX, block.getTransaction().toStringUtf8());
-        values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_PUBLIC_KEY, Base64.encodeToString(block.getPublicKey().toByteArray(), Base64.DEFAULT));
-        values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_SEQUENCE_NUMBER, block.getSequenceNumber());
-        values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_PUBLIC_KEY, Base64.encodeToString(block.getLinkPublicKey().toByteArray(), Base64.DEFAULT));
-        values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_LINK_SEQUENCE_NUMBER, block.getLinkSequenceNumber());
-        values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_PREVIOUS_HASH, Base64.encodeToString(block.getPreviousHash().toByteArray(), Base64.DEFAULT));
-        values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_SIGNATURE, Base64.encodeToString(block.getSignature().toByteArray(), Base64.DEFAULT));
-        values.put(TrustChainDBContract.BlockEntry.COLUMN_NAME_BLOCK_HASH, Base64.encodeToString(TrustChainBlockHelper.hash(block), Base64.DEFAULT));
-
-        return db.replace(TrustChainDBContract.BlockEntry.TABLE_NAME, null, values);
     }
 
     /**
@@ -189,7 +167,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
      *
      * @param pubkey    - Public key of the block of which to find the previous block in the chain
      * @param seqNumber - Sequence number of block of which to find the previous block in the chain
-     * @return The previous TrustChainBlockHelper in the chain
+     * @return The previous TrustChainBlock in the chain
      */
     public MessageProto.TrustChainBlock getBlockBefore(byte[] pubkey, int seqNumber) {
         SQLiteDatabase dbReadable = getReadableDatabase();
@@ -225,7 +203,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
      *
      * @param pubkey    - Public key of the block of which to find the previous block in the chain
      * @param seqNumber - Sequence number of block of which to find the previous block in the chain
-     * @return The next TrustChainBlockHelper in the chain
+     * @return The next TrustChainBlock in the chain
      */
     public MessageProto.TrustChainBlock getBlockAfter(byte[] pubkey, int seqNumber) {
         SQLiteDatabase dbReadable = getReadableDatabase();
@@ -322,19 +300,11 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
         return res;
     }
 
-    /**
-     *  Filter blocks on publickeyc
-     * @param publicKey block with this key are returned
-     * @param inLinked if true and the public key is in the linkedKey also return block
-     * @return
-     */
-    public List<MessageProto.TrustChainBlock> getBlocks(byte[] publicKey,boolean inLinked) {
+    public List<MessageProto.TrustChainBlock> getBlocks(byte[] publicKey) {
         List<MessageProto.TrustChainBlock> allBlocks = getAllBlocks();
         List<MessageProto.TrustChainBlock> res = new ArrayList<>();
         for (MessageProto.TrustChainBlock block : allBlocks) {
             if (Arrays.equals(publicKey, block.getPublicKey().toByteArray())) {
-                res.add(block);
-            }else if(inLinked && Arrays.equals(publicKey, block.getLinkPublicKey().toByteArray()) ){
                 res.add(block);
             }
         }
@@ -350,11 +320,7 @@ public class TrustChainDBHelper extends SQLiteOpenHelper {
      *
      * @param pubKey - public key of the chain to from which blocks need to be fetched
      * @param seqNum - sequence number of block, the blocks inserted after this block should be returned
-<<<<<<< HEAD
      * @param limit  - the limit of the amount of blocks to return
-=======
-     * @param limit - the limit of the amount of blocks to return
->>>>>>> e50816a71671d6d332df84c03b5f714fa6dea1f8
      * @return list of blocks
      */
     public List<MessageProto.TrustChainBlock> crawl(byte[] pubKey, int seqNum, int limit) throws Exception {
