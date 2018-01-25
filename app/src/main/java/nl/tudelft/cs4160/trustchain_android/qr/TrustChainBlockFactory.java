@@ -39,8 +39,10 @@ public class TrustChainBlockFactory {
             wallet.transaction.totalUp += tx.totalUp;
             wallet.transaction.totalDown += tx.totalDown;
         } catch (Exception e) {
-
+            wallet.transaction.totalUp = wallet.transaction.up;
+            wallet.transaction.totalDown = wallet.transaction.down;
         }
+
 
         String transactionString = transactionAdapter.toJson(wallet.transaction);
         DualKey walletKeyPair = getKeyPairFromWallet(wallet);
