@@ -3,7 +3,12 @@ package nl.tudelft.cs4160.trustchain_android.chainExplorer;
 
 import com.google.protobuf.ByteString;
 
+import org.junit.Test;
+
 import java.util.HashMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ChainExplorerAdapterTest {
     private static final ByteString PEER_2_PEER = ByteString.copyFromUtf8("peer2peer");

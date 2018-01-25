@@ -1,5 +1,6 @@
 package nl.tudelft.cs4160.trustchain_android.appToApp;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**

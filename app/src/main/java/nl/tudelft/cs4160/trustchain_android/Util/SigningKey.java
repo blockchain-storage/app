@@ -18,12 +18,15 @@ package nl.tudelft.cs4160.trustchain_android.Util;
 
 
 import org.libsodium.jni.Sodium;
+import org.libsodium.jni.crypto.Random;
 import org.libsodium.jni.crypto.Util;
 import org.libsodium.jni.encoders.Encoder;
 import org.libsodium.jni.keys.VerifyKey;
 
-import static org.libsodium.jni.NaCl.sodium;
+import static org.libsodium.jni.SodiumConstants.PUBLICKEY_BYTES;
+import static org.libsodium.jni.SodiumConstants.SECRETKEY_BYTES;
 import static org.libsodium.jni.SodiumConstants.SIGNATURE_BYTES;
+import static org.libsodium.jni.NaCl.sodium;
 
 public class SigningKey {
     private final byte[] secretKey;

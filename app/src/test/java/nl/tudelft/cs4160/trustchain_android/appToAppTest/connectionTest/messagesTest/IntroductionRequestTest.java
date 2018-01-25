@@ -1,5 +1,7 @@
 package nl.tudelft.cs4160.trustchain_android.appToAppTest.connectionTest.messagesTest;
 
+import android.util.Log;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -10,6 +12,7 @@ import java.util.Map;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.IntroductionRequest;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Message;
 import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.MessageException;
+import nl.tudelft.cs4160.trustchain_android.appToApp.connection.messages.Puncture;
 
 import static org.junit.Assert.assertEquals;
 

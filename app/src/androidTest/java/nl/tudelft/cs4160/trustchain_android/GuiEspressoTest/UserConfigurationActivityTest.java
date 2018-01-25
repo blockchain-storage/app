@@ -1,8 +1,13 @@
 package nl.tudelft.cs4160.trustchain_android.GuiEspressoTest;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.test.rule.ActivityTestRule;
+import android.text.LoginFilter;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 

@@ -1,13 +1,20 @@
 package nl.tudelft.cs4160.trustchain_android.main;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 
 /**
  * Created by Boning on 12/12/2017.

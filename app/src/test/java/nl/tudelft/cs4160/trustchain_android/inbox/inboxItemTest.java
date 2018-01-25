@@ -5,7 +5,12 @@ import junit.framework.TestCase;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+import nl.tudelft.cs4160.trustchain_android.appToApp.PeerAppToApp;
 
 public class inboxItemTest extends TestCase {
     String userName;
