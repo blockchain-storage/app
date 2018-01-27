@@ -17,9 +17,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.google.protobuf.ByteString;
+
 import java.util.List;
 
 import nl.tudelft.cs4160.trustchain_android.R;
+import nl.tudelft.cs4160.trustchain_android.SharedPreferences.UserNameStorage;
+import nl.tudelft.cs4160.trustchain_android.Util.ByteArrayConverter;
 import nl.tudelft.cs4160.trustchain_android.Util.DualKey;
 import nl.tudelft.cs4160.trustchain_android.Util.Key;
 import nl.tudelft.cs4160.trustchain_android.database.TrustChainDBHelper;
@@ -27,22 +31,24 @@ import nl.tudelft.cs4160.trustchain_android.main.ChainExplorerInfoActivity;
 import nl.tudelft.cs4160.trustchain_android.message.MessageProto;
 
 import static android.view.Gravity.CENTER;
-import static nl.tudelft.cs4160.trustchain_android.Peer.bytesToHex;
 
-
+/**
+ * This activity will show a chain of a given TrustChain peer.
+ */
 public class ChainExplorerActivity extends AppCompatActivity {
     TrustChainDBHelper dbHelper;
     ChainExplorerAdapter adapter;
     ListView blocksList;
 
     static final String TAG = "ChainExplorerActivity";
-
+    private static final String TITLE = "My chain overview";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chain_explorer);
         blocksList = findViewById(R.id.blocks_list);
+
 
         // Create a progress bar to display while the list loads
         ProgressBar progressBar = new ProgressBar(this);
@@ -77,23 +83,25 @@ public class ChainExplorerActivity extends AppCompatActivity {
         }
     }
 
-
     private void init() {
         dbHelper = new TrustChainDBHelper(this);
         DualKey kp = Key.loadKeys(getApplicationContext());
         byte[] publicKey;
         if (getIntent().hasExtra("publicKey")) {
-            publicKey = getIntent().getByteArrayExtra("publicKey");
+            publicKey = ByteArrayConverter.hexStringToByteArray(getIntent().getStringExtra("publicKey"));
         } else {
             publicKey = kp.getPublicKeyPair().toBytes();
-
         }
         try {
-            adapter = new ChainExplorerAdapter(this, dbHelper.getAllBlocks(), kp.getPublicKeyPair().toBytes());
-            blocksList.setAdapter(adapter);
-            List<MessageProto.TrustChainBlock> blocks = dbHelper.getBlocks(publicKey);
+            List<MessageProto.TrustChainBlock> blocks = dbHelper.getBlocks(publicKey, true);
             if(blocks.size() > 0) {
-                this.setTitle(bytesToHex(blocks.get(0).getPublicKey().toByteArray()));
+                String ownPubKey = ByteArrayConverter.byteStringToString(blocks.get(0).getPublicKey());
+                String firstPubKey = ByteArrayConverter.byteStringToString(ByteString.copyFrom(publicKey));
+                if (ownPubKey.equals(firstPubKey)){
+                    this.setTitle(TITLE);
+                } else {
+                    this.setTitle("Chain of " + UserNameStorage.getPeerByPublickey(this, ByteArrayConverter.byteStringToString(blocks.get(0).getPublicKey())));
+                }
                 adapter = new ChainExplorerAdapter(this, blocks, kp.getPublicKeyPair().toBytes());
                 blocksList.setAdapter(adapter);
             }else{
