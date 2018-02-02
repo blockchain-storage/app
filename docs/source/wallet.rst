@@ -29,7 +29,14 @@ The QR code has to be able to transfer the throw-away identity, while having a t
 * Transaction object, with the up and down quantities.
 * Block hash and sequence number belonging to the half block of the transaction between the sender identity and the throw away one. 
 
-This information is encoded in a JSON string before being put into the QR code. An example of the data is the following:
+This information is encoded in a JSON string before being put into the QR code. 
+
+Once the QR code has been read, the receiver uses this information to reconstruct the transaction and throw-away identity.
+The QR code used is the `version 13 <http://www.qrcode.com/en/about/version.html>`_, which has a capacity between 1440-3424 data bits depending on the ECC level.
+
+Example
+=======
+An example of the data in the QR code is the following:
 
 .. code-block:: json
 
@@ -45,6 +52,3 @@ Which will result in the following QR code:
 .. figure:: ./images/example-qr.jpg 
 	:width: 300px
 
-
-Once it has been read, the receiver uses this information to reconstruct the transaction and throw-away identity.
-The QR code used is the `version 13 <http://www.qrcode.com/en/about/version.html>`_, which has a capacity between 1440-3424 data bits depending on the ECC level.
