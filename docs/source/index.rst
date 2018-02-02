@@ -16,6 +16,7 @@ TrustChain Android
    protocolbuffers
    database
    crypto
+   wallet
    installation-instructions
    contact
 
