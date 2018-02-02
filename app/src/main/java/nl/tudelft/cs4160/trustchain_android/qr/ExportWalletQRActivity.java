@@ -93,10 +93,8 @@ public class ExportWalletQRActivity extends AppCompatActivity {
                     return;
 
                 }
-                transaction.up = 0 ;
-                transaction.down = total_up - total_down;
-                transaction.totalUp = total_up;
-                transaction.totalDown = total_down;
+                transaction.up = total_up - total_down ;
+                transaction.down = 0;
                 //transaction.totalUp = object.getLong("total_up") + transaction.down;
                 //transaction.totalDown = object.getLong("total_down") + transaction.up;
             } catch (Exception e) {
