@@ -17,6 +17,7 @@ TrustChain Android
    database
    crypto
    wallet
+   tokens
    installation-instructions
    contact
 
