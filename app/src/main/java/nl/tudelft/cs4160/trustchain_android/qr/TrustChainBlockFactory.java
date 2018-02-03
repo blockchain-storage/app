@@ -32,10 +32,6 @@ public class TrustChainBlockFactory {
         // Dont take this as a reference point for TX.
         // At the time of writing there is no TX api.
 
-        long tmp = wallet.transaction.down;
-        wallet.transaction.down = wallet.transaction.up;
-        wallet.transaction.up = tmp;
-
         wallet.transaction.totalUp = wallet.transaction.up;
         wallet.transaction.totalDown = wallet.transaction.down;
 
